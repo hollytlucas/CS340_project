@@ -1,0 +1,73 @@
+    <div class="w3-bar w3-light-blue">
+        <a href="/index_private" class="w3-bar-item w3-button w3-mobile" style="width:14%">Main Employee Only</a>
+        <a href="waiters" class="w3-bar-item w3-button w3-mobile" style="width:14%">Waiters</a>
+        <a href="orders" class="w3-bar-item w3-button w3-mobile" style="width:14%">Orders</a>
+        <a href="shifts" class="w3-bar-item w3-button w3-mobile" style="width:14%">Shifts</a>
+        <a href="customers_private" class="w3-bar-item w3-button w3-mobile w3-grayscale-max" style="width:14%">Customers</a>
+        <a href="menu_items" class="w3-bar-item w3-button w3-mobile" style="width:14%">Menu Items</a>
+        <a href="/" class="w3-bar-item w3-button w3-mobile" style="width:14%">Main Public</a>
+    </div>
+
+
+{{!-- The Data from our Database --}}
+
+{{!-- Create a table --}}
+<table id="people-table">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+        {{#each data}}
+
+        <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.fname}}</td>
+            <td>{{this.lname}}</td>
+            <td>{{this.homeworld}}</td>
+            <td>{{this.age}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<pre>
+    {{planet_map}}
+</pre>
+
+{{!-- Form to search by last name --}}
+<h2>Customer Search</h2>
+<p>Search customers by partial or whole last name using the field below.</p>
+<form id="search-person-html" method='GET' action='/customers'>
+    <label for="input-lname">Search by Last Name: </label>
+    <input type="text" name="lname" id="input-lname-html-search">
+    
+    <input type="submit">
+    <a href='/'><button>Reset</button></a>
+</form>
+
+{{!-- Form to search by last name --}}
+<h2>Orders Search</h2>
+<p>Search for orders by customer ID</p>
+<form id="search-person-html" method='GET' action='/customers'>
+    <label for="input-lname">Customer ID</label>
+    <input type="text" name="lname" id="input-lname-html-search">
+    
+    <input type="submit">
+    <a href='/'><button>Reset</button></a>
+</form>
+
+

@@ -1,0 +1,168 @@
+
+    <div class="w3-bar w3-light-blue">
+        <a href="/" class="w3-bar-item w3-button w3-mobile" style="width:33%">Main</a>
+        <a href="customers_public" class="w3-bar-item w3-button w3-mobile w3-grayscale-max" style="width:33%">Customers</a>
+        <a href="index_private" class="w3-bar-item w3-button w3-mobile" style="width:33%">Employees Only</a>
+    </div>
+
+
+
+{{!-- The Data from our Database --}}
+
+{{!-- Create a table --}}
+<table id="people-table">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+        {{#each data}}
+
+        <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.fname}}</td>
+            <td>{{this.lname}}</td>
+            <td>{{this.homeworld}}</td>
+            <td>{{this.age}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<pre>
+    {{planet_map}}
+</pre>
+
+<h2>Customer Profiles</h2>
+
+<table id="Customer Search">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            <th>CUSTOMER ID</th>
+            <th>FIRST NAME</th>
+            <th>LAST NAME</th>
+            <th>EMAIL</th>
+            <th>LOYALTY POINTS</th>
+        </tr>
+    </thead>
+    {{!-- Body section --}}
+    <tbody>
+        <tr>
+            <td>1456</td>
+            <td>Henry</td>
+            <td>Lucky</td>
+            <td>hlucas@hello.com</td>
+            <td>50</td>
+        </tr>
+        <tr>
+            <td>2345</td>
+            <td>George</td>
+            <td>Lucas</td>
+            <td>glucas@hello.com</td>
+            <td>25</td>
+        </tr>
+        <tr>
+            <td>1444</td>
+            <td>Tara</td>
+            <td>Luca</td>
+            <td>tluca@hello.com</td>
+            <td>22</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<h2>Customer Orders</h2>
+
+<table id="Customers and Orders">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            <th>CUSTOMER ID</th>
+            <th>FIRST NAME</th>
+            <th>LAST NAME</th>
+            <th>EMAIL</th>
+            <th>LOYALTY POINTS</th>
+            <th>ORDER DATE AND TIME</th>
+            <th>TOTAL CHARGES</th>
+        </tr>
+    </thead>
+    {{!-- Body section --}}
+    <tbody>
+        <tr>
+            <td>1456</td>
+            <td>Henry</td>
+            <td>Lucas</td>
+            <td>hlucas@hello.com</td>
+            <td>50</td>
+            <td>01/25/2021 13:40:00</td>
+            <td>42.28</td>
+        </tr>
+        <tr>
+            <td>1456</td>
+            <td>Henry</td>
+            <td>Lucas</td>
+            <td>hlucas@hello.com</td>
+            <td>50</td>
+            <td>01/28/2021 14:40:00</td>
+            <td>35.25</td>
+        </tr>
+        <tr>
+            <td>1456</td>
+            <td>Henry</td>
+            <td>Lucas</td>
+            <td>hlucas@hello.com</td>
+            <td>50</td>
+            <td>02/13/2021 10:12:00</td>
+            <td>10.14</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+{{!-- Form to search by last name --}}
+<h2>Customer Search</h2>
+<p>Search customers by partial or whole last name</p>
+<form id="search-person-html" method='GET' action='/customers'>
+    <label for="input-lname">Last Name: </label>
+    <input type="text" name="lname" id="input-lname-html-search">
+    
+    <input type="submit">
+    <a href='/'><button>Reset</button></a>
+</form>
+
+{{!-- Form to search by last name --}}
+<h2>Orders Search</h2>
+<p>Search for orders by customer ID</p>
+<form id="search-person-html" method='GET' action='/customers'>
+    <label for="input-lname">Customer ID</label>
+    <input type="text" name="lname" id="input-lname-html-search">
+    
+    <input type="submit">
+    <a href='/'><button>Reset</button></a>
+</form>
+
+

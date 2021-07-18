@@ -1,0 +1,192 @@
+    <div class="w3-bar w3-light-blue">
+        <a href="/index_private" class="w3-bar-item w3-button w3-mobile" style="width:14%">Main Employee Only</a>
+        <a href="waiters" class="w3-bar-item w3-button w3-mobile w3-grayscale-max" style="width:14%">Waiters</a>
+        <a href="orders" class="w3-bar-item w3-button w3-mobile" style="width:14%">Orders</a>
+        <a href="shifts" class="w3-bar-item w3-button w3-mobile" style="width:14%">Shifts</a>
+        <a href="customers_private" class="w3-bar-item w3-button w3-mobile" style="width:14%">Customers</a>
+        <a href="menu_items" class="w3-bar-item w3-button w3-mobile" style="width:14%">Menu Items</a>
+        <a href="/" class="w3-bar-item w3-button w3-mobile" style="width:14%">Main Public</a>
+    </div>
+
+
+{{!-- The Data from our Database --}}
+
+<!--
+{{!-- Create a table --}}
+<table id="people-table">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            <th>EMPLOYEE ID</th>
+            <th>FIRST NAME</th>
+            <th>LAST NAME</th>
+            <th>PHONE NUMBER</th>
+            <th>SHIFT PREFERENCE</th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+        {{#each data}}
+
+        <tr>
+            <td>{{this.employee_id}}</td>
+            <td>{{this.first_name}}</td>
+            <td>{{this.last_name}}</td>
+            <td>{{this.employee_phone_number}}</td>
+            <td>{{this.shift_type_preference}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+-->
+<h2>Waiters By Shift</h2>
+{{!-- Create a table --}}
+<table id="Waiters and Shifts">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            <th>EMPLOYEE ID</th>
+            <th>FIRST NAME</th>
+            <th>LAST NAME</th>
+            <th>PHONE NUMBER</th>
+            <th>SHIFT PREFERENCE</th>
+            <th>SHIFT ID</th>
+            <th>SHIFT DAY</th>
+            <th>SHIFT TYPE</th>
+        </tr>
+    </thead>
+    {{!-- Body section --}}
+    <tbody>
+        <tr>
+            <td>35465</td>
+            <td>Mary</td>
+            <td>Smith</td>
+            <td>345-555-6666</td>
+            <td>Night</td>
+            <td>2</td>
+            <td>Tuesday</td>
+            <td>Swing</td>
+        </tr>
+        <tr>
+            <td>2145</td>
+            <td>George</td>
+            <td>Lopez</td>
+            <td>345-234-1111</td>
+            <td>Day</td>
+            <td>2</td>
+            <td>Tuesday</td>
+            <td>Swing</td>
+        </tr>
+        <tr>
+            <td>33356</td>
+            <td>Gabriel</td>
+            <td>Keys</td>
+            <td>345-222-1214</td>
+            <td>Swing</td>
+            <td>2</td>
+            <td>Tuesday</td>
+            <td>Swing</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+
+<pre>
+    {{planet_map}}
+</pre>
+
+{{!-- Form to search by last name NOT WORKING--}}
+<h2>Search For Waiters by Shift</h2>
+<p>Search for all waiters assigned to a specific shift ID</p>
+<form id="search-person-html" method='GET' action='/waiters'>
+
+    <label for="input-id">Preferred Shift:</label>
+    <select id="input-shift-html" name="input-shift">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    </select>
+    
+    <input type="submit">
+</form>
+
+
+{{!-- Form to add a record to the table using standard HTML forms WORKING ON RIGHT NOW--}}
+<h2>Add A Waiter</h2>
+<p>To add a waiter, please enter their information below and click `Submit`.  Please assign a shift ID</p>
+<form id="add-waiter-form" method="POST" action="/add-waiter-form">
+    <label for="input-fname">First Name: </label>
+    <input type="text" name="input-fname" id="input-fname-html">
+    
+    <label for="input-lname">Last Name: </label>
+    <input type="text" name="input-lname" id="input-lname-html">
+
+    <label for="input-phone">Phone Number: </label>
+    <input type="number" name="input-phone" id="input-phone-html">
+
+    <label for="shift-preference">Preferred Shift:</label>
+    <select id="input-shift-html" name="input-shift">
+    <option value="none">No Preference</option>
+    <option value="day">Day Shift</option>
+    <option value="swing">Swing Shift</option>
+    <option value="night">Night Shift</option>
+    </select>
+    <br>
+    <br>
+    <label for="input-phone">Assigned Shift ID: </label>
+    <input type="number" name="input-assigned-shift" id="input-assigned-shift-html">
+    
+
+    <input type="submit">
+</form> 
+
+{{!-- Form to add a record to the table using standard HTML forms WORKING --}}
+<h2>Modify A Waiter</h2>
+<p>To modify a waiter, please enter their information below and click `Submit`. Any fields left blank will not be modified</p>
+<form id="modify-waiter-form" method="POST" action="/modify-waiter-form">
+    <label for="input-id">Employee ID: </label>
+    <input type="number" name="input-id" id="input-id">
+
+    <label for="input-fname">First Name: </label>
+    <input type="text" name="input-fname" id="input-fname-html">
+    
+    <label for="input-lname">Last Name: </label>
+    <input type="text" name="input-lname" id="input-lname-html">
+
+    <label for="input-phone">Phone Number: </label>
+    <input type="number" name="input-phone" id="input-phone-html">
+
+    <label for="shift-preference">Shift Preference:</label>
+    <select id="input-shift-html" name="input-shift">
+    <option value="NULL">No Preference</option>
+    <option value="day">Day Shift</option>
+    <option value="swing">Swing Shift</option>
+    <option value="night">Night Shift</option>
+    </select>
+    <br>
+    <br>
+    <label for="input-phone">Assigned Shift ID: </label>
+    <input type="number" name="input-assigned-shift" id="input-assigned-shift-html">
+    
+    <label for="radio-one">Add Shift</label>
+	<input type="radio" id="add-shift" name="switch-one" value="add" checked/>
+    <label for="radio-two">Remove Shift</label>	
+	<input type="radio" id="delete-shift" name="switch-one" value="remove" />
+
+    <input type="submit">
+</form> 

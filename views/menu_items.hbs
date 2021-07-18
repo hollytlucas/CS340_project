@@ -1,0 +1,121 @@
+
+    <div class="w3-bar w3-light-blue">
+
+        <a href="/index_private" class="w3-bar-item w3-button w3-mobile" style="width:14%">Main Employee Only</a>
+        <a href="waiters" class="w3-bar-item w3-button w3-mobile" style="width:14%">Waiters</a>
+        <a href="orders" class="w3-bar-item w3-button w3-mobile" style="width:14%">Orders</a>
+        <a href="shifts" class="w3-bar-item w3-button w3-mobile" style="width:14%">Shifts</a>
+        <a href="customers_private" class="w3-bar-item w3-button w3-mobile" style="width:14%">Customers</a>
+        <a href="menu_items" class="w3-bar-item w3-button w3-mobile w3-grayscale-max" style="width:14%">Menu Items</a>
+        <a href="/" class="w3-bar-item w3-button w3-mobile" style="width:14%">Main Public</a>
+    </div>
+
+{{!-- The Data from our Database --}}
+
+{{!-- Create a table --}}
+<table id="people-table">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+        {{#each data}}
+
+        <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.fname}}</td>
+            <td>{{this.lname}}</td>
+            <td>{{this.homeworld}}</td>
+            <td>{{this.age}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<pre>
+    {{planet_map}}
+</pre>
+
+
+<h2>Total Inventory</h2>
+
+<table id="Inventory">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            <th>ITEM NAME</th>
+            <th>PRICE</th>
+            <th>AVAILABLE</th>
+            <th>UNITS SOLD</th>
+        </tr>
+    </thead>
+    {{!-- Body section --}}
+    <tbody>
+        <tr>
+            <td>Spinach Quiche</td>
+            <td>7.85</td>
+            <td>TRUE</td>
+            <td>22</td>
+        </tr>
+        <tr>
+            <td>Meatloaf</td>
+            <td>7.99</td>
+            <td>FALSE</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>Cheese Enchilada</td>
+            <td>4.50</td>
+            <td>TRUE</td>
+            <td>30</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+{{!-- Form to add a record to the table using standard HTML forms --}}
+<h2>Add A Menu Item</h2>
+<p>To add a new menu item, please enter the information below and click `Submit`!  Any values left blank will be submitted as null.</p>
+<form id="add-person-form" method="POST" action="/add-person-form">
+
+    <label for="input-fname">Item Name (descriptive): </label>
+    <input type="text" name="input-fname" id="input-fname-html">
+    
+    <label for="input-lname">Unit Price: </label>
+    <input type="text" name="input-lname" id="input-lname-html">
+
+    <label for="radio-one">In Stock</label>
+	<input type="radio" id="radio-one" name="switch-one" value="yes" checked/>
+
+    <label for="radio-two">Not In Stock</label>	
+	<input type="radio" id="radio-two" name="switch-one" value="no" />
+
+    <br>
+    <br>
+
+    <label for="input-age">Number of Units Sold: </label>
+    <input type="number" name="input-age" id="input-age-html">
+
+    <br>
+    <br>
+
+    <input type="submit">
+</form> 
