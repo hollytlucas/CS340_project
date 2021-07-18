@@ -50,9 +50,10 @@
 </pre>
 
 
+<div class="container">
 <h2>Total Inventory</h2>
 
-<table id="Inventory">
+<table id="Inventory" class="paddingBetweenCols">
 
     {{!-- Header section --}}
     <thead>
@@ -88,10 +89,11 @@
         </tr>
     </tbody>
 </table>
-
-
+</div>
+<br><br>
 
 {{!-- Form to add a record to the table using standard HTML forms --}}
+<div class="container">
 <h2>Add A Menu Item</h2>
 <p>To add a new menu item, please enter the information below and click `Submit`!  Any values left blank will be submitted as null.</p>
 <form id="add-person-form" method="POST" action="/add-person-form">
@@ -119,3 +121,4 @@
 
     <input type="submit">
 </form> 
+</div>
