@@ -1,26 +1,22 @@
 const express = require("express");
 const router = express.Router();
+const db = require("../database/db-connector");
 
 // renders orders list (/orders):
 router.get("", function (req, res) {
-  let query1;
+  let selectQuery;
 
-  // If there is a query string, we run the query
   if (req.query.id != undefined) {
-    query1 = `SELECT * FROM orders`;
-    // Run the 1st query
-    db.pool.query(query1, function (error, rows, fields) {
-      // Save the waiters
+    selectQuery = `SELECT * FROM orders`;
+
+    db.pool.query(selectQuery, function (error, rows, fields) {
       let orders = rows;
       return res.render("orders", { data: orders });
     });
   } else {
-    // Query 1 is select all waiters if name search is blank
-    let query1 = "SELECT * FROM orders;";
+    selectQuery = "SELECT * FROM orders;";
 
-    // Run the 1st query
-    db.pool.query(query1, function (error, rows, fields) {
-      // Save the orders
+    db.pool.query(selectQuery, function (error, rows, fields) {
       let orders = rows;
       return res.render("orders/index", { data: orders });
     });
@@ -28,7 +24,9 @@ router.get("", function (req, res) {
 });
 
 // renders the "add order" form
-router.get("/new", function (req, res) {});
+router.get("/new", function (req, res) {
+  res.render("orders/new");
+});
 
 // receives the form submission of the "add order" form
 router.post("/new", function (req, res) {});

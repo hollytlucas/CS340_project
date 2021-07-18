@@ -1,0 +1,21 @@
+{{> nav currentRoute="/orders" }}
+
+<div id="orders-container" class="d-flex justify-content-between">
+
+  <div id="add-order-container" class="m-3">
+    <h2>Add an Order</h2>
+    <p>To add an order, please enter the information below and click `Submit`!</p>
+    <form id="add-order-form" class="d-flex flex-wrap" method="POST" action="/orders/new">
+      <div>
+        <label for="input-total-price">Total Price: </label>
+        <input type="text" name="input-total-price" id="input-total-price-html">
+      </div>
+      <div>
+        <label for="input-employee_id">Employee ID: </label>
+        <input type="text" name="input-employee-id" id="input-employee-id-html">
+      </div>
+      <input type="submit">
+    </form>
+  </div>
+
+</div>

@@ -10,5 +10,5 @@ var pool = mysql.createPool({
     database        : 'cs340_lucasho'
 })
 
-// Export it for use in our applicaiton
+// Export it for use in our application
 module.exports.pool = pool;

@@ -1,0 +1,49 @@
+{{> nav currentRoute="/orders" }}
+
+<div id="orders-container" class="d-flex justify-content-between">
+
+  <div id="orders-table" class="col-10">
+    <div class="d-flex justify-content-start flex-nowrap">
+      <div class="col-2 pt-3 pb-3"><strong>ORDER ID</strong></div>
+      <div class="col-5 pt-3 pb-3"><strong>CREATED AT</strong></div>
+      <div class="col-2 pt-3 pb-3"><strong>TOTAL PRICE</strong></div>
+      <div class="col-2 pt-3 pb-3"><strong>EMPLOYEE ID</strong></div>
+    </div>
+
+    {{#each data}}
+
+    {{#if (isEven @index)}}
+
+    <div class="d-flex justify-content-start py-1">
+      <div class="col-2 bg-light">{{this.order_id}}</div>
+      <div class="col-5 bg-light">{{this.order_created_at}}</div>
+      <div class="col-2 bg-light">{{this.total_price}}</div>
+      <div class="col-2 bg-light">{{this.employee_id}}</div>
+      <div class="col-1">
+        <a class="btn btn-sm btn-danger" href="/orders/{{this.order_id}}/delete">
+          Delete
+        </a>
+      </div>
+    </div>
+
+    {{else}}
+
+    <div class="d-flex justify-content-start">
+      <div class="col-2">{{this.order_id}}</div>
+      <div class="col-5">{{this.order_created_at}}</div>
+      <div class="col-2">{{this.total_price}}</div>
+      <div class="col-2">{{this.employee_id}}</div>
+      <div class="col-1">
+        <a class="btn btn-sm btn-danger" href="/orders/{{this.order_id}}/delete">
+          Delete
+        </a>
+      </div>
+    </div>
+
+    {{/if}}
+
+    {{/each}}
+  </div>
+  <div class="mt-3 col-2">
+    <a class="btn btn-warning mt-5" href="/orders/new">Add a New Order</a>
+  </div>

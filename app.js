@@ -1,6 +1,8 @@
 /*
     SETUP
 */
+const path = require("path");
+const { handleBarsHelpers } = require("./helpers");
 
 // Express
 var express = require('express');
@@ -21,8 +23,21 @@ app.engine('.hbs', exphbs({
 }));
 app.set('view engine', '.hbs');
 
-// Static Files
-app.use(express.static('public'));
+// Helper Functions
+app.engine(
+    ".hbs",
+    exphbs({
+      extname: ".hbs",
+      helpers: handleBarsHelpers,
+    })
+  );
+  app.set("view engine", ".hbs");
+  
+
+  // Static Files
+  app.use(express.static(path.join(__dirname, "public")));
+  app.use("/assets", express.static(path.join(__dirname, "assets")));
+
 
 /*
     ROUTES
