@@ -1,0 +1,39 @@
+{{> nav currentRoute="/shifts" }}
+
+<div id="shifts-container" class="d-flex justify-content-between">
+
+  <div id="shifts-table" class="col-8">
+    <div class="d-flex justify-content-start flex-nowrap">
+      <div class="col-2 pt-3 pb-3"><strong>SHIFT ID</strong></div>
+      <div class="col-2 pt-3 pb-3"><strong>SHIFT DAY</strong></div>
+      <div class="col-2 pt-3 pb-3"><strong>SHIFT TYPE</strong></div>
+      <div class="col-2 pt-3 pb-3"><strong>EMPLOYEE ID</strong></div>
+    </div>
+
+    {{#each data}}
+
+    {{#if (isEven @index)}}
+
+    <div class="d-flex justify-content-start py-1 col-4">
+      <div class="col-2 bg-light">{{this.shift_id}}</div>
+      <div class="col-2 bg-light">{{this.shift_day}}</div>
+      <div class="col-2 bg-light">{{this.shift_type}}</div>
+      <div class="col-2 bg-light">{{this.employee_id}}</div>
+    </div>
+
+    {{else}}
+
+    <div class="d-flex justify-content-start col-4">
+      <div class="col-2">{{this.shift_id}}</div>
+      <div class="col-2">{{this.shift_day}}</div>
+      <div class="col-2">{{this.shift_type}}</div>
+      <div class="col-2">{{this.employee_id}}</div>
+    </div>
+
+    {{/if}}
+
+    {{/each}}
+  </div>
+  <div class="mt-3 col-4">
+    <a class="btn btn-warning mt-5" href="/shifts/new">Add a New Shift</a>
+  </div>

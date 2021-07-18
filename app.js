@@ -4,6 +4,8 @@
 const path = require("path");
 const { handleBarsHelpers } = require("./helpers");
 const { router: ordersRouter } = require("./routes/orders");
+const { router: shiftsRouter } = require("./routes/shifts");
+
 
 
 // Express
@@ -103,6 +105,10 @@ db.pool.query(query1, function(error, rows, fields){
 
 // ROUTE FOR ORDERS--------------------------------------------------------------------------------------------------------------------
 app.use("/orders", ordersRouter);
+
+// ROUTE FOR SHIFTS--------------------------------------------------------------------------------------------------------------------
+app.use("/shifts", shiftsRouter);
+
     
 // ROUTE FOR CUSTOMERS-------------------------------------------------------------------------------------------------------
 
@@ -156,60 +162,6 @@ else {
     return res.render('customers_public')
 
 }
-});
-
-// ROUTE FOR SHIFTS-------------------------------------------------------------------------------------------------------------
-
-app.get('/shifts', function(req, res)
-{
-    // Declare Query 1
-    let query1;
-
-    // If there is no query string, we just perform a basic SELECT
-    if (req.query.lname === undefined)
-    {
-        query1 = "SELECT * FROM bsg_people;";
-    }
-
-    // If there is a query string, we assume this is a search, and return desired results
-    else
-    {
-        query1 = `SELECT * FROM bsg_people WHERE lname LIKE "${req.query.lname}%"`
-    }
-
-    // Query 2 is the same in both cases
-    let query2 = "SELECT * FROM bsg_planets;";
-
-    // Run the 1st query
-    db.pool.query(query1, function(error, rows, fields){
-        
-        // Save the people
-        let people = rows;
-        
-        // Run the second query
-        db.pool.query(query2, (error, rows, fields) => {
-            
-            // Save the planets
-            let planets = rows;
-
-            // Construct an object for reference in the table
-            // Array.map is awesome for doing something with each
-            // element of an array.
-            let planetmap = {}
-            planets.map(planet => {
-                let id = parseInt(planet.id, 10);
-
-                planetmap[id] = planet["name"];
-            })
-
-            // Overwrite the homeworld ID with the name of the planet in the people object
-            people = people.map(person => {
-                return Object.assign(person, {homeworld: planetmap[person.homeworld]})
-            })
-
-            return res.render('shifts', {data: people, planets: planets});
-        })
-    })
 });
 
 

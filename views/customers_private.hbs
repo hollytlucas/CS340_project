@@ -1,73 +1,80 @@
-    <div class="w3-bar w3-light-blue">
-        <a href="/index_private" class="w3-bar-item w3-button w3-mobile" style="width:14%">Main Employee Only</a>
-        <a href="waiters" class="w3-bar-item w3-button w3-mobile" style="width:14%">Waiters</a>
-        <a href="orders" class="w3-bar-item w3-button w3-mobile" style="width:14%">Orders</a>
-        <a href="shifts" class="w3-bar-item w3-button w3-mobile" style="width:14%">Shifts</a>
-        <a href="customers_private" class="w3-bar-item w3-button w3-mobile w3-grayscale-max" style="width:14%">Customers</a>
-        <a href="menu_items" class="w3-bar-item w3-button w3-mobile" style="width:14%">Menu Items</a>
-        <a href="/" class="w3-bar-item w3-button w3-mobile" style="width:14%">Main Public</a>
-    </div>
+<div class="w3-bar w3-light-blue">
+    <a href="/index_private" class="w3-bar-item w3-button w3-mobile" style="width:14%">Main Employee Only</a>
+    <a href="waiters" class="w3-bar-item w3-button w3-mobile" style="width:14%">Waiters</a>
+    <a href="orders" class="w3-bar-item w3-button w3-mobile" style="width:14%">Orders</a>
+    <a href="shifts" class="w3-bar-item w3-button w3-mobile" style="width:14%">Shifts</a>
+    <a href="customers_private" class="w3-bar-item w3-button w3-mobile w3-grayscale-max" style="width:14%">Customers</a>
+    <a href="menu_items" class="w3-bar-item w3-button w3-mobile" style="width:14%">Menu Items</a>
+    <a href="/" class="w3-bar-item w3-button w3-mobile" style="width:14%">Main Public</a>
+</div>
 
 
-{{!-- The Data from our Database --}}
+{{!-- customers table --}}
+<div id="customers-container" class="d-flex justify-content-between">
 
-{{!-- Create a table --}}
-<table id="people-table">
+    <div id="customers-table" class="col-3">
+        <div class="d-flex justify-content-start flex-nowrap">
+            <div class="col-3 pt-3 pb-3"><strong>CUSTOMER ID</strong></div>
+            <div class="col-3 pt-3 pb-3"><strong>FIRST NAME</strong></div>
+            <div class="col-3 pt-3 pb-3"><strong>LAST NAME</strong></div>
+            <div class="col-3 pt-3 pb-3"><strong>EMAIL</strong></div>
+            <div class="col-3 pt-3 pb-3"><strong>LOYALTY POINTS</strong></div>
+        </div>
 
-    {{!-- Header section --}}
-    <thead>
-
-        {{!-- For just the first row, we print each key of the row object as a header cell so we
-        know what each column means when the page renders --}}
-        <tr>
-            {{#each data.[0]}}
-            <th>
-                {{@key}}
-            </th>
-            {{/each}}
-        </tr>
-    </thead>
-
-    {{!-- Body section --}}
-    <tbody>
-
-        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
         {{#each data}}
 
-        <tr>
-            <td>{{this.id}}</td>
-            <td>{{this.fname}}</td>
-            <td>{{this.lname}}</td>
-            <td>{{this.homeworld}}</td>
-            <td>{{this.age}}</td>
-        </tr>
+        {{#if (isEven @index)}}
+
+        <div class="d-flex justify-content-start py-1">
+            <div class="col-3 bg-light">{{this.customer_id}}</div>
+            <div class="col-3 bg-light">{{this.first_name}}</div>
+            <div class="col-3 bg-light">{{this.last_name}}</div>
+            <div class="col-3 bg-light">{{this.email}}</div>
+            <div class="col-3 bg-light">{{this.loyalty_points}}</div>
+        </div>
+
+        {{else}}
+
+        <div class="d-flex justify-content-start">
+            <div class="col-3">{{this.customer_id}}</div>
+            <div class="col-3">{{this.first_name}}</div>
+            <div class="col-3">{{this.last_name}}</div>
+            <div class="col-3">{{this.email}}</div>
+            <div class="col-3">{{this.loyalty_points}}</div>
+        </div>
+
+        {{/if}}
+
         {{/each}}
-    </tbody>
-</table>
-<pre>
-    {{planet_map}}
-</pre>
+    </div>
 
-{{!-- Form to search by last name --}}
-<h2>Customer Search</h2>
-<p>Search customers by partial or whole last name using the field below.</p>
-<form id="search-person-html" method='GET' action='/customers'>
-    <label for="input-lname">Search by Last Name: </label>
-    <input type="text" name="lname" id="input-lname-html-search">
-    
-    <input type="submit">
-    <a href='/'><button>Reset</button></a>
-</form>
+    <div id="customers_private_forms" class="d-flex flex-column col-8">
+        {{!-- Form to search by last name --}}
+        <div class="mt-5">
+            <h2>Customer Search</h2>
+            <p>Search customers by partial or whole last name using the field below.</p>
+            <form id="search-person-html" method='GET' action='/customers'>
+                <label for="input-lname">Search by Last Name: </label>
+                <input type="text" name="lname" id="input-lname-html-search">
 
-{{!-- Form to search by last name --}}
-<h2>Orders Search</h2>
-<p>Search for orders by customer ID</p>
-<form id="search-person-html" method='GET' action='/customers'>
-    <label for="input-lname">Customer ID</label>
-    <input type="text" name="lname" id="input-lname-html-search">
-    
-    <input type="submit">
-    <a href='/'><button>Reset</button></a>
-</form>
+                <input type="submit">
+                <a href='/'><button>Reset</button></a>
+            </form>
+        </div>
+        {{!-- Form to search by last name --}}
+        <div class="mt-3">
+            <h2>Orders Search</h2>
+            <p>Search for orders by customer ID</p>
+            <form id="search-person-html" method='GET' action='/customers'>
+                <label for="input-lname">Customer ID</label>
+                <input type="text" name="lname" id="input-lname-html-search">
 
-
+                <input type="submit">
+                <a href='/'><button>Reset</button></a>
+            </form>
+        </div>
+        <div class="mt-3">
+            <a class="btn btn-warning mt-5" href="/customers/new">Add a New Customer</a>
+        </div>
+    </div>
+</div>
