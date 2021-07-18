@@ -10,7 +10,7 @@
 {{!-- The Data from our Database --}}
 
 {{!-- Create a table --}}
-<table id="people-table">
+<table id="people-table" class="paddingBetweenCols">
 
     {{!-- Header section --}}
     <thead>
@@ -46,10 +46,10 @@
     {{planet_map}}
 </pre>
 
+<div class="container">
 <h2>Customer Profiles</h2>
 
-<table id="Customer Search">
-
+<table id="Customer Search" class="paddingBetweenCols">
     {{!-- Header section --}}
     <thead>
 
@@ -88,11 +88,12 @@
         </tr>
     </tbody>
 </table>
+</div>
 
-
+<div class="container">
 <h2>Customer Orders</h2>
 
-<table id="Customers and Orders">
+<table id="Customers and Orders" class="paddingBetweenCols">
 
     {{!-- Header section --}}
     <thead>
@@ -140,29 +141,34 @@
         </tr>
     </tbody>
 </table>
+</div>
+<br><br>
 
 
 
 {{!-- Form to search by last name --}}
+<div class="container">
 <h2>Customer Search</h2>
 <p>Search customers by partial or whole last name</p>
 <form id="search-person-html" method='GET' action='/customers'>
     <label for="input-lname">Last Name: </label>
     <input type="text" name="lname" id="input-lname-html-search">
-    
+    <br><br>
     <input type="submit">
-    <a href='/'><button>Reset</button></a>
 </form>
+</div>
+<br><br>
 
 {{!-- Form to search by last name --}}
+<div class="container">
 <h2>Orders Search</h2>
 <p>Search for orders by customer ID</p>
 <form id="search-person-html" method='GET' action='/customers'>
     <label for="input-lname">Customer ID</label>
     <input type="text" name="lname" id="input-lname-html-search">
-    
+    <br><br>
     <input type="submit">
-    <a href='/'><button>Reset</button></a>
 </form>
+</div>
 
 
