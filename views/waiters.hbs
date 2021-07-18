@@ -1,12 +1,14 @@
-    <div class="w3-bar w3-light-blue">
-        <a href="/index_private" class="w3-bar-item w3-button w3-mobile" style="width:14%">Main Employee Only</a>
-        <a href="waiters" class="w3-bar-item w3-button w3-mobile w3-grayscale-max" style="width:14%">Waiters</a>
-        <a href="orders" class="w3-bar-item w3-button w3-mobile" style="width:14%">Orders</a>
-        <a href="shifts" class="w3-bar-item w3-button w3-mobile" style="width:14%">Shifts</a>
-        <a href="customers_private" class="w3-bar-item w3-button w3-mobile" style="width:14%">Customers</a>
-        <a href="menu_items" class="w3-bar-item w3-button w3-mobile" style="width:14%">Menu Items</a>
-        <a href="/" class="w3-bar-item w3-button w3-mobile" style="width:14%">Main Public</a>
-    </div>
+<div class="w3-bar w3-light-blue">
+    <a href="/index_private" class="w3-bar-item w3-button w3-mobile" style="width:14%">Main Employee Only</a>
+    <a href="waiters" class="w3-bar-item w3-button w3-mobile w3-grayscale-max" style="width:14%">Waiters</a>
+    <a href="/orders" class="w3-bar-item w3-button w3-mobile" style="width:14%">Orders</a>
+    <a href="shifts" class="w3-bar-item w3-button w3-mobile" style="width:14%">Shifts</a>
+    <a href="customers_private" class="w3-bar-item w3-button w3-mobile" style="width:14%">Customers</a>
+    <a href="menu_items" class="w3-bar-item w3-button w3-mobile" style="width:14%">Menu Items</a>
+    <a href="/" class="w3-bar-item w3-button w3-mobile" style="width:14%">Main Public</a>
+</div>
+
+
 
 
 {{!-- The Data from our Database --}}
@@ -116,23 +118,23 @@
 
     <label for="input-id">Preferred Shift:</label>
     <select id="input-shift-html" name="input-shift">
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
     </select>
-    
+
     <input type="submit">
 </form>
 
 
 {{!-- Form to add a record to the table using standard HTML forms WORKING ON RIGHT NOW--}}
 <h2>Add A Waiter</h2>
-<p>To add a waiter, please enter their information below and click `Submit`.  Please assign a shift ID</p>
+<p>To add a waiter, please enter their information below and click `Submit`. Please assign a shift ID</p>
 <form id="add-waiter-form" method="POST" action="/add-waiter-form">
     <label for="input-fname">First Name: </label>
     <input type="text" name="input-fname" id="input-fname-html">
-    
+
     <label for="input-lname">Last Name: </label>
     <input type="text" name="input-lname" id="input-lname-html">
 
@@ -141,30 +143,31 @@
 
     <label for="shift-preference">Preferred Shift:</label>
     <select id="input-shift-html" name="input-shift">
-    <option value="none">No Preference</option>
-    <option value="day">Day Shift</option>
-    <option value="swing">Swing Shift</option>
-    <option value="night">Night Shift</option>
+        <option value="none">No Preference</option>
+        <option value="day">Day Shift</option>
+        <option value="swing">Swing Shift</option>
+        <option value="night">Night Shift</option>
     </select>
     <br>
     <br>
     <label for="input-phone">Assigned Shift ID: </label>
     <input type="number" name="input-assigned-shift" id="input-assigned-shift-html">
-    
+
 
     <input type="submit">
-</form> 
+</form>
 
 {{!-- Form to add a record to the table using standard HTML forms WORKING --}}
 <h2>Modify A Waiter</h2>
-<p>To modify a waiter, please enter their information below and click `Submit`. Any fields left blank will not be modified</p>
+<p>To modify a waiter, please enter their information below and click `Submit`. Any fields left blank will not be
+    modified</p>
 <form id="modify-waiter-form" method="POST" action="/modify-waiter-form">
     <label for="input-id">Employee ID: </label>
     <input type="number" name="input-id" id="input-id">
 
     <label for="input-fname">First Name: </label>
     <input type="text" name="input-fname" id="input-fname-html">
-    
+
     <label for="input-lname">Last Name: </label>
     <input type="text" name="input-lname" id="input-lname-html">
 
@@ -173,20 +176,20 @@
 
     <label for="shift-preference">Shift Preference:</label>
     <select id="input-shift-html" name="input-shift">
-    <option value="NULL">No Preference</option>
-    <option value="day">Day Shift</option>
-    <option value="swing">Swing Shift</option>
-    <option value="night">Night Shift</option>
+        <option value="NULL">No Preference</option>
+        <option value="day">Day Shift</option>
+        <option value="swing">Swing Shift</option>
+        <option value="night">Night Shift</option>
     </select>
     <br>
     <br>
     <label for="input-phone">Assigned Shift ID: </label>
     <input type="number" name="input-assigned-shift" id="input-assigned-shift-html">
-    
+
     <label for="radio-one">Add Shift</label>
-	<input type="radio" id="add-shift" name="switch-one" value="add" checked/>
-    <label for="radio-two">Remove Shift</label>	
-	<input type="radio" id="delete-shift" name="switch-one" value="remove" />
+    <input type="radio" id="add-shift" name="switch-one" value="add" checked />
+    <label for="radio-two">Remove Shift</label>
+    <input type="radio" id="delete-shift" name="switch-one" value="remove" />
 
     <input type="submit">
-</form> 
+</form>
