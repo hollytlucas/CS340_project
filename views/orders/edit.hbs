@@ -3,7 +3,7 @@
 <div id="orders-container" class="d-flex justify-content-between">
 
   <div id="add-order-container" class="m-3">
-    <h2>Add an Order</h2>
+    <h2>Edit an Order</h2>
     <p>To add an order, please enter the information below and click `Submit`!</p>
     <form id="add-order-form" method="POST" action="/orders/new">
       <div class="form-group">
@@ -11,15 +11,7 @@
         <input class="form-control" type="text" name="input-total-price" id="input-total-price-html">
       </div>
       <div class="form-group">
-        <label for="input-employee-id">Employee ID: </label>
-        <input class="form-control" type="text" name="input-employee-id" id="input-employee-id-html">
-      </div>
-      <div class="form-group">
-        <label for="input-customer-id">Customer ID: </label>
-        <input class="form-control" type="text" name="input-customer-id" id="input-customer-id-html">
-      </div>
-      <div class="form-group">
-        <label for="input-menu-items-id">Menu Item IDs (separated by commas): </label>
+        <label for="input-employee_id">Employee ID: </label>
         <input class="form-control" type="text" name="input-employee-id" id="input-employee-id-html">
       </div>
       <button type="submit" class="btn btn-success">Submit</button>

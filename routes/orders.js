@@ -31,6 +31,15 @@ router.get("/new", function (req, res) {
 // receives the form submission of the "add order" form
 router.post("/new", function (req, res) {});
 
+router.get("/:id/edit", function (req, res) {
+  const selectQuery = `SELECT * FROM orders WHERE order_id=${req.params.id}`
+  db.pool.query(selectQuery, function (error, rows, fields) {
+    const order = rows[0];
+    res.render("orders/edit", { order })
+  });
+});
+
+
 // receives the form submission of the "delete order" form
 router.delete("/:id/delete", function (req, res) {
   // make a sql query to UPDATE the order
