@@ -1,6 +1,10 @@
 {{> nav currentRoute="/orders" }}
 
-<div id="orders-container" class="d-flex justify-content-between my-container flex-column">
+
+<div
+  id="orders-container"
+  class="d-flex justify-content-between my-container flex-column"
+>
 
   <table class="table table-striped">
     <thead>
@@ -17,26 +21,45 @@
     </thead>
     <tbody>
       {{#each data}}
-      <tr>
-        <th scope="row">{{this.order_id}}</th>
-        <td>{{this.order_created_at}}</td>
-        <td>{{this.total_price}}</td>
-        <td>{{this.employee_id}}</td>
-        <td>(customer ID goes here)</td>
-        <td>(menu item IDs go here)</td>
-        <td> <a class="btn btn-sm btn-warning" href="/orders/{{this.order_id}}/edit">
-            Edit
-          </a></td>
-        <td> <a class="btn btn-sm btn-danger" href="/orders/{{this.order_id}}/delete">
-            Delete
-          </a></td>
-      </tr>
+        <tr>
+          <th scope="row">{{this.order_id}}</th>
+          <td>{{this.order_created_at}}</td>
+          <td>{{this.total_price}}</td>
+          <td>{{this.employee_id}}</td>
+          <td>(customer ID goes here)</td>
+          <td>(menu item IDs go here)</td>
+          <td>
+            <a
+              class="btn btn-sm btn-warning"
+              href="/orders/{{this.order_id}}/edit"
+            >
+              Edit
+            </a></td>
+          <td>
+            <a
+              class="btn btn-sm btn-danger"
+              href="/orders/{{this.order_id}}/delete"
+            >
+              Delete
+            </a></td>
+        </tr>
       {{/each}}
     </tbody>
   </table>
   <div>
-    <a class="btn btn-sm btn-success" href="/orders/new">
+    <a class="btn btn-success mt-5 mb-5" href="/orders/new">
       Add Order
     </a>
+  </div>
+  <div class="col-6">
+    <h2>Orders Search</h2>
+    <p>Search for orders by customer ID</p>
+    <form id="search-person-html" method="GET" action="/customers">
+      <label for="input-lname">Customer ID</label>
+      <input type="text" name="lname" id="input-lname-html-search" />
+
+      <button type="submit" class="btn btn-info">Search</button>
+      <a class="btn btn-light" href="/">Reset</a>
+    </form>
   </div>
 </div>

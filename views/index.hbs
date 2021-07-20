@@ -1,35 +1,38 @@
-    <div class="w3-bar w3-light-blue">
-        <div class="w3-bar-item" style="width:33%"></div>
-        <a href="customers_public" class="w3-bar-item w3-button w3-mobile" style="width:33%">Customers</a>
-        <a href="index_private" class="w3-bar-item w3-button w3-mobile" style="width:33%">Employees Only</a>
-    </div>
-
-
-{{!-- Just some plain text --}}
-<div class="w3-container w3-light-gray">
-    <h3>Public Access Website</h3>
+<div class="w3-bar w3-light-blue">
+      <a
+    href="index_private"
+    class="w3-bar-item w3-button w3-mobile"
+    style="width:33%"
+  >Employees Only</a>
+  <div class="w3-bar-item" style="width:33%"></div>
+    <a
+    href="customers_public"
+    class="w3-bar-item w3-button w3-mobile"
+    style="width:33%"
+  >Customers</a>
 </div>
 
-</div>
-
-
-        Customers page: Holly 
-        <ol>
-            <li> Select profile by name search </li>
-            <li> Select all orders for specific customer by customer_id, display orders and customers as a joined table </li>
-        </ol>
-        
-   
-
-   
-    <br>
-    <br>
-    <br>
-    <br>
-    <!-- Full width -->
-    <div class="bottom-right">
-        Telephone: (206) 331-1245<br>
-        Address: 215 Merrill St. Seattle, WA<br>
-        Email: customer_service@house_finch.com<br>
+{{! Just some plain text }}
+<div
+  class="d-flex justify-content-center align-items-center flex-column w3-container w3-light-gray"
+>
+    <div class="m-3 d-flex flex-column align-items-center">
+        <h3 class="m-3">Welcome!</h3>
+        <p class="m-1">If you are a customer, you can search for your order details and loyalty
+        points balance by clicking on "Customers"</p>
     </div>
-
+    <div class="m-5">
+        <h4>Today's Menu</h4>
+        <ul>
+        <li>Spinach Quiche 7.85</li>
+        <li>Meatloaf 7.99</li>
+        <li>Cheese Enchilada 4.50</li>
+        </ul>
+    </div>
+    </div>
+</div>
+<div class="d-flex justify-content-center">
+  <span class="m-3">(206) 331-1245</span>
+  <span class="m-3">215 Merrill St. Seattle, WA</span>
+  <span class="m-3">customer_service@house_finch.com</span>
+</div>
