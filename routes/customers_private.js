@@ -39,6 +39,10 @@ router.get("/:id/edit", function (req, res) {
   });
 });
 
+router.post("/:id/edit", function (req, res) {
+  res.redirect("/customers_private");
+});
+
 // receives the form submission of the "delete customer" form
 router.delete("/:id/delete", function (req, res) {
   // make a sql query to UPDATE the customer

@@ -32,13 +32,16 @@ router.get("/new", function (req, res) {
 router.post("/new", function (req, res) {});
 
 router.get("/:id/edit", function (req, res) {
-  const selectQuery = `SELECT * FROM orders WHERE order_id=${req.params.id}`
+  const selectQuery = `SELECT * FROM orders WHERE order_id=${req.params.id}`;
   db.pool.query(selectQuery, function (error, rows, fields) {
     const order = rows[0];
-    res.render("orders/edit", { order })
+    res.render("orders/edit", { order });
   });
 });
 
+router.post("/:id/edit", function (req, res) {
+  res.redirect("/orders");
+});
 
 // receives the form submission of the "delete order" form
 router.delete("/:id/delete", function (req, res) {
