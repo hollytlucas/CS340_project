@@ -12,63 +12,18 @@
   >Customers</a>
 </div>
 
-{{! The Data from our Database }}
-
-{{! Create a table }}
-<table id="people-table" class="paddingBetweenCols">
-
-  {{! Header section }}
-  <thead>
-
-    {{! For just the first row, we print each key of the row object as a header cell so we
-        know what each column means when the page renders }}
-    <tr>
-      {{#each data}}
-        <th>
-          {{@key}}
-        </th>
-      {{/each}}
-    </tr>
-  </thead>
-
-  {{! Body section }}
-  <tbody>
-
-    {{! For each row, print the id, fname, lname, homeworld and age, in order }}
-    {{#each data}}
-
-      <tr>
-        <td>{{this.id}}</td>
-        <td>{{this.fname}}</td>
-        <td>{{this.lname}}</td>
-        <td>{{this.homeworld}}</td>
-        <td>{{this.age}}</td>
-      </tr>
-    {{/each}}
-  </tbody>
-</table>
-<pre>
-  {{planet_map}}
-</pre>
-
 <div class="my-container">
   <h2>Customer Profiles</h2>
-
-  <table id="Customer Search" class="paddingBetweenCols">
-    {{! Header section }}
+  <table class="table table-striped">
     <thead>
-
-      {{! For just the first row, we print each key of the row object as a header cell so we
-            know what each column means when the page renders }}
       <tr>
-        <th>CUSTOMER ID</th>
-        <th>FIRST NAME</th>
-        <th>LAST NAME</th>
-        <th>EMAIL</th>
-        <th>LOYALTY POINTS</th>
+        <th scope="col">CUSTOMER ID</th>
+        <th scope="col">FIRST NAME</th>
+        <th scope="col">LAST NAME</th>
+        <th scope="col">EMAIL</th>
+        <th scope="col">LOYALTY POINTS</th>
       </tr>
     </thead>
-    {{! Body section }}
     <tbody>
       <tr>
         <td>1456</td>
@@ -95,8 +50,6 @@
   </table>
 </div>
 
-<br /><br />
-
 {{! Form to search by last name }}
 <div class="my-container">
   <h2>Customer Search</h2>
@@ -105,7 +58,7 @@
     <label for="input-lname">Last Name: </label>
     <input type="text" name="lname" id="input-lname-html-search" />
     <br /><br />
-    <input type="submit" />
+    <button type="submit" class="btn btn-success">Search</button>
   </form>
 </div>
 <br /><br />
@@ -113,24 +66,18 @@
 <div class="my-container">
   <h2>Customer Orders</h2>
 
-  <table id="Customers and Orders" class="paddingBetweenCols">
-
-    {{! Header section }}
+  <table class="table table-striped">
     <thead>
-
-      {{! For just the first row, we print each key of the row object as a header cell so we
-            know what each column means when the page renders }}
       <tr>
-        <th>CUSTOMER ID</th>
-        <th>FIRST NAME</th>
-        <th>LAST NAME</th>
-        <th>EMAIL</th>
-        <th>LOYALTY POINTS</th>
-        <th>ORDER DATE AND TIME</th>
-        <th>TOTAL CHARGES</th>
+        <th scope="col">CUSTOMER ID</th>
+        <th scope="col">FIRST NAME</th>
+        <th scope="col">LAST NAME</th>
+        <th scope="col">EMAIL</th>
+        <th scope="col">LOYALTY POINTS</th>
+        <th scope="col">ORDER DATE AND TIME</th>
+        <th scope="col">TOTAL CHARGES</th>
       </tr>
     </thead>
-    {{! Body section }}
     <tbody>
       <tr>
         <td>1456</td>
@@ -161,8 +108,6 @@
       </tr>
     </tbody>
   </table>
-</div>
-<br /><br />
 
 {{! Form to search by last name }}
 <div class="my-container">
@@ -172,6 +117,6 @@
     <label for="input-lname">Customer ID</label>
     <input type="text" name="lname" id="input-lname-html-search" />
     <br /><br />
-    <input type="submit" />
+    <button type="submit" class="btn btn-success">Search</button>
   </form>
 </div>

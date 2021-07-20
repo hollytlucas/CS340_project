@@ -1,57 +1,54 @@
 {{> nav currentRoute="/waiters" }}
-
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">EMPLOYEE ID</th>
-      <th scope="col">FIRST NAME</th>
-      <th scope="col">LAST NAME</th>
-      <th scope="col">PHONE NUMBER</th>
-      <th scope="col">SHIFT PREFERENCE</th>
-      <th scope="col">SHIFT IDs</th>
-      <th scope="col">SHIFT DAYS</th>
-      <th scope="col">SHIFT TYPES</th>
-      <th scope="col"></th>
-      <th scope="col"></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>35465</td>
-      <td>Mary</td>
-      <td>Smith</td>
-      <td>345-555-6666</td>
-      <td>Night</td>
-      <td>2</td>
-      <td>Tuesday</td>
-      <td>Swing</td>
-    </tr>
-    <tr>
-      <td>2145</td>
-      <td>George</td>
-      <td>Lopez</td>
-      <td>345-234-1111</td>
-      <td>Day</td>
-      <td>2</td>
-      <td>Tuesday</td>
-      <td>Swing</td>
-    </tr>
-    <tr>
-      <td>33356</td>
-      <td>Gabriel</td>
-      <td>Keys</td>
-      <td>345-222-1214</td>
-      <td>Swing</td>
-      <td>2</td>
-      <td>Tuesday</td>
-      <td>Swing</td>
-    </tr>
-  </tbody>
-</table>
-
-<pre>
-  {{planet_map}}
-</pre>
+<div class="my-container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+            <th scope="col">EMPLOYEE ID</th>
+            <th scope="col">FIRST NAME</th>
+            <th scope="col">LAST NAME</th>
+            <th scope="col">PHONE NUMBER</th>
+            <th scope="col">SHIFT PREFERENCE</th>
+            <th scope="col">SHIFT IDs</th>
+            <th scope="col">SHIFT DAYS</th>
+            <th scope="col">SHIFT TYPES</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            <td>35465</td>
+            <td>Mary</td>
+            <td>Smith</td>
+            <td>345-555-6666</td>
+            <td>Night</td>
+            <td>2</td>
+            <td>Tuesday</td>
+            <td>Swing</td>
+            </tr>
+            <tr>
+            <td>2145</td>
+            <td>George</td>
+            <td>Lopez</td>
+            <td>345-234-1111</td>
+            <td>Day</td>
+            <td>2</td>
+            <td>Tuesday</td>
+            <td>Swing</td>
+            </tr>
+            <tr>
+            <td>33356</td>
+            <td>Gabriel</td>
+            <td>Keys</td>
+            <td>345-222-1214</td>
+            <td>Swing</td>
+            <td>2</td>
+            <td>Tuesday</td>
+            <td>Swing</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 {{! Form to search by last name NOT WORKING}}
 <div class="my-container">
@@ -67,7 +64,9 @@
       <option value="4">4</option>
     </select>
     <br /><br />
-    <input type="submit" />
+    <button class="btn btn-info">
+      Search
+    </button>
   </form>
 </div>
 <br />
@@ -104,7 +103,9 @@
     />
     <br /><br />
 
-    <input type="submit" />
+    <button class="btn btn-success">
+      Submit
+    </button>
   </form>
 </div>
 <br />
@@ -149,6 +150,8 @@
     <input type="radio" id="delete-shift" name="switch-one" value="remove" />
     <br /><br />
 
-    <input type="submit" />
+    <button class="btn btn-success">
+      Submit
+    </button>
   </form>
 </div>
