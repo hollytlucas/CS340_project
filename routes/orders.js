@@ -29,7 +29,9 @@ router.get("/new", function (req, res) {
 });
 
 // receives the form submission of the "add order" form
-router.post("/new", function (req, res) {});
+router.post("/new", function (req, res) {
+  res.redirect("/orders");
+});
 
 router.get("/:id/edit", function (req, res) {
   const selectQuery = `SELECT * FROM orders WHERE order_id=${req.params.id}`;

@@ -1,0 +1,43 @@
+{{> nav currentRoute="/shifts" }}
+
+
+<div id="shifts-container" class="d-flex justify-content-between">
+
+  <div id="edit-shift-container" class="m-3">
+    <h2>Add Shift</h2>
+    <p>To add a shift, enter info below and click `Submit`!</p>
+    <form
+      id="edit-shift-form"
+      class="form-group"
+      method="POST"
+      action="/shifts/new"
+    >
+      <div class="form-group">
+        <label for="input-total-price">Shift Day: </label>
+        <input
+          type="text"
+          name="input-employee-id"
+          id="input-employee-id-html"
+        />
+      </div>
+      <div class="form-group">
+        <label for="input-employee_id">Shift Type: </label>
+        <input
+          type="text"
+          name="input-employee-id"
+          id="input-employee-id-html"
+        />
+      </div>
+      <div class="form-group">
+        <label for="input-employee_id">Employee IDs (separated by commas):
+        </label>
+        <input
+          type="text"
+          name="input-employee-id"
+          id="input-employee-id-html"
+        />
+      </div>
+      <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+  </div>
+</div>

@@ -23,6 +23,16 @@ router.get("", function (req, res) {
   }
 });
 
+// renders the "add shift" form
+router.get("/new", function (req, res) {
+  res.render("shifts/new");
+});
+
+// receives the form submission of the "add shift" form
+router.post("/new", function (req, res) {
+  res.redirect("/shifts");
+});
+
 // renders the "edit shift" form
 router.get("/:id/edit", function (req, res) {
   res.render("shifts/edit", { shift: {} });
