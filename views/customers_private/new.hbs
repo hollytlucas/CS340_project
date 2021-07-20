@@ -1,0 +1,23 @@
+{{> nav currentRoute="/customers_private" }}
+
+
+<div id="customers-container" class="d-flex justify-content-between">
+
+  <div id="add-customer-container" class="m-3">
+    <h2>Add Customer</h2>
+    <p>To add a customer, please enter the information below and click `Submit`!</p>
+    <form id="add-customer-form" method="POST" action="/customers_private/new">
+      <div class="form-group">
+        <label for="input-first-name">First Name: </label>
+        <input
+          class="form-control"
+          type="text"
+          name="input-first-name"
+          id="input-first-name-html"
+        />
+      </div>
+      <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+  </div>
+
+</div>

@@ -1,56 +1,39 @@
-    <div class="w3-bar w3-light-blue">
+<div class="w3-bar w3-light-blue d-flex justify-content-center">
 
-        <a href="/index_private" class="w3-bar-item w3-button w3-mobile w3-grayscale-max" style="width:14%">Main Employee Only</a>
-        <a href="waiters" class="w3-bar-item w3-button w3-mobile" style="width:14%">Waiters</a>
-        <a href="orders" class="w3-bar-item w3-button w3-mobile" style="width:14%">Orders</a>
-        <a href="shifts" class="w3-bar-item w3-button w3-mobile" style="width:14%">Shifts</a>
-        <a href="customers_private" class="w3-bar-item w3-button w3-mobile" style="width:14%">Customers</a>
-        <a href="menu_items" class="w3-bar-item w3-button w3-mobile" style="width:14%">Menu Items</a>
-        <a href="/" class="w3-bar-item w3-button w3-mobile" style="width:14%">Main Public</a>
-    </div>
-
-
-{{!-- Just some plain text --}}
-<div class="w3-container w3-light-gray">
-    <h3>Employee Only Access Website</h3>
+  <a
+    href="waiters"
+    class="w3-bar-item w3-button w3-mobile"
+    style="width:14%"
+  >Waiters</a>
+  <a
+    href="orders"
+    class="w3-bar-item w3-button w3-mobile"
+    style="width:14%"
+  >Orders</a>
+  <a
+    href="shifts"
+    class="w3-bar-item w3-button w3-mobile"
+    style="width:14%"
+  >Shifts</a>
+  <a
+    href="customers_private"
+    class="w3-bar-item w3-button w3-mobile"
+    style="width:14%"
+  >Customers</a>
+  <a
+    href="menu_items"
+    class="w3-bar-item w3-button w3-mobile"
+    style="width:14%"
+  >Menu Items</a>
+  <a href="/" class="w3-bar-item w3-button w3-mobile" style="width:14%">Home</a>
 </div>
 
-        <ol>
-        <li>Waiters page: Holly </li>
-        <ol>
-            <li> Add a waiter, no assignments necessary</li>
-            <li> Select waiter from shift id dropdown, display waiters and shifts as a joined table</li>
-            <li> Modify a waiter, if shift is changed update shifts_waiters join table</li>
-        </ol>
-        <li>Shifts page:  Kelley </li>
-        <ol>
-            <li>Add a shift and assign to waiter by waiter ID</li>
-        </ol>
-        <li>Orders page: Kelley</li>
-        <ol>
-            <li>Select orders by menu_item_id , display orders and menu_items as a joined table</li>
-            <li>Add order, specify customer and menu item</li>
-            <li>Delete orders and modify customers_orders table</li>
-            <li>Modify order to remove waiter dependency</li>
-        </ol>
-        <li>Customers page:  Kelley</li>
-        <ol>
-            <li>Add customers, assign to an order </li>
-            <li>Modify loyalty_points</li>
-        </ol>
-        <li>Add menu items page:  Holly</li>
-        <ol>
-            <li>Add menu items, no assignments necessary</li>
-        </ol>
-    </ol>
-    <br>
-    <br>
-    <br>
-    <br>
-    <!-- Full width -->
-    <div class="bottom-right">
-        Telephone: (206) 331-1245<br>
-        Address: 215 Merrill St. Seattle, WA<br>
-        Email: customer_service@house_finch.com<br>
-    </div>
-
+{{! Just some plain text }}
+<div class="w3-container w3-light-gray">
+  <h3 class="m-5">Employee Only Access Website</h3>
+</div>
+<div class="d-flex justify-content-center">
+  <span class="m-3">(206) 331-1245</span>
+  <span class="m-3">215 Merrill St. Seattle, WA</span>
+  <span class="m-3">your_manager@house_finch.com</span>
+</div>

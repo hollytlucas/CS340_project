@@ -1,39 +1,67 @@
+
 {{> nav currentRoute="/shifts" }}
 
-<div id="shifts-container" class="d-flex justify-content-between">
+<div
+  id="shifts-container"
+  class="d-flex justify-content-between my-container flex-column"
+>
 
-  <div id="shifts-table" class="col-8">
-    <div class="d-flex justify-content-start flex-nowrap">
-      <div class="col-2 pt-3 pb-3"><strong>SHIFT ID</strong></div>
-      <div class="col-2 pt-3 pb-3"><strong>SHIFT DAY</strong></div>
-      <div class="col-2 pt-3 pb-3"><strong>SHIFT TYPE</strong></div>
-      <div class="col-2 pt-3 pb-3"><strong>EMPLOYEE ID</strong></div>
-    </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">SHIFT ID</th>
+        <th scope="col">SHIFT DAY</th>
+        <th scope="col">SHIFT TYPE</th>
+        <th scope="col">EMPLOYEE IDs</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{!-- {{#each data}}
+        <tr>
+          <th scope="row">{{this.shift_id}}</th>
+          <td>{{this.shift_day}}</td>
+          <td>{{this.shift_type}}</td>
+          <td>(employee IDs go here)</td>
+          <td>
+            <a
+              class="btn btn-sm btn-warning"
+              href="/shifts/{{this.shift_id}}/edit"
+            >
+              Edit Assigned Employees
+            </a>
+          </td>
+        </tr>
+      {{/each}} --}}
+      <tr>
+        <th scope="row">1</th>
+        <td>Friday</td>
+        <td>daytime</td>
+        <td>33356</td>
+        <td>
+          <a
+            class="btn btn-sm btn-warning"
+            href="/shifts/1/edit"
+          >
+            Edit Assigned Employees
+          </a>
+        </td>
+      </tr>
+            <tr>
+        <th scope="row">2</th>
+        <td>Friday</td>
+        <td>swing</td>
+        <td>2145</td>
+        <td>
+          <a
+            class="btn btn-sm btn-warning"
+            href="/shifts/2/edit"
+          >
+            Edit Assigned Employees
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-    {{#each data}}
-
-    {{#if (isEven @index)}}
-
-    <div class="d-flex justify-content-start py-1 col-4">
-      <div class="col-2 bg-light">{{this.shift_id}}</div>
-      <div class="col-2 bg-light">{{this.shift_day}}</div>
-      <div class="col-2 bg-light">{{this.shift_type}}</div>
-      <div class="col-2 bg-light">{{this.employee_id}}</div>
-    </div>
-
-    {{else}}
-
-    <div class="d-flex justify-content-start col-4">
-      <div class="col-2">{{this.shift_id}}</div>
-      <div class="col-2">{{this.shift_day}}</div>
-      <div class="col-2">{{this.shift_type}}</div>
-      <div class="col-2">{{this.employee_id}}</div>
-    </div>
-
-    {{/if}}
-
-    {{/each}}
-  </div>
-  <div class="mt-3 col-4">
-    <a class="btn btn-warning mt-5" href="/shifts/new">Add a New Shift</a>
-  </div>
+</div>
