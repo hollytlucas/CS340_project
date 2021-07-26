@@ -34,103 +34,68 @@
     Public</a>
 </div>
 
+
 <div class="my-container">
-  <h2>Total Inventory</h2>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">ITEM NAME</th>
-      <th scope="col">PRICE</th>
-      <th scope="col">AVAILABLE</th>
-      <th scope="col">UNITS SOLD</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-        <td>Spinach Quiche</td>
-        <td>7.85</td>
-        <td>TRUE</td>
-        <td>22</td>
-    </tr>
-    <tr>
-        <td>Meatloaf</td>
-        <td>7.99</td>
-        <td>FALSE</td>
-        <td>5</td>
-    </tr>
-    <tr>
-        <td>Cheese Enchilada</td>
-        <td>4.50</td>
-        <td>TRUE</td>
-        <td>30</td>
-    </tr>
-  </tbody>
-</table>
-  
+{{!-- Create a table --}}
+<table id="inventor" class="table table-striped paddingBetweenCols">
 
-  {{!-- <table id="Inventory" class="paddingBetweenCols">
-
-    {{! Header section }}
+    {{!-- Header section --}}
     <thead>
 
-      {{! For just the first row, we print each key of the row object as a header cell so we
-            know what each column means when the page renders }}
-      <tr>
-        <th>ITEM NAME</th>
-        <th>PRICE</th>
-        <th>AVAILABLE</th>
-        <th>UNITS SOLD</th>
-      </tr>
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            <th scope="col">MENU ITEM ID</th>
+            <th scope="col">ITEM NAME</th>
+            <th scope="col">PRICE</th>
+            <th scope="col">IS AVAILABLE (1=YES, 0=NO)</th>
+            <th scope="col">UNITS SOLD</th>
+        </tr>
     </thead>
-    {{! Body section }}
+
+    {{!-- Body section --}}
     <tbody>
-      <tr>
-        <td>Spinach Quiche</td>
-        <td>7.85</td>
-        <td>TRUE</td>
-        <td>22</td>
-      </tr>
-      <tr>
-        <td>Meatloaf</td>
-        <td>7.99</td>
-        <td>FALSE</td>
-        <td>5</td>
-      </tr>
-      <tr>
-        <td>Cheese Enchilada</td>
-        <td>4.50</td>
-        <td>TRUE</td>
-        <td>30</td>
-      </tr>
+
+        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+        {{#each data}}
+
+        <tr>
+            <td>{{this.menu_item_id}}</td>
+            <td>{{this.name}}</td>
+            <td>$ {{this.price}}</td>
+            <td>{{this.is_available}}</td>
+            <td>{{this.number_sold}}</td>
+        </tr>
+        {{/each}}
     </tbody>
-  </table>
+</table>
 </div>
-<br /><br /> --}}
+
 
 {{! Form to add a record to the table using standard HTML forms }}
 <div class="my-container">
   <h2>Add A Menu Item</h2>
   <p>To add a new menu item, please enter the information below and click
     `Submit`! Any values left blank will be submitted as null.</p>
-  <form id="add-person-form" method="POST" action="/add-person-form">
+  <form id="add-menu-item-form" method="POST" action="/add-menu-item-form">
 
-    <label for="input-fname">Item Name (descriptive): </label>
-    <input type="text" name="input-fname" id="input-fname-html" />
+    <label for="input-name">Item Name (descriptive): </label>
+    <input type="text" name="input-name" id="input-name-html" />
 
-    <label for="input-lname">Unit Price: </label>
-    <input type="text" name="input-lname" id="input-lname-html" />
+    <label for="input-price">Unit Price: </label>
+    <input type="text" name="input-price" id="input-price-html" />
 
     <label for="radio-one">In Stock</label>
-    <input type="radio" id="radio-one" name="switch-one" value="yes" checked />
+    <input type="radio" id="radio-one" name="is-available" value="1" checked />
 
     <label for="radio-two">Not In Stock</label>
-    <input type="radio" id="radio-two" name="switch-one" value="no" />
+    <input type="radio" id="radio-two" name="is-available" value="0" />
 
     <br />
     <br />
 
-    <label for="input-age">Number of Units Sold: </label>
-    <input type="number" name="input-age" id="input-age-html" />
+    <label for="input-number-sold">Number of Units Sold: </label>
+    <input type="number" name="input-number-sold" id="input-number-sold-html" />
 
     <br />
     <br />
