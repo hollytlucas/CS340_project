@@ -225,54 +225,73 @@ app.use("/shifts", shiftsRouter);
 
 // ROUTE FOR CUSTOMERS-------------------------------------------------------------------------------------------------------
 
+// ROUTE FOR CUSTOMERS PUBLIC-------------------------------------------------------------------------------------------------------
+
 app.get("/customers_public", function (req, res) {
   // Declare Query 1
   let query1;
+  let charges;
+  let orders;
+  let customer_ids;
 
-  // If there is a query string, we run the query
-  if (req.query.lname != undefined) {
-    query1 = `SELECT * FROM bsg_people WHERE lname LIKE "${req.query.lname}%"`;
+  query1 = `SELECT customer_id FROM customers`;
+  db.pool.query(query1, function (error, rows, fields) {
+    // Save the people
+    customer_ids = rows;
+    // Run the second query
+    });
 
-    // Query 2 is the same in both cases
-    let query2 = "SELECT * FROM bsg_planets;";
-
+  // If there is a query string, we run the query for searching by last name
+  if (req.query.lname != undefined) 
+  {
+    console.log("searching");
+    query1 = `SELECT * FROM customers WHERE last_name LIKE "${req.query.lname}%"`;
     // Run the 1st query
     db.pool.query(query1, function (error, rows, fields) {
       // Save the people
-      let people = rows;
-
+      let customers = rows;
       // Run the second query
-      db.pool.query(query2, (error, rows, fields) => {
-        // Save the planets
-        let planets = rows;
-
-        // Construct an object for reference in the table
-        // Array.map is awesome for doing something with each
-        // element of an array.
-        let planetmap = {};
-        planets.map((planet) => {
-          let id = parseInt(planet.id, 10);
-
-          planetmap[id] = planet["name"];
-        });
-
-        // Overwrite the homeworld ID with the name of the planet in the people object
-        people = people.map((person) => {
-          return Object.assign(person, {
-            homeworld: planetmap[person.homeworld],
-          });
-        });
-
-        return res.render("customers_public", {
-          data: people,
-          planets: planets,
+      return res.render("customers_public", { customers: customers, customer_ids: customer_ids });
+      });
+  } 
+  
+  else if (req.query.customer != undefined) {
+    console.log(req.query.custorder);
+    query1 = `SELECT * FROM customers c
+    INNER JOIN customers_orders co ON c.customer_id = co.customer_id
+    INNER JOIN orders o ON co.order_id = o.order_id WHERE c.customer_id = "${req.query.customer}%"`;
+    db.pool.query(query1, function (error, rows, fields) {
+      // Save the orders
+      orders = rows;
+      query1 = `SELECT SUM(o.total_price) as total_charges FROM customers c
+      INNER JOIN customers_orders co ON c.customer_id = co.customer_id
+      INNER JOIN orders o ON co.order_id = o.order_id WHERE c.customer_id = "${req.query.customer}%"`;
+      db.pool.query(query1, function (error, rows, fields) {
+        // Save the orders
+        charges = rows;
+        return res.render("customers_public", { orders: orders, charges: charges, customer_ids: customer_ids });
         });
       });
-    });
-  } else {
-    return res.render("customers_public");
+    // get the total charges
+
+    
+   }
+
+  else {
+
+    query1 = `SELECT customer_id FROM customers`;
+    db.pool.query(query1, function (error, rows, fields) {
+      // Save the people
+      customer_ids = rows;
+      // Run the second query
+      console.log("this is cust id ", customer_ids);
+      return res.render("customers_public", {customer_ids: customer_ids});
+      });
+  
+
   }
 });
+
 
 // ROUTE FOR CUSTOMERS EMPLOYEE ONLY
 
@@ -370,12 +389,33 @@ app.post("/add-waiter-form", function (req, res) {
 
 //  ROUTE FOR MODIFY WAITER --------------------------------------------------------------------------------------------------------
 app.post("/modify-waiter-form", function (req, res) {
+  let shifts;
+  let waiters;
+  let query2;
   // Capture the incoming data and parse it back to a JS object
+  console.log(req.body);
+  cant_delete = false
+
   count = 0;
-  let query2 = `UPDATE waiters SET `;
+
+  query2 = `SELECT shift_id FROM shifts`;
+  // Run the second query
+  db.pool.query(query2, (error, rows, fields) => {
+   shifts = rows 
+      })
+        // get all waiter IDs, this will be populated in the dropdown to search for waiters whenever the page is loaded
+  query2 = `SELECT waiter_id FROM waiters`; 
+  // Run the second query
+  db.pool.query(query2, (error, rows, fields) => {
+  waiters = rows 
+            })
+
+
+  query2 = `UPDATE waiters SET `;
 
   let data = req.body;
-  console.log(data);
+
+  waiter_id = data["input-waiter-id"];
 
   // Capture NULL values
   let fname = data["input-fname"];
@@ -397,35 +437,124 @@ app.post("/modify-waiter-form", function (req, res) {
     if (count >= 1) {
       query2 += `, `;
     }
-    query2 += ` employee_phone_number = '${phone}' `;
+    query2 += ` phone_number = '${phone}' `;
   }
 
   let shift = data["input-shift"];
-  if (shift != "") {
+  console.log(data["input-shift"]);
+  if (data["input-shift"] != "unchanged") {
     if (count >= 1) {
       query2 += `, `;
     }
     query2 += ` shift_type_preference = '${shift}' `;
   }
 
-  query2 += `where employee_id = '${data["input-id"]}'`;
+  query2 += `where waiter_id = '${data["input-waiter-id"]}'`;
+  console.log("query is ", query2);
 
-  // Create the query and run it on the database
+
+  // run the modify query
   db.pool.query(query2, function (error, rows, fields) {
-    // Check to see if there was an error
-    if (error) {
-      // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-      console.log(error);
-      res.sendStatus(400);
+    if (error) { 
+
+    }
+    else {
+      console.log("assigned shift should be undefined ", data["input-assigned-shift"]);
+      if (data["input-assigned-shift"] === undefined) {
+        
+        res.redirect("/waiters");
+        //, {shifts:shifts, waiters:waiters});
+      }
+
+    //done
+    }
+});
+
+    //if switch-one = add, then add to shifts_waiters table
+
+    if (data["input-shift-action"] == "Add" && data["input-assigned-shift"] != "") {
+      query1 = `INSERT INTO shifts_waiters (waiter_id, shift_id) VALUES ('${data["input-waiter-id"]}', '${data["input-assigned-shift"]}')`;
+      db.pool.query(query1, function (error, rows, fields) {
+      if (error) { 
+        res.redirect("/waiters");
+      }
+      else {
+        res.redirect("/waiters");
+      }
+    })
     }
 
-    // If there was no error, we redirect back to our root route, which automatically runs the SELECT * FROM waiters and
-    // presents it on the screen
-    else {
-      res.redirect("/waiters");
+
+      //if switch-one = delete and assigned shift not blank
+      if (data["input-shift-action"] == "Remove" && data["input-assigned-shift"] != "") {
+        query1 = `SELECT COUNT(*) AS count FROM shifts_waiters WHERE waiter_id = '${data["input-waiter-id"]}'`        
+        db.pool.query(query1, function (error, rows, fields) {
+        if (error) { }
+        else {
+          let count = rows[0];
+          console.log("the waiter ID is ", data["input-id"]);
+          console.log("count is ", count);
+            if (count["count"] > 1) {
+              query1 = `DELETE FROM shifts_waiters WHERE waiter_id = '${data["input-waiter-id"]}' AND shift_id = '${data["input-assigned-shift"]}'`;
+              db.pool.query(query1, function (error, rows, fields) {
+
+              if (error) { 
+                console.log(error);
+                res.sendStatus(400);
+              }
+        else {
+          res.redirect("/waiters");
+        }
+      
+      })    
     }
-  });
+    else {
+        // Only one shift assigned, cannot remove
+
+        cant_delete = true
+        console.log("not deleted")
+        res.render("waiters", {cant_delete: cant_delete, shifts:shifts, waiters:waiters});
+    }
+}
+  })
+}
+
 });
+
+// ROUTE FOR ADD MENU ITEM
+
+app.post("/add-menu-item-form", function (req, res) {
+  // Capture the incoming data and parse it back to a JS object
+  let data = req.body;
+  let items;
+    // Create the query and run it on the database
+    query1 = `INSERT INTO menu_items (name, price, is_available, number_sold) VALUES ('${data["input-name"]}', '${data["input-price"]}', '${data["is-available"]}', '${data["input-number-sold"]}')`;
+    db.pool.query(query1, function (error, rows, fields) {
+      // Check to see if there was an error
+      if (error) {
+        console.log(error);
+        res.sendStatus(400);
+      }
+      else {   }
+
+            })   
+    query1 = `SELECT * FROM menu_items`;
+    db.pool.query(query1, function (error, rows, fields) {
+      // Check to see if there was an error
+      if (error) {
+        console.log(error);
+        res.sendStatus(400);
+      }
+      else {
+        console.log(rows);
+        items = rows
+        return res.render("menu_items", { data: items});
+                    }
+            })
+});
+
+
+
 
 //----------------------------------------------------------------------------------------------------------------------
 /*
