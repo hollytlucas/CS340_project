@@ -4,7 +4,7 @@ const db = require("../database/db-connector");
 
 // renders shifts and waiter table(/shifts):
 router.get("", function (req, res) {
-  let selectQuery = `
+  const selectQuery = `
   SELECT s.shift_id, s.shift_day, s.shift_type, w.waiter_id, w.first_name, w.last_name FROM shifts s
 	  LEFT JOIN shifts_waiters sw ON s.shift_id = sw.shift_id
     LEFT JOIN waiters w ON sw.waiter_id = w.waiter_id`;
@@ -45,6 +45,10 @@ router.get("/new", function (req, res) {
 
 // receives the form submission of the "add shift" form
 router.post("/new", function (req, res) {
+  const shiftDay = req.body["shift-day"];
+  const shiftType = req.body["shift-type"];
+
+  const insertShiftQuery = `INSERT INTO shifts (shift_day, shift_type) VALUES (${shiftDay}, ${shiftType})`;
   res.redirect("/shifts");
 });
 
@@ -75,6 +79,15 @@ router.get("/:id/edit", function (req, res) {
 
 // receives the form submission of the "edit shift" form
 router.post("/:id/edit", function (req, res) {
+  // update the shift itself
+  const shiftId = req.params.id;
+  const shiftDay = req.body["shift-day"];
+  const shiftType = req.body["shift-type"];
+
+  const updateShiftQuery = `
+    UPDATE shifts SET shift_day = ${shiftDay}, shift_type = ${shiftType}) 
+      WHERE shift_id = ${shiftId}`;
+
   // handle assigning waiters
 
   // first parse the form body and just extract the IDs of the waiters that are checked
@@ -82,16 +95,14 @@ router.post("/:id/edit", function (req, res) {
     .filter((key) => key.includes("waiter-"))
     .map((waiterKey) => waiterKey.replace("waiter-", ""));
 
-  const shiftId = req.params.id;
-
   // first delete
-  const deleteShiftsWaitersQuery = `DELETE FROM shifts_waiters WHERE shift_id = ${req.params.id}`;
+  const deleteShiftsWaitersQuery = `DELETE FROM shifts_waiters WHERE shift_id = ${shiftId}`;
 
   // then insert
-  const shiftIdsWithWaiterIds = waiterIds
+  const shiftIdWaiterIdTuples = waiterIds
     .map((waiterId) => `(${shiftId}, ${waiterId})`)
     .join(",");
-  const insertShiftsWaitersQuery = `INSERT INTO shifts_waiters (shift_id, waiter_id) VALUES ${shiftIdsWithWaiterIds}`;
+  const insertShiftsWaitersQuery = `INSERT INTO shifts_waiters (shift_id, waiter_id) VALUES ${shiftIdWaiterIdTuples}`;
 
   db.pool.query(deleteShiftsWaitersQuery, function (error, rows, fields) {
     db.pool.query(insertShiftsWaitersQuery, function (error, rows, fields) {

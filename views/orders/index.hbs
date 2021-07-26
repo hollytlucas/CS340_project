@@ -14,7 +14,7 @@
         <th scope="col">TOTAL PRICE</th>
         <th scope="col">EMPLOYEE ID</th>
         <th scope="col">CUSTOMER ID</th>
-        <th scope="col">MENU ITEM IDs</th>
+        <th scope="col">MENU ITEMS</th>
         <th scope="col"></th>
         <th scope="col"></th>
       </tr>
@@ -26,8 +26,8 @@
           <td>{{this.order_created_at}}</td>
           <td>{{this.total_price}}</td>
           <td>{{this.employee_id}}</td>
-          <td>(customer ID goes here)</td>
-          <td>(menu item IDs go here)</td>
+          <td>{{this.customer_id}}</td>
+          <td>{{join this.menuItems ", "}}</td>
           <td>
             <a
               class="btn btn-sm btn-warning"
