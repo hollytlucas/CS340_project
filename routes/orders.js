@@ -61,6 +61,7 @@ router.post("/new", function (req, res) {
     const customerOrdersQuery = `INSERT INTO customers_orders (customer_id, order_id) VALUES (${customerId}, ${orderId})`;
     const menuItemIdOrderIdTuples = ``;
     const menuItemsOrdersQuery = `INSERT INTO menu_items_orders (menu_item_id, order_id) VALUES ${menuItemIdOrderIdTuples}`;
+    // TODO: Update units sold on menu items included in order
     db.pool.query(customerOrdersQuery, function (error, rows, fields) {
       res.redirect("/orders");
     });
@@ -78,6 +79,7 @@ router.get("/:id/edit", function (req, res) {
 
 router.post("/:id/edit", function (req, res) {
   // TODO: Pattern match off shifts
+  // TODO: Update units sold on menu items included in order
   res.redirect("/orders");
 });
 
@@ -87,6 +89,7 @@ router.delete("/:id/delete", function (req, res) {
   const deleteMenuItemsOrdersQuery = `DELETE FROM menu_items_orders WHERE order_id = ${orderId}`;
   const deleteCustomersOrdersQuery = `DELETE FROM customers_orders WHERE order_id = ${orderId}`;
   const deleteOrderQuery = `DELETE FROM orders WHERE order_id = ${orderId}`;
+  // TODO: Update units sold on menu items included in order
   db.pool.query(deleteOrderQuery, function (error, rows, fields) {
     res.redirect("/orders");
   });
