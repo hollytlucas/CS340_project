@@ -3,19 +3,44 @@
 <div id="shifts-container" class="d-flex justify-content-between">
 
   <div id="edit-shift-container" class="m-3">
-    <h2>Re-assign Employees to a Shift</h2>
-    <p>To re-assign employees to this shift, please enter employee ids below and click `Submit`!</p>
-    <form id="edit-shift-form" class="form-group" method="POST" action="/shifts/1/edit">
-      <div class="m-3">
-        <label for="input-total-price">Shift Day: (shift day will go here) </label>
-      </div>
-      <div class="m-3">
-        <label for="input-employee_id">Shift Type: (shift type will go here) </label>
-      </div>
-      <div class="form-group">
-        <label for="input-employee_id">Employee IDs (separated by commas): </label>
-        <input type="text" name="input-employee-id" id="input-employee-id-html">
-      </div>
+    <h2>Edit Shift</h2>
+    <div class="m-3">
+      <label for="input-total-price">Shift Day: (shift day will go here)
+      </label>
+    </div>
+    <div class="m-3">
+      <label for="input-employee_id">Shift Type: (shift type will go here)
+      </label>
+    </div>
+    <h2>Assign Employees to a Shift</h2>
+    <p>To assign employees to this shift, please enter employee ids below and
+      click `Submit`!</p>
+    <form
+      id="edit-shift-form"
+      class="form-group"
+      method="POST"
+      action="/shifts/{{shift.shift_id}}/edit"
+    >
+
+      {{#each waiters}}
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id={{concat "waiter-" this.waiter_id}}
+            name={{concat "waiter-" this.waiter_id}}
+            {{isChecked this.isOnShift}}
+          />
+          <label
+            class="form-check-label"
+            for={{concat "waiter-" this.waiter_id}}
+          >
+            {{concat this.first_name " " this.last_name}}
+          </label>
+        </div>
+      {{/each}}
+
       <button type="submit" class="btn btn-success">Submit</button>
     </form>
   </div>

@@ -2,25 +2,40 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database/db-connector");
 
-// renders shifts list (/shifts):
+// renders shifts and waiter table(/shifts):
 router.get("", function (req, res) {
-  let selectQuery;
+  let selectQuery = `
+  SELECT s.shift_id, s.shift_day, s.shift_type, w.waiter_id, w.first_name, w.last_name FROM shifts s
+	  LEFT JOIN shifts_waiters sw ON s.shift_id = sw.shift_id
+    LEFT JOIN waiters w ON sw.waiter_id = w.waiter_id`;
 
-  if (req.query.id != undefined) {
-    selectQuery = `SELECT * FROM shifts`;
+  db.pool.query(selectQuery, function (error, rows, fields) {
+    const shifts = rows;
+    // add a "waiters" array to each shift object
+    const condensedShifts = shifts.reduce((acc, shift) => {
+      const mostRecentShift = acc[acc.length - 1];
+      if (shift.waiter_id) {
+        const waiterName = `${shift.first_name} ${shift.last_name}`;
 
-    db.pool.query(selectQuery, function (error, rows, fields) {
-      let shifts = rows;
-      return res.render("shifts", { data: shifts });
-    });
-  } else {
-    selectQuery = "SELECT * FROM shifts;";
+        // combine waiters for the same shift into one row by grouping by
+        //  the shift ID
+        if (mostRecentShift && mostRecentShift.shift_id === shift.shift_id) {
+          mostRecentShift.waiters.push(waiterName);
+        } else {
+          shift.waiters = [waiterName];
+          acc.push(shift);
+        }
+      } else {
+        // if there are no waiters assigned to the shift, just put an empty array
+        shift.waiters = [];
+        acc.push(shift);
+      }
 
-    db.pool.query(selectQuery, function (error, rows, fields) {
-      let shifts = rows;
-      return res.render("shifts/index", { data: shifts });
-    });
-  }
+      return acc;
+    }, []);
+
+    return res.render("shifts", { data: condensedShifts });
+  });
 });
 
 // renders the "add shift" form
@@ -35,12 +50,54 @@ router.post("/new", function (req, res) {
 
 // renders the "edit shift" form
 router.get("/:id/edit", function (req, res) {
-  res.render("shifts/edit", { shift: {} });
+  const shiftQuery = `SELECT * FROM shifts WHERE shift_id = ${req.params.id}`;
+  const waitersQuery = `SELECT * FROM waiters`;
+  const shiftsWaitersQuery = `SELECT waiter_id FROM shifts_waiters WHERE shift_id = ${req.params.id}`;
+
+  db.pool.query(shiftQuery, function (error, rows, fields) {
+    const shift = rows[0];
+    db.pool.query(waitersQuery, function (error, rows, fields) {
+      let waiters = rows;
+      db.pool.query(shiftsWaitersQuery, function (error, rows, fields) {
+        // make shiftsWaiter just an array of waiterIDs
+        const shiftsWaiters = rows.map((shiftWaiter) => shiftWaiter.waiter_id);
+
+        waiters = waiters.map((waiter) => {
+          waiter.isOnShift = shiftsWaiters.includes(waiter.waiter_id);
+          return waiter;
+        });
+
+        res.render("shifts/edit", { shift, waiters });
+      });
+    });
+  });
 });
 
 // receives the form submission of the "edit shift" form
 router.post("/:id/edit", function (req, res) {
-  res.redirect("/shifts");
+  // handle assigning waiters
+
+  // first parse the form body and just extract the IDs of the waiters that are checked
+  const waiterIds = Object.keys(req.body)
+    .filter((key) => key.includes("waiter-"))
+    .map((waiterKey) => waiterKey.replace("waiter-", ""));
+
+  const shiftId = req.params.id;
+
+  // first delete
+  const deleteShiftsWaitersQuery = `DELETE FROM shifts_waiters WHERE shift_id = ${req.params.id}`;
+
+  // then insert
+  const shiftIdsWithWaiterIds = waiterIds
+    .map((waiterId) => `(${shiftId}, ${waiterId})`)
+    .join(",");
+  const insertShiftsWaitersQuery = `INSERT INTO shifts_waiters (shift_id, waiter_id) VALUES ${shiftIdsWithWaiterIds}`;
+
+  db.pool.query(deleteShiftsWaitersQuery, function (error, rows, fields) {
+    db.pool.query(insertShiftsWaitersQuery, function (error, rows, fields) {
+      res.redirect("/shifts");
+    });
+  });
 });
 
 module.exports = {

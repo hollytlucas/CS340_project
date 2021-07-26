@@ -11,55 +11,27 @@
         <th scope="col">SHIFT ID</th>
         <th scope="col">SHIFT DAY</th>
         <th scope="col">SHIFT TYPE</th>
-        <th scope="col">EMPLOYEE IDs</th>
+        <th scope="col">WAITERS</th>
         <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
-      {{!-- {{#each data}}
+      {{#each data}}
         <tr>
           <th scope="row">{{this.shift_id}}</th>
           <td>{{this.shift_day}}</td>
           <td>{{this.shift_type}}</td>
-          <td>(employee IDs go here)</td>
+          <td>{{join this.waiters ", "}}</td>
           <td>
             <a
               class="btn btn-sm btn-warning"
               href="/shifts/{{this.shift_id}}/edit"
             >
-              Edit Assigned Employees
+              Edit
             </a>
           </td>
         </tr>
-      {{/each}} --}}
-      <tr>
-        <th scope="row">1</th>
-        <td>Friday</td>
-        <td>daytime</td>
-        <td>33356</td>
-        <td>
-          <a
-            class="btn btn-sm btn-warning"
-            href="/shifts/1/edit"
-          >
-            Edit Assigned Employees
-          </a>
-        </td>
-      </tr>
-            <tr>
-        <th scope="row">2</th>
-        <td>Friday</td>
-        <td>swing</td>
-        <td>2145</td>
-        <td>
-          <a
-            class="btn btn-sm btn-warning"
-            href="/shifts/2/edit"
-          >
-            Edit Assigned Employees
-          </a>
-        </td>
-      </tr>
+      {{/each}}
     </tbody>
   </table>
   <div>

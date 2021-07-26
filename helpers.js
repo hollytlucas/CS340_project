@@ -8,13 +8,17 @@ const handleBarsHelpers = {
   isSelected: function (option, valueFromDatabase) {
     return option.toString() === valueFromDatabase.toString() ? "selected" : "";
   },
+  isChecked: function (value) {
+    return value ? "checked" : "";
+  },
   isCurrentRoute: function (route, currentRoute) {
     return route === currentRoute ? " w3-grayscale-max" : "";
   },
-  concat: function (arg1, arg2) {
-    str1 = arg1.toString();
-    str2 = arg2.toString();
-    return "str1" + "str2";
+  concat: function (...args) {
+    return args.slice(0, args.length - 1).join("");
+  },
+  join: function (arr, separator) {
+    return arr.join(separator);
   },
 };
 
