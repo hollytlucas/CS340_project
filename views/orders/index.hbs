@@ -38,7 +38,7 @@
           <td>
             <a
               class="btn btn-sm btn-danger"
-              href="/orders/{{this.order_id}}/delete"
+              href="/orders"
             >
               Delete
             </a></td>
@@ -50,16 +50,5 @@
     <a class="btn btn-success mt-5 mb-5" href="/orders/new">
       Add Order
     </a>
-  </div>
-  <div class="col-6">
-    <h2>Orders Search</h2>
-    <p>Search for orders by customer ID</p>
-    <form id="search-person-html" method="GET" action="/orders">
-      <label for="input-lname">Customer ID</label>
-      <input type="text" name="lname" id="input-lname-html-search" />
-
-      <button type="submit" class="btn btn-info">Search</button>
-      <a class="btn btn-light" href="/orders">Reset</a>
-    </form>
   </div>
 </div>

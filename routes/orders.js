@@ -49,23 +49,24 @@ router.get("/new", function (req, res) {
 
 // receives the form submission of the "add order" form
 router.post("/new", function (req, res) {
-  const totalPrice = req.body["total-price"];
-  const waiterId = req.body["waiter-id"];
-  const customerId = req.body["customer-id"];
-  const menuItemIds = [];
+  // const totalPrice = req.body["total-price"];
+  // const waiterId = req.body["waiter-id"];
+  // const customerId = req.body["customer-id"];
+  // const menuItemIds = [];
 
-  const insertOrderQuery = `INSERT INTO orders (total_price, waiter_id) VALUES (${totalPrice}, ${waiterId})`;
+  // const insertOrderQuery = `INSERT INTO orders (total_price, waiter_id) VALUES (${totalPrice}, ${waiterId})`;
 
-  db.pool.query(insertOrderQuery, function (error, rows, fields) {
-    const orderId = rows[0].order_id;
-    const customerOrdersQuery = `INSERT INTO customers_orders (customer_id, order_id) VALUES (${customerId}, ${orderId})`;
-    const menuItemIdOrderIdTuples = ``;
-    const menuItemsOrdersQuery = `INSERT INTO menu_items_orders (menu_item_id, order_id) VALUES ${menuItemIdOrderIdTuples}`;
-    // TODO: Update units sold on menu items included in order
-    db.pool.query(customerOrdersQuery, function (error, rows, fields) {
-      res.redirect("/orders");
-    });
-  });
+  // db.pool.query(insertOrderQuery, function (error, rows, fields) {
+  //   const orderId = rows[0].order_id;
+  //   const customerOrdersQuery = `INSERT INTO customers_orders (customer_id, order_id) VALUES (${customerId}, ${orderId})`;
+  //   const menuItemIdOrderIdTuples = ``;
+  //   const menuItemsOrdersQuery = `INSERT INTO menu_items_orders (menu_item_id, order_id) VALUES ${menuItemIdOrderIdTuples}`;
+  //   // TODO: Update units sold on menu items included in order
+  //   db.pool.query(customerOrdersQuery, function (error, rows, fields) {
+  //     res.redirect("/orders");
+  //   });
+  // });
+  res.redirect("/orders");
 });
 
 router.get("/:id/edit", function (req, res) {

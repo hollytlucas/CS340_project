@@ -12,11 +12,23 @@
   >Customers</a>
 </div>
 
-<div class="w3-container w3-light-gray">
-    <h3>Page Link and Descriptions</h3>
-</div>
-
-        <ol>
+<div class="d-flex align-items-center flex-column w3-container w3-light-gray">
+    <div class="m-3 d-flex flex-column align-items-center">
+        <h3 class="m-3">Welcome!</h3>
+        <p class="m-1">If you are a customer, you can search for your order details by clicking on "Customers"</p>
+    </div>
+    <div class="m-5">
+        <h4>Today's Menu</h4>
+        <ul>
+            <li>Spinach Quiche 7.85</li>
+            <li>Meatloaf 7.99</li>
+            <li>Cheese Enchilada 4.50</li>
+        </ul>
+    </div>
+    <div class="m-1">
+        <h3>Page Links and Descriptions</h3>
+    </div>
+    <div class="d-flex flex-column">
         <li>Waiters page: Holly </li>
         <ol>
             <li><a href="waiters">Add a waiter, no assignments necessary (no fields can be blank)</li></a>
@@ -38,7 +50,7 @@
         </ol>
         <li>Customers page (private):  Kelley</li>
         <ol>
-            <li><a href="customers_private/add"></a>Add customers, assign to an order </li>
+            <li><a href="customers_private/new">Add customers</a></li>
         </ol>
         <li>Add menu items page:  Holly</li>
         <ol>
@@ -49,31 +61,13 @@
             <li><a href="customers_public">Select profile by name search</li></a>
             <li><a href="customers_public">Select all orders for specific customer by customer_id, display orders and customers as a joined table</li></a>
         </ol>
-    </ol>
-
-
-
-
-{{! Just some plain text }}
-<div
-  class="d-flex justify-content-center align-items-center flex-column w3-container w3-light-gray"
->
-    <div class="m-3 d-flex flex-column align-items-center">
-        <h3 class="m-3">Welcome!</h3>
-        <p class="m-1">If you are a customer, you can search for your order details by clicking on "Customers"</p>
     </div>
-    <div class="m-5">
-        <h4>Today's Menu</h4>
-        <ul>
-        <li>Spinach Quiche 7.85</li>
-        <li>Meatloaf 7.99</li>
-        <li>Cheese Enchilada 4.50</li>
-        </ul>
-    </div>
+    <div class="d-flex justify-content-center">
+        <span class="m-3">(206) 331-1245</span>
+        <span class="m-3">215 Merrill St. Seattle, WA</span>
+        <span class="m-3">customer_service@house_finch.com</span>
     </div>
 </div>
-<div class="d-flex justify-content-center">
-  <span class="m-3">(206) 331-1245</span>
-  <span class="m-3">215 Merrill St. Seattle, WA</span>
-  <span class="m-3">customer_service@house_finch.com</span>
-</div>
+
+
+
