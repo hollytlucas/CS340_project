@@ -360,50 +360,52 @@ app.post("/add-person-form", function (req, res) {
 // ROUTE FOR ADD WAITER -----------------------------------------------------------------------------------------------------------------
 app.post("/add-waiter-form", function (req, res) {
   // Capture the incoming data and parse it back to a JS object
-  let data = req.body;
-  let no_assigned_shift = false;
+  let data = req.body;                // holds body of request
+  let no_assigned_shift = false;      // no assigned shift needs to flag error (all waiters must have a shift)
 
-  let phone = data["input-phone"];
-
-  // if assigned shift not selected
-  if (data["input-assigned-shift"] == "") {
-    console.log("shift not added");
+  // if assigned shift not selected, render website with error
+  if (data["input-assigned-shift"] == ""){
+    console.log("shift not added")
     no_assigned_shift = true;
-    res.render("waiters", { no_assigned_shift: no_assigned_shift });
-  } else {
-    // Create the query and run it on the database
+    res.render("waiters", {no_assigned_shift: no_assigned_shift});
+  }
+  
+  else {
+    // insert new waiter into waiters table
     query1 = `INSERT INTO waiters (first_name, last_name, phone_number, shift_type_preference) VALUES ('${data["input-fname"]}', '${data["input-lname"]}', '${data["input-phone"]}', '${data["input-shift"]}')`;
     db.pool.query(query1, function (error, rows, fields) {
       // Check to see if there was an error
       if (error) {
         console.log(error);
         res.sendStatus(400);
-      } else {
-        query1 = `select max(waiter_id) as last_id from waiters`;
+      }
+      else {
+        // get the last waiter ID created
+        query1 = `select max(waiter_id) as last_id from waiters`;   
         db.pool.query(query1, function (error, rows, fields) {
           if (error) {
             console.log(error);
             res.sendStatus(400);
-          } else {
-            let new_id = rows[0];
-            console.log("this is the last id ", new_id["last_id"]);
-            query1 = `INSERT INTO shifts_waiters (waiter_id, shift_id) VALUES ('${new_id["last_id"]}', '${data["input-assigned-shift"]}')`;
+          }
+          else {
+            // insert new entry into shifts_waiters consolidated table
+            let new_id = rows[0]
+            query1 = `INSERT INTO shifts_waiters (waiter_id, shift_id) VALUES ('${new_id["last_id"]}', '${data["input-assigned-shift"]}')`
             db.pool.query(query1, function (error, rows, fields) {
               if (error) {
                 console.log(error);
                 res.sendStatus(400);
-              } else {
+              }
+              else {
                 res.redirect("/waiters");
               }
-              //res.redirect('/xxxx');
-            });
+            })   
           }
-        });
+        })
       }
-    });
+    })
   }
 });
-
 //  ROUTE FOR MODIFY WAITER --------------------------------------------------------------------------------------------------------
 app.post("/modify-waiter-form", function (req, res) {
   let shifts;
