@@ -1,44 +1,71 @@
-{{> nav currentRoute="/menu_items" }}
+<div class="w3-bar w3-light-blue">
 
-
-<div class="my-container">
-{{!-- Create a table --}}
-<table id="inventor" class="table table-striped paddingBetweenCols">
-
-    {{!-- Header section --}}
-    <thead>
-
-        {{!-- For just the first row, we print each key of the row object as a header cell so we
-        know what each column means when the page renders --}}
-        <tr>
-            <th scope="col">MENU ITEM ID</th>
-            <th scope="col">ITEM NAME</th>
-            <th scope="col">PRICE</th>
-            <th scope="col">IS AVAILABLE (1=YES, 0=NO)</th>
-            <th scope="col">UNITS SOLD</th>
-        </tr>
-    </thead>
-
-    {{!-- Body section --}}
-    <tbody>
-
-        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
-        {{#each data}}
-
-        <tr>
-            <td>{{this.menu_item_id}}</td>
-            <td>{{this.name}}</td>
-            <td>$ {{this.price}}</td>
-            <td>{{this.is_available}}</td>
-            <td>{{this.number_sold}}</td>
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
+  <a
+    href="/index_private"
+    class="w3-bar-item w3-button w3-mobile"
+    style="width:14%"
+  >Main Employee Only</a>
+  <a
+    href="waiters"
+    class="w3-bar-item w3-button w3-mobile"
+    style="width:14%"
+  >Waiters</a>
+  <a
+    href="orders"
+    class="w3-bar-item w3-button w3-mobile"
+    style="width:14%"
+  >Orders</a>
+  <a
+    href="shifts"
+    class="w3-bar-item w3-button w3-mobile"
+    style="width:14%"
+  >Shifts</a>
+  <a
+    href="customers_private"
+    class="w3-bar-item w3-button w3-mobile"
+    style="width:14%"
+  >Customers</a>
+  <a
+    href="menu_items"
+    class="w3-bar-item w3-button w3-mobile w3-grayscale-max"
+    style="width:14%"
+  >Menu Items</a>
+  <a href="/" class="w3-bar-item w3-button w3-mobile" style="width:14%">Main
+    Public</a>
 </div>
 
 
-{{! Form to add a record to the table using standard HTML forms }}
+<div class="my-container">
+  {{!-- Create a table to display all menu items --}}
+  <table id="inventor" class="table table-striped paddingBetweenCols">
+    {{!-- Header section --}}
+    <thead>
+      <tr>
+        <th scope="col">MENU ITEM ID</th>
+        <th scope="col">ITEM NAME</th>
+        <th scope="col">PRICE</th>
+        <th scope="col">IS AVAILABLE (1=YES, 0=NO)</th>
+        <th scope="col">UNITS SOLD</th>
+      </tr>
+    </thead>
+
+    {{!-- Display all attributes of menu items --}}
+    <tbody>
+      {{#each data}}
+      <tr>
+        <td>{{this.menu_item_id}}</td>
+        <td>{{this.name}}</td>
+        <td>$ {{this.price}}</td>
+        <td>{{this.is_available}}</td>
+        <td>{{this.number_sold}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+
+{{! Form to add a menu items }}
 <div class="my-container">
   <h2>Add A Menu Item</h2>
   <p>To add a new menu item, please enter the information below and click
