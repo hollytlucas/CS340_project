@@ -254,11 +254,68 @@ app.use("/shifts", shiftsRouter);
 
 // ROUTE FOR CUSTOMERS PUBLIC-------------------------------------------------------------------------------------------------------
 
+// ROUTE FOR CUSTOMERS PUBLIC-------------------------------------------------------------------------------------------------------
+
 app.get("/customers_public", function (req, res) {
   // Declare Query 1
+  let query1;
+  let charges;
+  let orders;
+  let customer_ids;
 
-  return res.render("customers_public");
+  // select all customer_ID's to display all customer ID's on dropdown as default with every page load
+  query1 = `SELECT customer_id FROM customers`;
+  db.pool.query(query1, function (error, rows, fields) {
+    // Save the people
+    customer_ids = rows;
+    // Run the second query
+    });
+
+  // If there is a query string, we run the query for searching by last name
+  if (req.query.lname != undefined) 
+    {
+    // run query to select all customers with last name like user input
+    query1 = `SELECT * FROM customers WHERE last_name LIKE "${req.query.lname}%"`;
+    db.pool.query(query1, function (error, rows, fields) {
+      // save customers 
+      let customers = rows;
+      return res.render("customers_public", { customers: customers, customer_ids: customer_ids });
+      });
+    } 
+  
+  // else if user input a customer ID to search for all orders
+  else if (req.query.customer != undefined) {
+    // run query to get all attributes for customers and orders for all entries for specified customer ID
+    query1 = `SELECT * FROM customers c
+    INNER JOIN customers_orders co ON c.customer_id = co.customer_id
+    INNER JOIN orders o ON co.order_id = o.order_id WHERE c.customer_id = "${req.query.customer}%"`;
+    db.pool.query(query1, function (error, rows, fields) {
+      // save the orders 
+      orders = rows;
+      // run query to get total charges for all orders for specified customer ID
+      query1 = `SELECT SUM(o.total_price) as total_charges FROM customers c
+      INNER JOIN customers_orders co ON c.customer_id = co.customer_id
+      INNER JOIN orders o ON co.order_id = o.order_id WHERE c.customer_id = "${req.query.customer}%"`;
+      db.pool.query(query1, function (error, rows, fields) {
+        // save the charges
+        charges = rows;
+        return res.render("customers_public", { orders: orders, charges: charges, customer_ids: customer_ids });
+      });
+    });  
+   }
+  else {
+    // otherwise populate customer ID's into dropdown
+    query1 = `SELECT customer_id FROM customers`;
+    db.pool.query(query1, function (error, rows, fields) {
+      // Save the people
+      customer_ids = rows;
+      // Run the second query
+      console.log("this is cust id ", customer_ids);
+      return res.render("customers_public", {customer_ids: customer_ids});
+    });
+  }
 });
+
 
 // ROUTE FOR CUSTOMERS EMPLOYEE ONLY
 
