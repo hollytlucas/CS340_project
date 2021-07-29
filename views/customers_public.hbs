@@ -13,105 +13,102 @@
 </div>
 
 <div class="my-container">
-  {{! Form to search by last name }}
-  <div class="my-container">
-    <h2>Customer Search</h2>
-    <p>Search customers by partial or whole last name (to test, search for "S",
-      then narrow down to "Stone" or "Smith"</p>
-    <form id="search-customer-html" method="GET" action="/customers_public">
-      <label for="input-lname">Last Name: </label>
-      <input type="text" name="lname" id="input-lname-html" />
-      <br /><br />
-      <button type="submit" class="btn btn-success">Search</button>
-    </form>
-  </div>
-  {{! Create a table }}
+  {{!-- Create a table to display customers based on last name search --}}
   <table id="people-table" class="table table-striped">
-
-    {{! Header section }}
+    {{!-- Header section --}}
     <thead>
-
-      {{! For just the first row, we print each key of the row object as a header cell so we
-        know what each column means when the page renders }}
       <tr>
         <th scope="col">CUSTOMER ID</th>
         <th scope="col">FIRST NAME</th>
         <th scope="col">LAST NAME</th>
         <th scope="col">EMAIL</th>
+        <th scope="col">LOYALTY POINTS</th>
       </tr>
     </thead>
 
-    {{! Body section }}
+    {{!-- Display all attributes of customers --}}
     <tbody>
-
-      {{! For each row, print the id, fname, lname, homeworld and age, in order }}
       {{#each customers}}
-
-        <tr>
-          <td>{{this.customer_id}}</td>
-          <td>{{this.first_name}}</td>
-          <td>{{this.last_name}}</td>
-          <td>{{this.email}}</td>
-          <td>{{this.loyalty_points}}</td>
-        </tr>
+      <tr>
+        <td>{{this.customer_id}}</td>
+        <td>{{this.first_name}}</td>
+        <td>{{this.last_name}}</td>
+        <td>{{this.email}}</td>
+        <td>{{this.loyalty_points}}</td>
+      </tr>
       {{/each}}
     </tbody>
   </table>
 </div>
 
+{{! Form to search by last name }}
+<div class="my-container">
+  <h2>Customer Search</h2>
+  <p>Search customers by partial or whole last name (to test, search for "S", then narrow down to "Stone" or "Smith"</p>
+  <form id="search-customer-html" method="GET" action="/customers_public">
+    <label for="input-lname">Last Name: </label>
+    <input type="text" name="lname" id="input-lname-html" />
+    <br /><br />
+    <button type="submit" class="btn btn-success">Search</button>
+  </form>
+</div>
 <br /><br />
 
+{{! Table to display all waiters and their shifts, or all waiters by given shift }}
 <div class="my-container">
-  {{! Form to search by last name }}
-  <div class="my-container">
-    <h2>Orders Search</h2>
-    <p>Search for orders by customer ID (To test total charges, choose customer
-      ID = 2</p>
-    <form id="search-custorder-html" method="GET" action="/customers_public">
-      <label for="input-custorder">Customer ID</label>
-      <select name="customer" id="input-custorder-html">
-        <option value="">Select a Customer ID</option>
-        {{#each customer_ids}}
-          <option value="{{this.customer_id}}">{{this.customer_id}}</option>
-        {{/each}}
-      </select>
-      <br /><br />
-      <button type="submit" class="btn btn-success">Search</button>
-    </form>
-  </div>
-  {{! Create a table }}
   <table id="people-table" class="table table-striped">
-
-    {{! Header section }}
+    {{!-- Header section --}}
     <thead>
-
-      {{! For just the first row, we print each key of the row object as a header cell so we
-        know what each column means when the page renders }}
       <tr>
+        <th scope="col">CUSTOMER ID</th>
+        <th scope="col">FIRST NAME</th>
+        <th scope="col">LAST NAME</th>
+        <th scope="col">EMAIL</th>
+        <th scope="col">LOYALTY POINTS</th>
         <th scope="col">ORDER ID</th>
         <th scope="col">ORDER DATE AND TIME</th>
         <th scope="col">TOTAL CHARGES</th>
-        <th scope="col">MENU ITEMS</th>
       </tr>
     </thead>
 
-    {{! Body section }}
+    {{!-- Display all attributes for waiters and shifts --}}
     <tbody>
-
-      {{! For each row, print the id, fname, lname, homeworld and age, in order }}
+      {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
       {{#each orders}}
-
-        <tr>
-          <td>{{this.customer_id}}</td>
-          <td>{{this.first_name}}</td>
-          <td>{{this.last_name}}</td>
-          <td>{{this.email}}</td>
-          <td>{{this.order_id}}</td>
-          <td>{{this.order_created_at}}</td>
-          <td>$ {{this.total_price}}</td>
-        </tr>
+      <tr>
+        <td>{{this.customer_id}}</td>
+        <td>{{this.first_name}}</td>
+        <td>{{this.last_name}}</td>
+        <td>{{this.email}}</td>
+        <td>{{this.loyalty_points}}</td>
+        <td>{{this.order_id}}</td>
+        <td>{{this.order_created_at}}</td>
+        <td>$ {{this.total_price}}</td>
+      </tr>
       {{/each}}
     </tbody>
   </table>
+  <h5>Total:</h5> 
 
+  {{! Display total charges for all orders of given customer }}
+  {{#each charges}}
+  <h7>{{this.total_charges}}</h7>
+  {{/each}}
+</div>
+
+{{! Form to search for all orders given user input of customer ID }}
+<div class="my-container">
+  <h2>Orders Search</h2>
+  <p>Search for orders by customer ID (To test total charges, choose customer ID = 2</p>
+  <form id="search-custorder-html" method="GET" action="/customers_public">
+    <label for="input-custorder">Customer ID</label>
+      <select name="customer" id="input-custorder-html">
+        <option value="">Select a Customer ID</option>
+        {{#each customer_ids}}
+        <option value="{{this.customer_id}}">{{this.customer_id}}</option>
+        {{/each}}
+      </select>
+      <br /><br />
+    <button type="submit" class="btn btn-success">Search</button>
+  </form>
 </div>
