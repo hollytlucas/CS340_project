@@ -408,40 +408,39 @@ app.post("/add-waiter-form", function (req, res) {
 });
 //  ROUTE FOR MODIFY WAITER --------------------------------------------------------------------------------------------------------
 app.post("/modify-waiter-form", function (req, res) {
-  let shifts;
-  let waiters;
-  let query2;
-  // Capture the incoming data and parse it back to a JS object
-  console.log(req.body);
-  cant_delete = false;
+  let shifts;         // holds all shift ID's
+  let waiters;        // holds all waiter ID's
+  let query2;         
+  cant_delete = false;    // holds flag to notify user shift cannot be deleted
+  count = 0;          // holds the counter to determine whether comma needs to be inserted when building query string
 
-  count = 0;
 
+
+  // get all shift ID's
   query2 = `SELECT shift_id FROM shifts`;
-  // Run the second query
   db.pool.query(query2, (error, rows, fields) => {
-    shifts = rows;
+    shifts = rows 
   });
+
   // get all waiter IDs, this will be populated in the dropdown to search for waiters whenever the page is loaded
-  query2 = `SELECT waiter_id FROM waiters`;
-  // Run the second query
+  query2 = `SELECT waiter_id FROM waiters`; 
   db.pool.query(query2, (error, rows, fields) => {
-    waiters = rows;
-  });
+    waiters = rows 
+    });
 
+  // start to build query string for updating waiter
   query2 = `UPDATE waiters SET `;
-
   let data = req.body;
-
   waiter_id = data["input-waiter-id"];
 
-  // Capture NULL values
+  // if first name given, add to update
   let fname = data["input-fname"];
   if (fname != "") {
     query2 += `first_name = '${fname}' `;
     count += 1;
   }
 
+  // if last name given, add to update
   let lname = data["input-lname"];
   if (lname != "") {
     if (count >= 1) {
@@ -450,6 +449,7 @@ app.post("/modify-waiter-form", function (req, res) {
     query2 += ` last_name = '${lname}'`;
   }
 
+  // if phone number given, add to update
   let phone = data["input-phone"];
   if (phone != "") {
     if (count >= 1) {
@@ -458,8 +458,8 @@ app.post("/modify-waiter-form", function (req, res) {
     query2 += ` phone_number = '${phone}' `;
   }
 
+  // if preferred shift given, add to update
   let shift = data["input-shift"];
-  console.log(data["input-shift"]);
   if (data["input-shift"] != "unchanged") {
     if (count >= 1) {
       query2 += `, `;
@@ -467,109 +467,106 @@ app.post("/modify-waiter-form", function (req, res) {
     query2 += ` shift_type_preference = '${shift}' `;
   }
 
+  // finish string with waiter_ID given by user as selector
   query2 += `where waiter_id = '${data["input-waiter-id"]}'`;
-  console.log("query is ", query2);
-
-  // run the modify query
   db.pool.query(query2, function (error, rows, fields) {
-    if (error) {
-    } else {
-      console.log(
-        "assigned shift should be undefined ",
-        data["input-assigned-shift"]
-      );
-      if (data["input-assigned-shift"] === undefined) {
+    if (error) { 
+    }
+    else {
+      if (data["input-assigned-shift"] === undefined) { 
+        //if no assigned shift change, then update is complete.  Redirect to waiters page 
         res.redirect("/waiters");
-        //, {shifts:shifts, waiters:waiters});
       }
-
-      //done
     }
   });
 
-  //if switch-one = add, then add to shifts_waiters table
-
-  if (
-    data["input-shift-action"] == "Add" &&
-    data["input-assigned-shift"] != ""
-  ) {
-    query1 = `INSERT INTO shifts_waiters (waiter_id, shift_id) VALUES ('${data["input-waiter-id"]}', '${data["input-assigned-shift"]}')`;
-    db.pool.query(query1, function (error, rows, fields) {
-      if (error) {
-        res.redirect("/waiters");
-      } else {
+  //if user chose to add a shift, then add to shifts_waiters table
+  if (data["input-shift-action"] == "Add" && data["input-assigned-shift"] != "") {
+      query1 = `INSERT INTO shifts_waiters (waiter_id, shift_id) VALUES ('${data["input-waiter-id"]}', '${data["input-assigned-shift"]}')`;
+      db.pool.query(query1, function (error, rows, fields) {
+      if (error) { 
         res.redirect("/waiters");
       }
-    });
+      else {
+        // if successful shifts_waiters table update, then update is complete.  Redirect to waiters
+        res.redirect("/waiters");
+      }
+    })
   }
 
-  //if switch-one = delete and assigned shift not blank
-  if (
-    data["input-shift-action"] == "Remove" &&
-    data["input-assigned-shift"] != ""
-  ) {
-    query1 = `SELECT COUNT(*) AS count FROM shifts_waiters WHERE waiter_id = '${data["input-waiter-id"]}'`;
+
+  //if user chose to remove a shift and shift ID exists, then remove assigned shift
+  if (data["input-shift-action"] == "Remove" && data["input-assigned-shift"] != "") {
+    query1 = `SELECT COUNT(*) AS count FROM shifts_waiters WHERE waiter_id = '${data["input-waiter-id"]}'`        
     db.pool.query(query1, function (error, rows, fields) {
-      if (error) {
-      } else {
+      if (error) { 
+      }
+      else {
+        // get number of shifts the waiter has currently before the delete
         let count = rows[0];
-        console.log("the waiter ID is ", data["input-id"]);
-        console.log("count is ", count);
-        if (count["count"] > 1) {
+        query2 = `SELECT COUNT(waiter_id) as count FROM shifts_waiters WHERE shift_id = '${data["input-assigned-shift"]}'`;
+        db.pool.query(query2, (error, rows, fields) => {
+        })  
+        // get number of waiters the shift has currently before the delete
+        let waiters_assigned = rows[0];
+        // if waiter has more than 1 shift and shift has more than 1 waiter
+        if (count["count"] > 1 && waiters_assigned["count"] > 1) {
+          // then okay to delete, detete from shifts_waiters table
           query1 = `DELETE FROM shifts_waiters WHERE waiter_id = '${data["input-waiter-id"]}' AND shift_id = '${data["input-assigned-shift"]}'`;
           db.pool.query(query1, function (error, rows, fields) {
-            if (error) {
+            if (error) { 
               console.log(error);
               res.sendStatus(400);
-            } else {
+              }
+            else {
               res.redirect("/waiters");
             }
-          });
-        } else {
-          // Only one shift assigned, cannot remove
-
-          cant_delete = true;
-          console.log("not deleted");
-          res.render("waiters", {
-            cant_delete: cant_delete,
-            shifts: shifts,
-            waiters: waiters,
-          });
+      
+          })    
+        }
+        else {
+        // ptherwise, shift cannot be deleted
+        // set "can't delete" to true and notify user
+        cant_delete = true
+        res.render("waiters", {cant_delete: cant_delete, shifts:shifts, waiters:waiters});
         }
       }
-    });
+    })
   }
 });
 
 // ROUTE FOR ADD MENU ITEM
-
 app.post("/add-menu-item-form", function (req, res) {
-  // Capture the incoming data and parse it back to a JS object
-  let data = req.body;
-  let items;
-  // Create the query and run it on the database
+  let data = req.body;      // holds body of request
+  let items;                // holds all menu items to be displayed
+  
+  // insert new menu item
   query1 = `INSERT INTO menu_items (name, price, is_available, number_sold) VALUES ('${data["input-name"]}', '${data["input-price"]}', '${data["is-available"]}', '${data["input-number-sold"]}')`;
   db.pool.query(query1, function (error, rows, fields) {
-    // Check to see if there was an error
     if (error) {
       console.log(error);
       res.sendStatus(400);
-    } else {
     }
-  });
+    else {   
+    }
+  })   
+
+  // get all menu items to display
   query1 = `SELECT * FROM menu_items`;
   db.pool.query(query1, function (error, rows, fields) {
-    // Check to see if there was an error
+    // check to see if there was an error
     if (error) {
       console.log(error);
       res.sendStatus(400);
-    } else {
-      console.log(rows);
-      items = rows;
-      return res.render("menu_items", { data: items });
     }
-  });
+    else {
+      // save all menu items
+      items = rows
+      return res.render("menu_items", { data: items});
+    }
+  })
 });
+
 
 //----------------------------------------------------------------------------------------------------------------------
 /*
