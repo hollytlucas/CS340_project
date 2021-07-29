@@ -203,14 +203,14 @@ app.get("/waiters", function (req, res) {
 app.get("/menu_items", function (req, res) {
   // Display all items on page load
   let query1 = `SELECT * FROM menu_items`;
-  // Run the 1st query
   db.pool.query(query1, function (error, rows, fields) {
-    // Save the people
+    // Save menu items
     let items = rows;
     return res.render("menu_items", { data: items });
-  });
+  })
 });
 
+//need to delete if Kelley is not using
 app.post("/add-person-form", function (req, res) {
   // Capture the incoming data and parse it back to a JS object
   let data = req.body;
@@ -244,7 +244,6 @@ app.post("/add-person-form", function (req, res) {
     }
   });
 });
-
 // ROUTE FOR ORDERS--------------------------------------------------------------------------------------------------------------------
 app.use("/orders", ordersRouter);
 
