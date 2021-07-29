@@ -64,89 +64,93 @@ app.get("/index_private", function (req, res) {
 // ROUTE FOR WAITERS
 
 // ROUTE FOR WAITERS
-
 app.get("/waiters", function (req, res) {
-  let query1;
+  let query1; 
+  let query2;            
   let data = req.query;
-  let query2;
-  let waiters;
-  let remove_shift;
-  let add_shift;
-  let shifts;
-  let remove = false;
-  let add = false;
-  let no_shift_change = false;
-  let remove_error;
-  let add_error;
+  let waiters;            //holds all the waiter ID's
+  let remove_shift;       //holds all shift ID's belonging to a waiter that can be removed
+  let add_shift;          //holds all shift ID's belonging to a waiter that can be added
+  let shifts;             //holds all shift ID's available
+  let remove = false;     //if selected shift ID can be removed
+  let add = false;        //if selected shift ID can be added
+  let no_shift_change = false;    //if user selected no shift change
 
-  // Query 2 is the same in both cases
+
+  // get all waiter IDs, this will be populated in the modify waiters form whenever the page is loaded
+  query2 = `SELECT waiter_id FROM waiters`; 
+    // Run the second query
+    db.pool.query(query2, (error, rows, fields) => {
+      if (error) { 
+      }
+      else {
+      waiters = rows;
+      }
+    })
+
+  // Query 2 - select all shift ID's
   query2 = `SELECT shift_id FROM shifts`;
-  // Run the second query
+  // Run query
   db.pool.query(query2, (error, rows, fields) => {
+    //assign shift ID's list to shifts
     shifts = rows;
-  });
+  })
 
+  // if user chose to remove an assigned shift, get all available shifts to remove
   if (data["switch-one"] == "remove") {
-    //if switch-one is "remove", get all shift ID's that belong to waiter
+  //if switch-one is "remove", get all shift ID's that belong to waiter
     query2 = `SELECT s.shift_id FROM waiters w
-  INNER JOIN shifts_waiters sw ON w.waiter_id = sw.waiter_id
-  INNER JOIN shifts s ON sw.shift_id = s.shift_id WHERE w.waiter_id = '${data["input-id"]}'`;
+    INNER JOIN shifts_waiters sw ON w.waiter_id = sw.waiter_id
+    INNER JOIN shifts s ON sw.shift_id = s.shift_id WHERE w.waiter_id = '${data["input-id"]}'`
     db.pool.query(query2, (error, rows, fields) => {
       remove_shift = rows;
       //set remove to true
       remove = true;
-    });
-  }
+      }) 
+    }
 
+  // if user chose not to modify assigned shifts
   if (data["switch-one"] == "none") {
+    // assign true for no shift change
     no_shift_change = true;
   }
 
   // if user chose to add an assigned shift
   if (data["switch-one"] == "add") {
-    //get all shift ID's
+    //get all shift ID's 
     add_shift = shifts;
     //set add to true
     add = true;
-  }
+  } 
 
-  // get all waiter IDs, this will be populated in the dropdown to search for waiters whenever the page is loaded
-  query2 = `SELECT waiter_id FROM waiters`;
-  // Run the second query
-  db.pool.query(query2, (error, rows, fields) => {
-    if (error) {
-    } else {
-    }
-
-    waiters = rows;
-  });
-
-  // if waiter_id is submitted, user has selected a waiter to modify.
+  // if waiter_id is submitted, user has selected a waiter to modify
   if (data["input-id"] != undefined) {
     // run a query to select all attributes of waiter with waiter id input by user
-    query2 = `SELECT * FROM waiters WHERE waiter_id = '${data["input-id"]}'`;
+    query2 = `SELECT * FROM waiters WHERE waiter_id = '${data["input-id"]}'`; 
     db.pool.query(query2, (error, rows, fields) => {
       if (error) {
         // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
         console.log("here is the error", error);
         res.sendStatus(400);
-      } else {
-        mod_waiter = rows;
-        return res.render("waiters", {
-          mod_waiter: mod_waiter,
-          waiters: waiters,
-          shifts: shifts,
-          remove_shift: remove_shift,
-          remove: remove,
-          add: add,
-          add_shift: add_shift,
-          no_shift_change: no_shift_change,
-        });
       }
-    });
+      else {
+        // assign all attributes of waiter to modify to mod_waiter
+        mod_waiter = rows
+
+        // select all shift ID's 
+        query2 = `SELECT shift_id FROM shifts`;
+        db.pool.query(query2, (error, rows, fields) => {
+          //assign shift ID's list to shifts
+          shifts = rows;
+        })
+
+        // return attributes to page to populate for modification
+        return res.render("waiters", { mod_waiter: mod_waiter, waiters: waiters, remove_shift:remove_shift, shifts:shifts, remove:remove, add:add, add_shift:add_shift, no_shift_change:no_shift_change});
+      }  
+    })
   }
 
-  // If there is a query string or ALL was selected, we run the query as select all
+  // If no ID was selected (page loading for first time) or ALL was selected, we run the query to select ALL waiters-shifts to display
   if (data["input-shift"] === undefined || data["input-shift"] == "ALL") {
     query1 = `SELECT * FROM waiters w
     INNER JOIN shifts_waiters sw ON w.waiter_id = sw.waiter_id
@@ -156,31 +160,43 @@ app.get("/waiters", function (req, res) {
     db.pool.query(query1, function (error, rows, fields) {
       // Save the people
       let people = rows;
-      return res.render("waiters", {
-        data: people,
-        shifts: shifts,
-        waiters: waiters,
-        remove_shift: remove_shift,
-      });
+
+      // Query 2 - select all shift ID's
+      query2 = `SELECT shift_id FROM shifts`;
+      // Run query
+      db.pool.query(query2, (error, rows, fields) => {
+        //assign shift ID's list to shifts
+        shifts = rows;
+        
+        query2 = `SELECT waiter_id FROM waiters`; 
+        // Run the second query
+        db.pool.query(query2, (error, rows, fields) => {
+          if (error) { 
+          }
+          else {
+          waiters = rows;
+
+          return res.render("waiters", { data: people, shifts : shifts, waiters: waiters, remove_shift: remove_shift});
+
+          }
+        })
+      })
     });
-  } else {
-    // otherwise a particular ID was selected, run a query for that shift ID to display all waiters on that shift
+  } 
+
+  // otherwise a particular shift ID was selected, run a query for that shift ID to display all waiters on that shift
+  else if (data["input-shift"] != undefined) {
     query1 = `SELECT * FROM waiters w INNER JOIN shifts_waiters sw ON w.waiter_id = sw.waiter_id 
     INNER JOIN shifts s ON sw.shift_id = s.shift_id WHERE s.shift_id = '${data["input-shift"]}' ORDER BY w.last_name ASC`;
-
-    // Run the 1st query
     db.pool.query(query1, function (error, rows, fields) {
-      // Save the people
+      // Save the waiters
       let people = rows;
-      return res.render("waiters", {
-        data: people,
-        shifts: shifts,
-        waiters: waiters,
-        remove_shift: remove_shift,
-      });
+        return res.render("waiters", { data: people, shifts : shifts, waiters: waiters, remove_shift:remove_shift });
     });
   }
+
 });
+
 
 // ROUTE FOR MENU ITEMS --------------------------------------------------------------------------------------------
 
