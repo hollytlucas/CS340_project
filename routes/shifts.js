@@ -40,7 +40,11 @@ router.get("", function (req, res) {
 
 // renders the "add shift" form
 router.get("/new", function (req, res) {
-  res.render("shifts/new");
+  const waitersQuery = `SELECT * FROM waiters`;
+  db.pool.query(waitersQuery, function (error, rows, fields) {
+    let waiters = rows;
+    res.render("shifts/new", { waiters });
+  });
 });
 
 // receives the form submission of the "add shift" form
