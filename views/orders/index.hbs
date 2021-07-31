@@ -26,7 +26,7 @@
           <td>{{this.order_created_at}}</td>
           <td>{{this.total_price}}</td>
           <td>{{getWaiterNameOnOrder ../waiters this}}</td>
-          <td>{{this.customer_id}}</td>
+          <td>{{concat this.customer_first_name " " this.customer_last_name}}</td>
           <td>{{join this.menuItems ", "}}</td>
           <td>
             <a
