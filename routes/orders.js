@@ -44,7 +44,16 @@ router.get("", function (req, res) {
 
 // renders the "add order" form
 router.get("/new", function (req, res) {
-  res.render("orders/new");
+  // query for waiters to propagate drop down
+  const waitersQuery = `SELECT * FROM waiters`;
+  const customersQuery = `SELECT * FROM customers`;
+  db.pool.query(waitersQuery, function (error, rows, fields) {
+    let waiters = rows;
+    db.pool.query(customersQuery, function (error, rows, fields) {
+      let customers = rows;
+      res.render("orders/new", { waiters, customers });
+    });
+  });
 });
 
 // receives the form submission of the "add order" form
@@ -70,11 +79,24 @@ router.post("/new", function (req, res) {
 });
 
 router.get("/:id/edit", function (req, res) {
-  // TODO: query for menu items to populate check boxes
   const selectQuery = `SELECT * FROM orders WHERE order_id=${req.params.id}`;
+  const waitersQuery = `SELECT * FROM waiters`;
+  const customersQuery = `SELECT * FROM customers`;
+  const menuItemsQuery = `SELECT * FROM menu_items`;
+
   db.pool.query(selectQuery, function (error, rows, fields) {
     const order = rows[0];
-    res.render("orders/edit", { order });
+    // query for waiters and customers to propagate drop downs
+    db.pool.query(waitersQuery, function (error, rows, fields) {
+      let waiters = rows;
+      db.pool.query(customersQuery, function (error, rows, fields) {
+        let customers = rows;
+        db.pool.query(menuItemsQuery, function (error, rows, fields) {
+          let menuItems = rows;
+          res.render("orders/edit", { order, waiters, customers, menuItems });
+        });
+      });
+    });
   });
 });
 

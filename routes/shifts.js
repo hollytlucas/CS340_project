@@ -51,6 +51,7 @@ router.get("/new", function (req, res) {
 router.post("/new", function (req, res) {
   const shiftDay = req.body["shift-day"];
   const shiftType = req.body["shift-type"];
+  // TODO post checkbox input values for assigned waiters to new shift
 
   const insertShiftQuery = `INSERT INTO shifts (shift_day, shift_type) VALUES (${shiftDay}, ${shiftType})`;
   res.redirect("/shifts");
