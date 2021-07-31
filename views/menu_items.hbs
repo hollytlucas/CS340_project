@@ -34,11 +34,10 @@
     Public</a>
 </div>
 
-
 <div class="my-container">
-  {{!-- Create a table to display all menu items --}}
+  {{! Create a table to display all menu items }}
   <table id="inventor" class="table table-striped paddingBetweenCols">
-    {{!-- Header section --}}
+    {{! Header section }}
     <thead>
       <tr>
         <th scope="col">MENU ITEM ID</th>
@@ -49,21 +48,20 @@
       </tr>
     </thead>
 
-    {{!-- Display all attributes of menu items --}}
+    {{! Display all attributes of menu items }}
     <tbody>
       {{#each data}}
-      <tr>
-        <td>{{this.menu_item_id}}</td>
-        <td>{{this.name}}</td>
-        <td>$ {{this.price}}</td>
-        <td>{{this.is_available}}</td>
-        <td>{{this.number_sold}}</td>
-      </tr>
+        <tr>
+          <td>{{this.menu_item_id}}</td>
+          <td>{{this.name}}</td>
+          <td>$ {{this.price}}</td>
+          <td>{{this.is_available}}</td>
+          <td>{{this.number_sold}}</td>
+        </tr>
       {{/each}}
     </tbody>
   </table>
 </div>
-
 
 {{! Form to add a menu items }}
 <div class="my-container">
@@ -76,7 +74,7 @@
     <input type="text" name="input-name" id="input-name-html" />
 
     <label for="input-price">Unit Price: </label>
-    <input type="text" name="input-price" id="input-price-html" />
+    <input type="text" name="input-price" id="input-price-html" value="$" />
 
     <label for="radio-one">In Stock</label>
     <input type="radio" id="radio-one" name="is-available" value="1" checked />

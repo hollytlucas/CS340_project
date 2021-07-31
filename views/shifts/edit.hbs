@@ -1,25 +1,38 @@
 {{> nav currentRoute="/shifts" }}
 
 <div id="shifts-container" class="d-flex justify-content-between">
-
-  <div id="edit-shift-container" class="m-3">
+  <div id="edit-shift-container" class="m-3 w-40">
     <h2>Edit Shift</h2>
-    <div class="m-3">
-      <label for="input-total-price">Shift Day: (shift day will go here)
-      </label>
-    </div>
-    <div class="m-3">
-      <label for="input-employee_id">Shift Type: (shift type will go here)
-      </label>
-    </div>
-    <h3>Assigned Waiters:</h3>
     <form
       id="edit-shift-form"
       class="form-group"
       method="POST"
       action="/shifts/{{shift.shift_id}}/edit"
     >
-
+      <div class="m-3 form-group">
+        <label for="input-shift-day">Shift Day:
+        </label>
+        <select name="input-shift-day">
+          <option>{{this.shift_day}}</option>
+          <option>Friday</option>
+          <option>Sunday</option>
+          <option>Monday</option>
+          <option>Tuesday</option>
+          <option>Wednesday</option>
+          <option>Thursday</option>
+        </select>
+      </div>
+      <div class="m-3">
+        <label for="input-shift-type">Shift Type:
+        </label>
+            <select name="input-shift-type">
+              <option>{{this.shift_type}}</option>
+              <option>day</option>
+              <option>swing</option>
+              <option>night</option>
+            </select>
+      </div>
+      <h3>Assigned Waiters:</h3>
       {{#each waiters}}
         <div class="form-check">
           <input
@@ -38,8 +51,7 @@
           </label>
         </div>
       {{/each}}
-
-      <button type="submit" class="btn btn-success">Submit</button>
+      <button type="submit" class="btn btn-success mt-3">Submit</button>
     </form>
   </div>
 

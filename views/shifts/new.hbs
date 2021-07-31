@@ -14,7 +14,8 @@
     >
       <div class="form-group">
         <label for="input-shift-day">Shift Day: </label>
-        <select value="shift-day" class="form-control" id="input-shift-day">
+        <select value="shift-day" id="input-shift-day">
+          <option>Select one...</option>
           <option>Friday</option>
           <option>Sunday</option>
           <option>Monday</option>
@@ -24,14 +25,15 @@
         </select>
       <div class="form-group">
         <label for="input-shift-type">Shift Type: </label>
-        <select value="shift-type" class="form-control" id="input-shift-type">
+        <select value="shift-type" id="input-shift-type">
+          <option>Select one...</option>
           <option>day</option>
           <option>swing</option>
           <option>night</option>
         </select>
       </div>
       <div class="form-group">
-        <label class="mb-2" for="input-waiters">Assigned Waiters: </label>
+        <label class="mb-2" for="input-waiters">Assign Waiters: </label>
       {{#each waiters}}
         <div class="form-check">
           <input
