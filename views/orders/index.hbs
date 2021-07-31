@@ -12,8 +12,8 @@
         <th scope="col">ORDER ID</th>
         <th scope="col">CREATED AT</th>
         <th scope="col">TOTAL PRICE</th>
-        <th scope="col">WAITER ID</th>
-        <th scope="col">CUSTOMER ID</th>
+        <th scope="col">WAITER</th>
+        <th scope="col">CUSTOMER</th>
         <th scope="col">MENU ITEMS</th>
         <th scope="col"></th>
         <th scope="col"></th>
@@ -25,7 +25,7 @@
           <th scope="row">{{this.order_id}}</th>
           <td>{{this.order_created_at}}</td>
           <td>{{this.total_price}}</td>
-          <td>{{getWaiterNameOnOrder waiters this}}</td>
+          <td>{{getWaiterNameOnOrder ../waiters this}}</td>
           <td>{{this.customer_id}}</td>
           <td>{{join this.menuItems ", "}}</td>
           <td>
