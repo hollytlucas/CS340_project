@@ -2,21 +2,21 @@
 
 <div id="orders-container" class="d-flex justify-content-between">
   <div id="edit-order-container" class="m-3 w-40">
+    <h2>Edit Order</h2>
     <form
         id="edit-order-form"
         class="form-group"
         method="POST"
-        action="/orders/{{this.order_id}}/edit"
+        action="/orders/{{order.order_id}}/edit"
     >  
-      <h2>Edit Order</h2>
       <div class="m-3 form-group">
         <label for="input-order-price">Total Price:</label>
-        <input name="input-order-price" value="$">{{this.total_price}}</input>
+        <input name="input-order-price" value={{concat "$" order.total_price}}></input>
       </div>
       <div class="m-3 form-group">
         <label for="input-waiter-name">Waiter:</label>
         <select name="input-waiter-name">
-          <option>{{this.waiter_id}}</option>
+          <option>{{getWaiterNameOnOrder waiters order}}</option>
           {{#each waiters}}
           <option>{{concat this.first_name " " this.last_name}}</option>
           {{/each}}

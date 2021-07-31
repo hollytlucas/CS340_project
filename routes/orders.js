@@ -5,11 +5,12 @@ const db = require("../database/db-connector");
 // renders orders list (/orders):
 router.get("", function (req, res) {
   const selectQuery = `
-  SELECT o.order_id, o.order_created_at, o.total_price, mi.menu_item_id, mi.name AS menu_item_name, co.customer_id FROM orders o
+  SELECT o.order_id, o.order_created_at, o.total_price, o.waiter_id, mi.menu_item_id, mi.name AS menu_item_name, co.customer_id FROM orders o
 	  LEFT JOIN menu_items_orders mio ON o.order_id = mio.order_id
     LEFT JOIN menu_items mi ON mio.menu_item_id = mi.menu_item_id
     JOIN customers_orders co ON co.order_id = o.order_id
     `;
+  const waitersQuery = `SELECT * FROM waiters`;
 
   db.pool.query(selectQuery, function (error, rows, fields) {
     const orders = rows;
@@ -35,10 +36,13 @@ router.get("", function (req, res) {
 
       return acc;
     }, []);
-
-    console.log({ condensedOrders });
-
-    return res.render("orders", { data: condensedOrders });
+    db.pool.query(waitersQuery, function (error, rows, fields) {
+      let waiters = rows;
+      return res.render("orders", {
+        orders: condensedOrders,
+        waiters,
+      });
+    });
   });
 });
 

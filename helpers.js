@@ -20,6 +20,12 @@ const handleBarsHelpers = {
   join: function (arr, separator) {
     return arr.join(separator);
   },
+  getWaiterNameOnOrder(waiters, order) {
+    orderWaiter = waiters.filter(
+      (waiter) => waiter.waiter_id == order.waiter_id
+    )[0];
+    return `${orderWaiter.first_name} ${orderWaiter.last_name}`;
+  },
 };
 
 module.exports = {

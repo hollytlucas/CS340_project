@@ -20,12 +20,12 @@
       </tr>
     </thead>
     <tbody>
-      {{#each data}}
+      {{#each orders}}
         <tr>
           <th scope="row">{{this.order_id}}</th>
           <td>{{this.order_created_at}}</td>
           <td>{{this.total_price}}</td>
-          <td>{{this.waiter_id}}</td>
+          <td>{{getWaiterNameOnOrder waiters this}}</td>
           <td>{{this.customer_id}}</td>
           <td>{{join this.menuItems ", "}}</td>
           <td>
