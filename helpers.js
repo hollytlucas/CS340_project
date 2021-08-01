@@ -30,7 +30,6 @@ const handleBarsHelpers = {
     let orderCustomer = customers.filter(
       (customer) => customer.customer_id == order.customer_id
     )[0];
-    console.log(orderCustomer);
     return `${orderCustomer.first_name} ${orderCustomer.last_name}`;
   },
 };

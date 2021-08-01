@@ -88,6 +88,7 @@ router.get("/:id/edit", function (req, res) {
   const waitersQuery = `SELECT * FROM waiters`;
   const customersQuery = `SELECT * FROM customers`;
   const menuItemsQuery = `SELECT * FROM menu_items`;
+  const menuItemsOrdersQuery = `SELECT menu_item_id FROM menu_items_orders WHERE order_id = ${req.params.id}`;
 
   db.pool.query(selectQuery, function (error, rows, fields) {
     const order = rows[0];
@@ -95,15 +96,28 @@ router.get("/:id/edit", function (req, res) {
     db.pool.query(waitersQuery, function (error, rows, fields) {
       let waiters = rows;
       db.pool.query(customersQuery, function (error, rows, fields) {
-        let customers = rows;
+        const customers = rows;
         // query for menu items to propagate check boxes
         db.pool.query(menuItemsQuery, function (error, rows, fields) {
           let menuItems = rows;
-          res.render("orders/edit", {
-            order,
-            waiters,
-            customers,
-            menuItems,
+          db.pool.query(menuItemsOrdersQuery, function (error, rows, fields) {
+            // make array of just the menuItemIDs
+            const menuItemsOrders = rows.map(
+              (menuItemOrder) => menuItemOrder.menu_item_id
+            );
+            console.log(menuItemsOrders);
+            menuItems = menuItems.map((menuItem) => {
+              menuItem.isOnOrder = menuItemsOrders.includes(
+                menuItem.menu_item_id
+              );
+              return menuItem;
+            });
+            res.render("orders/edit", {
+              order,
+              waiters,
+              customers,
+              menuItems,
+            });
           });
         });
       });
