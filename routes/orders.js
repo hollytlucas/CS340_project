@@ -99,7 +99,6 @@ router.get("/:id/edit", function (req, res) {
         // query for menu items to propagate check boxes
         db.pool.query(menuItemsQuery, function (error, rows, fields) {
           let menuItems = rows;
-          console.log(customers);
           res.render("orders/edit", {
             order,
             waiters,
