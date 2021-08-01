@@ -87,7 +87,6 @@ router.get("/:id/edit", function (req, res) {
   const selectQuery = `SELECT * FROM orders WHERE order_id=${req.params.id}`;
   const waitersQuery = `SELECT * FROM waiters`;
   const customersQuery = `SELECT * FROM customers`;
-  const customersOrdersQuery = `SELECT customer_id FROM customers_orders WHERE order_id = ${req.params.id}`;
   const menuItemsQuery = `SELECT * FROM menu_items`;
 
   db.pool.query(selectQuery, function (error, rows, fields) {
@@ -97,19 +96,15 @@ router.get("/:id/edit", function (req, res) {
       let waiters = rows;
       db.pool.query(customersQuery, function (error, rows, fields) {
         let customers = rows;
-        db.pool.query(customersOrdersQuery, function (error, rows, fields) {
-          let customersOrders = rows.map(
-            (customerOrder) => customerOrder.customer_id
-          );
-          db.pool.query(menuItemsQuery, function (error, rows, fields) {
-            let menuItems = rows;
-            res.render("orders/edit", {
-              order,
-              waiters,
-              customers,
-              customersOrders,
-              menuItems,
-            });
+        // query for menu items to propagate check boxes
+        db.pool.query(menuItemsQuery, function (error, rows, fields) {
+          let menuItems = rows;
+          console.log(customers);
+          res.render("orders/edit", {
+            order,
+            waiters,
+            customers,
+            menuItems,
           });
         });
       });
