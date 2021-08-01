@@ -66,7 +66,7 @@ router.get("/:id/edit", function (req, res) {
   db.pool.query(shiftQuery, function (error, rows, fields) {
     const shift = rows[0];
     db.pool.query(waitersQuery, function (error, rows, fields) {
-      const waiters = rows;
+      let waiters = rows;
       db.pool.query(shiftsWaitersQuery, function (error, rows, fields) {
         // make shiftsWaiter just an array of waiterIDs
         const shiftsWaiters = rows.map((shiftWaiter) => shiftWaiter.waiter_id);
@@ -86,11 +86,11 @@ router.get("/:id/edit", function (req, res) {
 router.post("/:id/edit", function (req, res) {
   // update the shift itself
   const shiftId = req.params.id;
-  const shiftDay = req.body["shift-day"];
-  const shiftType = req.body["shift-type"];
+  const shiftDay = req.body["input-shift-day"];
+  const shiftType = req.body["input-shift-type"];
 
   const updateShiftQuery = `
-    UPDATE shifts SET shift_day = ${shiftDay}, shift_type = ${shiftType}) 
+    UPDATE shifts SET shift_day = '${shiftDay}', shift_type = '${shiftType}'
       WHERE shift_id = ${shiftId}`;
 
   // handle assigning waiters
@@ -110,8 +110,10 @@ router.post("/:id/edit", function (req, res) {
   const insertShiftsWaitersQuery = `INSERT INTO shifts_waiters (shift_id, waiter_id) VALUES ${shiftIdWaiterIdTuples}`;
 
   db.pool.query(deleteShiftsWaitersQuery, function (error, rows, fields) {
-    db.pool.query(insertShiftsWaitersQuery, function (error, rows, fields) {
-      res.redirect("/shifts");
+    db.pool.query(updateShiftQuery, function (error, rows, fields) {
+      db.pool.query(insertShiftsWaitersQuery, function (error, rows, fields) {
+        res.redirect("/shifts");
+      });
     });
   });
 });
