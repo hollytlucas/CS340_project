@@ -1,4 +1,4 @@
--- Waiters
+-- Waiters --------------------------------------------------------------------------------------------------
 --  INSERT a waiter (and insert into shifts waiters by last waiter ID added)
 INSERT INTO waiters (first_name, last_name, employee_phone_number, shift_type_preference) VALUES (:first_name, :last_name, :employee_phone_number, :shift_type_preference);
 SELECT max(waiter_id) as last_id from waiters;
@@ -26,7 +26,7 @@ SELECT shift_id FROM shifts;
 SELECT * FROM waiters WHERE waiter_id = :waiter_id;
 
 --  UPDATE a waiter
-UPDATE waiters SET first_name = :first_name, last_name = :last_name, phone_number = :phone_number, shift_preference = :shift_preference)
+UPDATE waiters SET first_name = :first_name, last_name = :last_name, phone_number = :phone_number, shift_preference = :shift_preference
 WHERE waiter_id = :waiter_id;
 
 --    if user enters assigned shift ID and selects delete radio button
@@ -42,18 +42,22 @@ SELECT COUNT(*) AS count FROM shifts_waiters WHERE waiter_id = :waiter_id;
 -- DELETE relation from shifts_waiters table
 DELETE FROM shifts_waiters WHERE waiter_id = '${data["input-waiter-id"]}' AND shift_id = :shift_id;
   
--- Menu Items
+-- Menu Items --------------------------------------------------------------------------------------------------
 --  INSERT a menu item
 INSERT INTO menu_items (name, price, is_available, number_sold) VALUES (:name, :price, :is_available, :number_sold);
 
 -- SELECT all menu items
 SELECT * FROM menu_items;
 
--- Customers (Modify/Add/Delete Page)
+-- Customers (Modify/Add/Delete Page (Private)) --------------------------------------------------------------------------------------------------
 --  SELECT customer profile by name
 SELECT * FROM customers WHERE last_name LIKE .last_name;
 
--- Customers (Search Page)
+-- UPDATE customers
+UPDATE customers SET first_name = :first_name, last_name = :last_name, email = :email
+WHERE waiter_id = :waiter_id;
+
+-- Customers (Search Page (Public)) --------------------------------------------------------------------------------------------------
 --  SELECT orders by customer id
 SELECT * FROM customers c
 INNER JOIN customers_orders co ON c.customer_id = co.customer_id
@@ -70,7 +74,7 @@ INNER JOIN orders o ON co.order_id = o.order_id WHERE c.customer_id = :customer_
 -- SELECT all customers with last name LIKE last name input by user
 SELECT * FROM customers WHERE last_name LIKE :last_name;
 
--- Shifts
+-- Shifts --------------------------------------------------------------------------------------------------
 --  INSERT a shift
 INSERT INTO shifts (shift_day, shift_type) VALUES (:shift_day, :shift_type);
 
@@ -87,7 +91,7 @@ WHERE shift_id = :shift_id;
 DELETE FROM shifts_waiters WHERE shift_id = :shift_id;
 INSERT INTO shifts_waiters (shift_id, waiter_id) VALUES (:shift_id, :waiter_id);
 
--- Orders
+-- Orders --------------------------------------------------------------------------------------------------
 --  INSERT an order (and insert into menu items orders and customers orders)
 INSERT INTO orders (total_price, waiter_id) VALUES (:total_price, :waiter_id);
 INSERT INTO customers_orders (customer_id, order_id) VALUES (:customer_id, :order_id);
