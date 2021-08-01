@@ -26,6 +26,24 @@ const handleBarsHelpers = {
     )[0];
     return `${orderWaiter.first_name} ${orderWaiter.last_name}`;
   },
+  getCustomerNamesOnOrder(customers, order) {
+    customersOrders = customers.filter(
+      (customer) => customer.customer_id == order.customer_id
+    );
+    let str = "";
+    if (customersOrders.length > 1) {
+      for (let i = 0; i < customersOrders.length; i++) {
+        if (i == customersOrders.length - 1) {
+          str += `${customersOrders[i].first_name} ${customersOrders[i].last_name}`;
+        } else {
+          str += `${customersOrders[i].first_name} ${customersOrders[i].last_name}, `;
+        }
+      }
+    } else {
+      return `${customersOrders[0].first_name} ${customersOrders[0].last_name}`;
+    }
+    return str;
+  },
 };
 
 module.exports = {
