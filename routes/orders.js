@@ -8,8 +8,7 @@ router.get("", function (req, res) {
   SELECT o.order_id, o.order_created_at, o.total_price, o.waiter_id, mi.menu_item_id, mi.name AS menu_item_name, c.first_name AS customer_first_name, c.last_name AS customer_last_name FROM orders o
 	  LEFT JOIN menu_items_orders mio ON o.order_id = mio.order_id
     LEFT JOIN menu_items mi ON mio.menu_item_id = mi.menu_item_id
-    JOIN customers_orders co ON co.order_id = o.order_id
-    JOIN customers c ON c.customer_id = co.order_id;
+    JOIN customers c ON o.customer_id = c.customer_id
     `;
   const waitersQuery = `SELECT * FROM waiters`;
 
