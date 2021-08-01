@@ -66,7 +66,7 @@ router.get("/:id/edit", function (req, res) {
   db.pool.query(shiftQuery, function (error, rows, fields) {
     const shift = rows[0];
     db.pool.query(waitersQuery, function (error, rows, fields) {
-      let waiters = rows;
+      const waiters = rows;
       db.pool.query(shiftsWaitersQuery, function (error, rows, fields) {
         // make shiftsWaiter just an array of waiterIDs
         const shiftsWaiters = rows.map((shiftWaiter) => shiftWaiter.waiter_id);
