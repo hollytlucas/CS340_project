@@ -5,10 +5,15 @@ const db = require("../database/db-connector");
 // renders orders list (/orders):
 router.get("", function (req, res) {
   const selectQuery = `
-  SELECT o.order_id, o.order_created_at, o.total_price, o.waiter_id, mi.menu_item_id, mi.name AS menu_item_name, c.first_name AS customer_first_name, c.last_name AS customer_last_name FROM orders o
+  SELECT o.order_id, o.order_created_at, o.total_price, o.waiter_id,  
+    mi.menu_item_id, mi.name AS menu_item_name, c.first_name AS customer_first_name, 
+    c.last_name AS customer_last_name, w.first_name AS waiter_first_name,
+    w.last_name AS waiter_last_name FROM orders o
 	  LEFT JOIN menu_items_orders mio ON o.order_id = mio.order_id
     LEFT JOIN menu_items mi ON mio.menu_item_id = mi.menu_item_id
     JOIN customers c ON o.customer_id = c.customer_id
+    JOIN waiters w ON o.waiter_id = w.waiter_id
+    ORDER BY o.order_id
     `;
   const waitersQuery = `SELECT * FROM waiters`;
 
@@ -36,6 +41,7 @@ router.get("", function (req, res) {
 
       return acc;
     }, []);
+
     db.pool.query(waitersQuery, function (error, rows, fields) {
       let waiters = rows;
       return res.render("orders", {
@@ -105,7 +111,6 @@ router.get("/:id/edit", function (req, res) {
             const menuItemsOrders = rows.map(
               (menuItemOrder) => menuItemOrder.menu_item_id
             );
-            console.log(menuItemsOrders);
             menuItems = menuItems.map((menuItem) => {
               menuItem.isOnOrder = menuItemsOrders.includes(
                 menuItem.menu_item_id
@@ -126,9 +131,43 @@ router.get("/:id/edit", function (req, res) {
 });
 
 router.post("/:id/edit", function (req, res) {
-  // TODO: Pattern match off shifts
   // TODO: Update units sold on menu items included in order
-  res.redirect("/orders");
+  const orderId = req.params.id;
+  const totalPrice = req.body["input-order-price"];
+  const waiterId = req.body["input-waiter-name"].split(": waiter ")[1];
+  const customerId = req.body["input-customer-name"].split(": customer ")[1];
+
+  const updateOrderQuery = `
+    UPDATE orders SET total_price = '${totalPrice}', waiter_id = ${waiterId}, customer_id = ${customerId} 
+      WHERE order_id = ${orderId}`;
+
+  // handle assigning menu items
+
+  // first parse from the body and just extract the menu item Ids that are checked
+  const menuItemIds = Object.keys(req.body)
+    .filter((key) => key.includes("menuItem-"))
+    .map((menuItemKey) => menuItemKey.replace("menuItem-", ""));
+
+  // first delete
+  const deleteMenuItemsOrdersQuery = `DELETE FROM menu_items_orders WHERE order_id = ${orderId}`;
+
+  // then insert
+  const menuItemIdOrderIdTuples = menuItemIds
+    .map((menuItemId) => `(${orderId}, ${menuItemId})`)
+    .join(",");
+
+  const insertMenuItemsOrdersQuery = `INSERT INTO menu_items_orders (menu_item_id, order_id) VALUES ${menuItemIdOrderIdTuples}`;
+
+  db.pool.query(deleteMenuItemsOrdersQuery, function (error, rows, fields) {
+    console.log(error);
+    db.pool.query(updateOrderQuery, function (error, rows, fields) {
+      console.log(error);
+      db.pool.query(insertMenuItemsOrdersQuery, function (error, rows, fields) {
+        console.log(error);
+        res.redirect("/orders");
+      });
+    });
+  });
 });
 
 // receives the form submission of the "delete order" form

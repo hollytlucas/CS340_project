@@ -25,7 +25,7 @@
           <th scope="row">{{this.order_id}}</th>
           <td>{{this.order_created_at}}</td>
           <td>{{this.total_price}}</td>
-          <td>{{getWaiterNameOnOrder ../waiters this}}</td>
+          <td>{{concat this.waiter_first_name " " this.waiter_last_name}}</td>
           <td>{{concat this.customer_first_name " " this.customer_last_name}}</td>
           <td>{{join this.menuItems ", "}}</td>
           <td>

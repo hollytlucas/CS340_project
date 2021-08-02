@@ -4,21 +4,37 @@
   <div id="edit-order-container" class="m-3 w-40">
     <h2>Edit Order</h2>
     <form
-        id="edit-order-form"
-        class="form-group"
-        method="POST"
-        action="/orders/{{order.order_id}}/edit"
-    >  
+      id="edit-order-form"
+      class="form-group"
+      method="POST"
+      action="/orders/{{order.order_id}}/edit"
+    >
+
       <div class="m-3 form-group">
         <label for="input-order-price">Total Price:</label>
-        <input name="input-order-price" value={{concat "$" order.total_price}}></input>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
+          <input
+            name="input-order-price"
+            class="form-control"
+            value={{order.total_price}}
+          />
+        </div>
       </div>
       <div class="m-3 form-group">
         <label for="input-waiter-name">Waiter:</label>
         <select name="input-waiter-name">
           <option>{{getWaiterNameOnOrder waiters order}}</option>
           {{#each waiters}}
-          <option>{{concat this.first_name " " this.last_name}}</option>
+            <option>{{concat
+                this.first_name
+                " "
+                this.last_name
+                ": waiter "
+                this.waiter_id
+              }}</option>
           {{/each}}
         </select>
       </div>
@@ -27,13 +43,19 @@
         <select name="input-customer-name">
           <option>{{getCustomerNameOnOrder customers order}}</option>
           {{#each customers}}
-          <option>{{concat this.first_name " " this.last_name}}</option>
+            <option>{{concat
+                this.first_name
+                " "
+                this.last_name
+                ": customer "
+                this.customer_id
+              }}</option>
           {{/each}}
         </select>
       </div>
       <h3>Assign Menu Items:</h3>
-        <div class="form-group d-flex flex-column">
-          {{#each menuItems}}
+      <div class="form-group d-flex flex-column">
+        {{#each menuItems}}
           <div>
             <input
               class="form-check-input"
@@ -49,10 +71,10 @@
             >
               {{this.name}}
             </label>
-          </div> 
-          {{/each}} 
-        </div>
-        <button type="submit" class="btn btn-success mt-3" disabled>Submit</button>
+          </div>
+        {{/each}}
+      </div>
+      <button type="submit" class="btn btn-success mt-3">Submit</button>
     </form>
   </div>
 

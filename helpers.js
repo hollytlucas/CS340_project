@@ -24,13 +24,13 @@ const handleBarsHelpers = {
     let orderWaiter = waiters.filter(
       (waiter) => waiter.waiter_id == order.waiter_id
     )[0];
-    return `${orderWaiter.first_name} ${orderWaiter.last_name}`;
+    return `${orderWaiter.first_name} ${orderWaiter.last_name}: waiter ${orderWaiter.waiter_id}`;
   },
   getCustomerNameOnOrder: function (customers, order) {
     let orderCustomer = customers.filter(
       (customer) => customer.customer_id == order.customer_id
     )[0];
-    return `${orderCustomer.first_name} ${orderCustomer.last_name}`;
+    return `${orderCustomer.first_name} ${orderCustomer.last_name}: customer ${orderCustomer.customer_id}`;
   },
 };
 
