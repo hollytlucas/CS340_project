@@ -68,24 +68,40 @@ router.get("/new", function (req, res) {
 
 // receives the form submission of the "add order" form
 router.post("/new", function (req, res) {
-  // const totalPrice = req.body["total-price"];
-  // const waiterId = req.body["waiter-id"];
-  // const customerId = req.body["customer-id"];
-  // const menuItemIds = [];
+  const totalPrice = req.body["input-total-price"];
+  const waiterId = req.body["input-waiter-name"].split(": waiter ")[1];
+  const customerId = req.body["input-customer-name"].split(": customer ")[1];
 
-  // const insertOrderQuery = `INSERT INTO orders (total_price, waiter_id) VALUES (${totalPrice}, ${waiterId})`;
+  function getMenuIds(data) {
+    let menuItemsWithHyphens = Object.keys(data).filter((key) =>
+      key.includes("menuItem-")
+    );
+    let menuItemsWithoutHyphens = menuItemsWithHyphens.map((menuItem) =>
+      parseInt(menuItem.replace("menuItem-", ""))
+    );
+    return menuItemsWithoutHyphens;
+  }
 
-  // db.pool.query(insertOrderQuery, function (error, rows, fields) {
-  //   const orderId = rows[0].order_id;
-  //   const customerOrdersQuery = `INSERT INTO customers_orders (customer_id, order_id) VALUES (${customerId}, ${orderId})`;
-  //   const menuItemIdOrderIdTuples = ``;
-  //   const menuItemsOrdersQuery = `INSERT INTO menu_items_orders (menu_item_id, order_id) VALUES ${menuItemIdOrderIdTuples}`;
-  //   // TODO: Update units sold on menu items included in order
-  //   db.pool.query(customerOrdersQuery, function (error, rows, fields) {
-  //     res.redirect("/orders");
-  //   });
-  // });
-  res.redirect("/orders");
+  let menuItemIds = getMenuIds(req.body);
+
+  const selectOrdersQuery = `SElECT * FROM orders`;
+
+  const insertOrderQuery = `INSERT INTO orders (total_price, waiter_id, customer_id) VALUES (${totalPrice}, ${waiterId}, ${customerId})`;
+
+  db.pool.query(insertOrderQuery, function (error, rows, fields) {
+    db.pool.query(selectOrdersQuery, function (error, rows, fields) {
+      const orderId = rows[0].order_id;
+      const menuItemIdOrderIdTuples = menuItemIds
+        .map((menuItemId) => `(${orderId}, ${menuItemId})`)
+        .join(",");
+
+      const menuItemsOrdersQuery = `INSERT INTO menu_items_orders (order_id, menu_item_id) VALUES ${menuItemIdOrderIdTuples}`;
+      // TODO: Update units sold on menu items included in order
+      db.pool.query(menuItemsOrdersQuery, function (error, rows, fields) {
+        res.redirect("/orders");
+      });
+    });
+  });
 });
 
 //renders the edit form
