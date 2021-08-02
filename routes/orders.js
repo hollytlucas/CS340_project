@@ -146,7 +146,7 @@ router.post("/:id/edit", function (req, res) {
   // first parse from the body and just extract the menu item Ids that are checked
   const menuItemIds = Object.keys(req.body)
     .filter((key) => key.includes("menuItem-"))
-    .map((menuItemKey) => menuItemKey.replace("menuItem-", ""));
+    .map((menuItemKey) => parseInt(menuItemKey.replace("menuItem-", "")));
 
   // first delete
   const deleteMenuItemsOrdersQuery = `DELETE FROM menu_items_orders WHERE order_id = ${orderId}`;
@@ -155,15 +155,11 @@ router.post("/:id/edit", function (req, res) {
   const menuItemIdOrderIdTuples = menuItemIds
     .map((menuItemId) => `(${orderId}, ${menuItemId})`)
     .join(",");
-
-  const insertMenuItemsOrdersQuery = `INSERT INTO menu_items_orders (menu_item_id, order_id) VALUES ${menuItemIdOrderIdTuples}`;
+  const insertMenuItemsOrdersQuery = `INSERT INTO menu_items_orders (order_id, menu_item_id) VALUES ${menuItemIdOrderIdTuples}`;
 
   db.pool.query(deleteMenuItemsOrdersQuery, function (error, rows, fields) {
-    console.log(error);
     db.pool.query(updateOrderQuery, function (error, rows, fields) {
-      console.log(error);
       db.pool.query(insertMenuItemsOrdersQuery, function (error, rows, fields) {
-        console.log(error);
         res.redirect("/orders");
       });
     });
