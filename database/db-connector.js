@@ -14,7 +14,7 @@ var pool = mysql.createPool({
   host: "localhost",
   user: "kelleysharp",
   password: "password",
-  database: "cs340_lucasho",
+  database: "house_finch",
 });
 
 // Export it for use in our application
