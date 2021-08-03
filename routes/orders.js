@@ -54,14 +54,18 @@ router.get("", function (req, res) {
 
 // renders the "add order" form
 router.get("/new", function (req, res) {
-  // query for waiters to propagate drop down
   const waitersQuery = `SELECT * FROM waiters`;
   const customersQuery = `SELECT * FROM customers`;
+  const menuItemsQuery = `SELECT * FROM menu_items`;
+
   db.pool.query(waitersQuery, function (error, rows, fields) {
     let waiters = rows;
     db.pool.query(customersQuery, function (error, rows, fields) {
       let customers = rows;
-      res.render("orders/new", { waiters, customers });
+      db.pool.query(menuItemsQuery, function (error, rows, fields) {
+        let menuItems = rows;
+        res.render("orders/new", { waiters, customers, menuItems });
+      });
     });
   });
 });
