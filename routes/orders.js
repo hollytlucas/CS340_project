@@ -182,15 +182,19 @@ router.post("/:id/edit", function (req, res) {
   });
 });
 
-// receives the form submission of the "delete order" form
-router.delete("/:id/delete", function (req, res) {
+// receives the submission of the "delete order" button
+router.get("/:id/delete", function (req, res) {
   const orderId = req.params.id;
   const deleteMenuItemsOrdersQuery = `DELETE FROM menu_items_orders WHERE order_id = ${orderId}`;
-  const deleteCustomersOrdersQuery = `DELETE FROM customers_orders WHERE order_id = ${orderId}`;
   const deleteOrderQuery = `DELETE FROM orders WHERE order_id = ${orderId}`;
+
   // TODO: Update units sold on menu items included in order
-  db.pool.query(deleteOrderQuery, function (error, rows, fields) {
-    res.redirect("/orders");
+  db.pool.query(deleteMenuItemsOrdersQuery, function (error, rows, fields) {
+    console.log(error);
+    db.pool.query(deleteOrderQuery, function (error, rows, fields) {
+      console.log(error);
+      res.redirect("/orders");
+    });
   });
 });
 
