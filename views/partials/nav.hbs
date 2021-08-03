@@ -1,12 +1,9 @@
 <div class="w3-bar w3-light-blue">
   <a
-    href="/index_private"
-    class="w3-bar-item w3-button w3-mobile{{isCurrentRoute
-        "/index_private"
-        currentRoute
-      }}"
+    href="/"
+    class="w3-bar-item w3-button w3-mobile{{isCurrentRoute " /" currentRoute}}"
     style="width:14%"
-  >Employee Only - Home</a>
+  >Home</a>
   <a
     href="/waiters"
     class="w3-bar-item w3-button w3-mobile{{isCurrentRoute
@@ -40,6 +37,14 @@
     style="width:14%"
   >Customers</a>
   <a
+    href="/customers_search"
+    class="w3-bar-item w3-button w3-mobile{{isCurrentRoute
+        "/customers_private"
+        currentRoute
+      }}"
+    style="width:14%"
+  >Search Customer Orders</a>
+  <a
     href="/menu_items"
     class="w3-bar-item w3-button w3-mobile{{isCurrentRoute
         "/menu_items"
@@ -47,9 +52,4 @@
       }}"
     style="width:14%"
   >Menu Items</a>
-  <a
-    href="/"
-    class="w3-bar-item w3-button w3-mobile{{isCurrentRoute " /" currentRoute}}"
-    style="width:14%"
-  >Home</a>
 </div>
