@@ -2,20 +2,20 @@
 var mysql = require("mysql");
 
 // Create a 'connection pool' using the provided credentials
-// var pool = mysql.createPool({
-//     connectionLimit : 10,
-//     host            : 'classmysql.engr.oregonstate.edu',
-//     user            : 'cs340_lucasho',
-//     password        : '1234',
-//     database        : 'cs340_lucasho'
-// })
 var pool = mysql.createPool({
   connectionLimit: 10,
-  host: "localhost",
-  user: "kelleysharp",
-  password: "password",
-  database: "house_finch",
+  host: "classmysql.engr.oregonstate.edu",
+  user: "cs340_lucasho",
+  password: "1234",
+  database: "cs340_lucasho",
 });
+// var pool = mysql.createPool({
+//   connectionLimit: 10,
+//   host: "localhost",
+//   user: "kelleysharp",
+//   password: "password",
+//   database: "house_finch",
+// });
 
 // Export it for use in our application
 module.exports.pool = pool;
