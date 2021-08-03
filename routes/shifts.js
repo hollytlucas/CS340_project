@@ -49,12 +49,44 @@ router.get("/new", function (req, res) {
 
 // receives the form submission of the "add shift" form
 router.post("/new", function (req, res) {
-  const shiftDay = req.body["shift-day"];
-  const shiftType = req.body["shift-type"];
-  // TODO post checkbox input values for assigned waiters to new shift
+  const shiftDay = req.body["input-shift-day"];
+  const shiftType = req.body["input-shift-type"];
 
-  const insertShiftQuery = `INSERT INTO shifts (shift_day, shift_type) VALUES (${shiftDay}, ${shiftType})`;
-  res.redirect("/shifts");
+  function getWaiterIds(data) {
+    let waiterIdsWithHyphens = Object.keys(data).filter((key) =>
+      key.includes("waiter-")
+    );
+    let waiterIdsWithoutHyphens = waiterIdsWithHyphens.map((waiterId) =>
+      parseInt(waiterId.replace("waiter-", ""))
+    );
+    return waiterIdsWithoutHyphens;
+  }
+
+  let waiterIds = getWaiterIds(req.body);
+
+  const selectShiftsQuery = `SElECT * FROM shifts`;
+
+  const insertShiftQuery = `INSERT INTO shifts (shift_day, shift_type) VALUES ("${shiftDay}", "${shiftType}")`;
+
+  db.pool.query(insertShiftQuery, function (error, rows, fields) {
+    console.log(error);
+    db.pool.query(selectShiftsQuery, function (error, rows, fields) {
+      console.log(error);
+
+      const shiftId = rows[rows.length - 1].shift_id;
+      const shiftIdWaiterIdTuples = waiterIds
+        .map((waiterId) => `(${shiftId}, ${waiterId})`)
+        .join(",");
+
+      const shiftsWaitersQuery = `INSERT INTO shifts_waiters (shift_id, waiter_id) VALUES ${shiftIdWaiterIdTuples}`;
+
+      db.pool.query(shiftsWaitersQuery, function (error, rows, fields) {
+        console.log(error);
+
+        res.redirect("/shifts");
+      });
+    });
+  });
 });
 
 // renders the "edit shift" form
