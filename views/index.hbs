@@ -1,73 +1,74 @@
 <div class="w3-bar w3-light-blue">
-      <a
+  <a
     href="index_private"
     class="w3-bar-item w3-button w3-mobile"
     style="width:33%"
   >Employees Only</a>
   <div class="w3-bar-item" style="width:33%"></div>
-    <a
-    href="customers_public"
+  <a
+    href="customers_search"
     class="w3-bar-item w3-button w3-mobile"
     style="width:33%"
   >Customers</a>
 </div>
 
 <div class="d-flex align-items-center flex-column w3-container w3-light-gray">
-    <div class="m-3 d-flex flex-column align-items-center">
-        <h3 class="m-3">Welcome!</h3>
-        <p class="m-1">If you are a customer, you can search for your order details by clicking on "Customers"</p>
-    </div>
-    <div class="m-5">
-        <h4>Today's Menu</h4>
-        <ul>
-            <li>Spinach Quiche 7.85</li>
-            <li>Meatloaf 7.99</li>
-            <li>Cheese Enchilada 4.50</li>
-        </ul>
-    </div>
-    <div class="m-1">
-        <h3>Page Links and Descriptions</h3>
-    </div>
-    <div class="d-flex flex-column">
-        <li>Waiters page: Holly </li>
-        <ol>
-            <li><a href="waiters">Add a waiter, no assignments necessary (no fields can be blank)</li></a>
-            <li><a href="waiters">Select waiters from shift id dropdown, display waiters and shifts as a joined table</li></a>
-            <li><a href="waiters">Modify a waiter, if shift is changed update shifts_waiters join table</li></a>
-        </ol>
-        <li>Shifts page:  Kelley </li>
-        <ol>
-            <li><a href="shifts/index">Display shifts table (with waiter names via shifts waiters table)</a></li>
-            <li><a href="shifts/new">Add a shift and assign to waiter by waiter name</a></li>
-            <li><a href="shifts/1/edit">Add a shift and assign waiters by waiter name</a></li>
-        </ol>
-        <li>Orders page: Kelley</li>
-        <ol>
-            <li><a href="orders/index">Display orders table (with menu item names via menu items orders table)</a></li>
-            <li><a href="orders/new">Add order, specify total price, customer, waiter ID and menu item(s)</a></li>
-            <li><a href="orders/1/delete">Delete orders. Update customers orders and menu items orders tables</a></li>
-            <li><a href="orders/1/edit">Modify order. Update customers orders and menu items orders tables</a></li>
-        </ol>
-        <li>Customers page (private):  Kelley</li>
-        <ol>
-            <li><a href="customers_private/new">Add customers</a></li>
-        </ol>
-        <li>Add menu items page:  Holly</li>
-        <ol>
-            <li><a href="menu_items">Add menu items, no assignments necessary (no fields can be blank)</li></a>
-        </ol>
-        <li>Customers page (public): Holly</li>
-        <ol>
-            <li><a href="customers_public">Select profile by name search</li></a>
-            <li><a href="customers_public">Select all orders for specific customer by customer_id, display orders and customers as a joined table</li></a>
-        </ol>
-    </div>
-    <div class="d-flex justify-content-center">
-        <span class="m-3">(206) 331-1245</span>
-        <span class="m-3">215 Merrill St. Seattle, WA</span>
-        <span class="m-3">customer_service@house_finch.com</span>
-    </div>
+  <div class="m-3 d-flex flex-column align-items-center">
+    <h2 class="m-3">Welcome</h2>
+
+  </div>
+
+  <div class="d-flex flex-column">
+    <h4>Page Links and Descriptions</h4>
+    <li><strong>Waiters page</strong>: Holly </li>
+    <ol>
+      <li>Add a waiter (no fields can be blank)
+        <a href="waiters">"/waiters"</a></li>
+      <li>Search for a waiter based on shift ID
+        <a href="waiters">"/waiters"</a></li>
+      <li>Modify a waiter <a href="waiters">"/waiters"</a></li>
+    </ol>
+    <li><strong>Shifts page</strong>: Kelley </li>
+    <ol>
+      <li>Display shifts table (with waiter names via shifts_waiters table)
+        <a href="shifts/index">"/shifts/index"</a></li>
+      <li>Add a shift and assign waiters
+        <a href="shifts/new">"/shifts/new"</a></li>
+      <li>Update a shift <a href="shifts/1/edit">"/shifts/:id/edit</a></li>
+    </ol>
+    <li><strong>Orders page</strong>: Kelley</li>
+    <ol>
+      <li>Display orders table (with menu item names via menu_items_orders
+        table)
+        <a href="orders/index">"/orders/index"</a></li>
+      <li>Add an order and assign menu items
+        <a href="orders/new">"orders/new"</a></li>
+      <li>Modify an order. Update menu_items_orders table
+        <a href="orders/1/edit">"/orders/:id/edit"</a></li>
+      <li>Delete an order. Update menu_items_orders table
+        <a href="orders/1/delete">"orders/:id/delete"</a></li>
+    </ol>
+    <li><strong>Customers page </strong>: Kelley</li>
+    <ol>
+      <li>Add customers
+        <a href="customers_private/new">"/customers/new"</a></li>
+    </ol>
+    <li><Strong>Menu Items page</Strong>: Holly</li>
+    <ol>
+      <li>Add menu items (no fields can be blank)
+        <a href="menu_items">"/menu_items"</a></li>
+    </ol>
+    <li><strong>Search Orders by Customer page</strong>: Holly</li>
+    <ol>
+      <li>Search for Customer profile by name
+        <a href="customers_search">"/customers_search"</a></li>
+      <li>Select all orders for a customer by customer_id
+        <a href="customers_search">"/customers_search"</a></li>
+    </ol>
+  </div>
+  <div class="d-flex justify-content-center">
+    <span class="m-3">(206) 331-1245</span>
+    <span class="m-3">215 Merrill St. Seattle, WA</span>
+    <span class="m-3">your_manager@house_finch.com</span>
+  </div>
 </div>
-
-
-
