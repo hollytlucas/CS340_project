@@ -90,7 +90,7 @@ router.post("/new", function (req, res) {
 
   db.pool.query(insertOrderQuery, function (error, rows, fields) {
     db.pool.query(selectOrdersQuery, function (error, rows, fields) {
-      const orderId = rows[0].order_id;
+      const orderId = rows[rows.length - 1].order_id;
       const menuItemIdOrderIdTuples = menuItemIds
         .map((menuItemId) => `(${orderId}, ${menuItemId})`)
         .join(",");
