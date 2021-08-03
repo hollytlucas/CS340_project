@@ -18,7 +18,17 @@ router.get("/new", function (req, res) {
 });
 
 // receives the form submission of the "add customer" form
-router.post("/new", function (req, res) {});
+router.post("/new", function (req, res) {
+  const firstName = req.body["input-first-name"];
+  const lastName = req.body["input-last-name"];
+  const email = req.body["input-email"];
+  const insertCustomerQuery = `INSERT INTO customers (first_name, last_name, email) VALUES ("${firstName}", "${lastName}", "${email}")`;
+
+  db.pool.query(insertCustomerQuery, function (error, rows, fields) {
+    console.log(error);
+    res.redirect("/customers_private");
+  });
+});
 
 // renders the "edit customer" form
 router.get("/:id/edit", function (req, res) {
