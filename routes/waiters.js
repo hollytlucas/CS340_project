@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require("../database/db-connector");
 
 // renders the list of waiters (/waiters)
-router.get("", function (req, res) {
+router.get("", function (req, res, next) {
   let selectQuery;
 
   // If there is a query string, we run the query
@@ -11,6 +11,9 @@ router.get("", function (req, res) {
     selectQuery = `SELECT * FROM waiters WHERE employee_id LIKE "${req.query.id}%"`;
     // Run the 1st query
     db.pool.query(selectQuery, function (error, rows, fields) {
+      if (error) {
+        return next(error);
+      }
       // Save the waiters
       let waiters = rows;
       return res.render("waiters", { data: waiters });
@@ -21,6 +24,9 @@ router.get("", function (req, res) {
 
     // Run the 1st query
     db.pool.query(selectQuery, function (error, rows, fields) {
+      if (error) {
+        return next(error);
+      }
       // Save the waiters
       let people = rows;
       return res.render("waiters/index", { data: people });
@@ -29,7 +35,7 @@ router.get("", function (req, res) {
 });
 
 // renders the "add waiter" form
-router.get("/new", function (req, res) {
+router.get("/new", function (req, res, next) {
   res.render("waiters/new");
 });
 
@@ -45,11 +51,8 @@ router.post("/new", function (req, res) {
                 VALUES ('${firstName}', '${lastName}', ${phone}, '${shiftTypePreference}')`;
 
   db.pool.query(insertQuery, function (error, rows, fields) {
-    // Check to see if there was an error
     if (error) {
-      // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-      console.log(error);
-      res.sendStatus(400);
+      return next(error);
     }
 
     // If there was no error, we redirect back to our root route, which automatically runs the SELECT * FROM bsg_people and
@@ -62,13 +65,12 @@ router.post("/new", function (req, res) {
 });
 
 // renders the "edit waiter" form
-router.get("/:id/edit", function (req, res) {
+router.get("/:id/edit", function (req, res, next) {
   const waiterQuery = `SELECT * FROM waiters WHERE employee_id = ${req.params.id}`;
 
   db.pool.query(waiterQuery, function (error, rows, fields) {
     if (error) {
-      console.log(error);
-      res.sendStatus(400);
+      return next(error);
     }
 
     const waiter = rows[0];
@@ -78,7 +80,7 @@ router.get("/:id/edit", function (req, res) {
 });
 
 // receives the form submission of the "edit waiter" form
-router.post("/:id/edit", function (req, res) {
+router.post("/:id/edit", function (req, res, next) {
   // make a sql query to UPDATE the waiter
   // Capture the incoming data and parse it back to a JS object
   count = 0;
@@ -123,9 +125,7 @@ router.post("/:id/edit", function (req, res) {
   db.pool.query(updateQuery, function (error, rows, fields) {
     // Check to see if there was an error
     if (error) {
-      // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-      console.log(error);
-      res.sendStatus(400);
+      return next(error);
     }
 
     // If there was no error, we redirect back to our root route, which automatically runs the SELECT * FROM waiters and

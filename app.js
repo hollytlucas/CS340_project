@@ -576,6 +576,14 @@ app.post("/add-menu-item-form", function (req, res) {
   });
 });
 
+// global error handler
+
+app.use((error, req, res, next) => {
+  res.status(500).json({
+    error: error.message,
+  });
+});
+
 //----------------------------------------------------------------------------------------------------------------------
 /*
     LISTENER

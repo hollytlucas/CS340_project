@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require("../database/db-connector");
 
 // renders orders list (/orders):
-router.get("", function (req, res) {
+router.get("", function (req, res, next) {
   const selectQuery = `
   SELECT o.order_id, o.order_created_at, o.total_price, o.waiter_id,  
     mi.menu_item_id, mi.name AS menu_item_name, c.first_name AS customer_first_name, 
@@ -19,6 +19,9 @@ router.get("", function (req, res) {
 
   db.pool.query(selectQuery, function (error, rows, fields) {
     const orders = rows;
+    if (error) {
+      return next(error);
+    }
     // add a "menuItems" array to each order object
     const condensedOrders = orders.reduce((acc, order) => {
       const mostRecentOrder = acc[acc.length - 1];
@@ -44,6 +47,9 @@ router.get("", function (req, res) {
 
     db.pool.query(waitersQuery, function (error, rows, fields) {
       let waiters = rows;
+      if (error) {
+        return next(error);
+      }
       return res.render("orders", {
         orders: condensedOrders,
         waiters: waiters,
@@ -53,17 +59,26 @@ router.get("", function (req, res) {
 });
 
 // renders the "add order" form
-router.get("/new", function (req, res) {
+router.get("/new", function (req, res, next) {
   const waitersQuery = `SELECT * FROM waiters`;
   const customersQuery = `SELECT * FROM customers`;
   const menuItemsQuery = `SELECT * FROM menu_items`;
 
   db.pool.query(waitersQuery, function (error, rows, fields) {
     let waiters = rows;
+    if (error) {
+      return next(error);
+    }
     db.pool.query(customersQuery, function (error, rows, fields) {
       let customers = rows;
+      if (error) {
+        return next(error);
+      }
       db.pool.query(menuItemsQuery, function (error, rows, fields) {
         let menuItems = rows;
+        if (error) {
+          return next(error);
+        }
         res.render("orders/new", { waiters, customers, menuItems });
       });
     });
@@ -71,7 +86,7 @@ router.get("/new", function (req, res) {
 });
 
 // receives the form submission of the "add order" form
-router.post("/new", function (req, res) {
+router.post("/new", function (req, res, next) {
   const totalPrice = req.body["input-total-price"];
   const waiterId = req.body["input-waiter-name"].split(": waiter ")[1];
   const customerId = req.body["input-customer-name"].split(": customer ")[1];
@@ -93,7 +108,13 @@ router.post("/new", function (req, res) {
   const insertOrderQuery = `INSERT INTO orders (total_price, waiter_id, customer_id) VALUES (${totalPrice}, ${waiterId}, ${customerId})`;
 
   db.pool.query(insertOrderQuery, function (error, rows, fields) {
+    if (error) {
+      return next(error);
+    }
     db.pool.query(selectOrdersQuery, function (error, rows, fields) {
+      if (error) {
+        return next(error);
+      }
       const orderId = rows[rows.length - 1].order_id;
       const menuItemIdOrderIdTuples = menuItemIds
         .map((menuItemId) => `(${orderId}, ${menuItemId})`)
@@ -102,6 +123,9 @@ router.post("/new", function (req, res) {
       const menuItemsOrdersQuery = `INSERT INTO menu_items_orders (order_id, menu_item_id) VALUES ${menuItemIdOrderIdTuples}`;
       // TODO: Update units sold on menu items included in order
       db.pool.query(menuItemsOrdersQuery, function (error, rows, fields) {
+        if (error) {
+          return next(error);
+        }
         res.redirect("/orders");
       });
     });
@@ -109,7 +133,7 @@ router.post("/new", function (req, res) {
 });
 
 //renders the edit form
-router.get("/:id/edit", function (req, res) {
+router.get("/:id/edit", function (req, res, next) {
   const selectQuery = `SELECT * FROM orders WHERE order_id=${req.params.id}`;
   const waitersQuery = `SELECT * FROM waiters`;
   const customersQuery = `SELECT * FROM customers`;
@@ -117,16 +141,31 @@ router.get("/:id/edit", function (req, res) {
   const menuItemsOrdersQuery = `SELECT menu_item_id FROM menu_items_orders WHERE order_id = ${req.params.id}`;
 
   db.pool.query(selectQuery, function (error, rows, fields) {
+    if (error) {
+      return next(error);
+    }
     const order = rows[0];
     // query for waiters and customers to propagate drop downs
     db.pool.query(waitersQuery, function (error, rows, fields) {
+      if (error) {
+        return next(error);
+      }
       let waiters = rows;
       db.pool.query(customersQuery, function (error, rows, fields) {
+        if (error) {
+          return next(error);
+        }
         const customers = rows;
         // query for menu items to propagate check boxes
         db.pool.query(menuItemsQuery, function (error, rows, fields) {
+          if (error) {
+            return next(error);
+          }
           let menuItems = rows;
           db.pool.query(menuItemsOrdersQuery, function (error, rows, fields) {
+            if (error) {
+              return next(error);
+            }
             // make array of just the menuItemIDs
             const menuItemsOrders = rows.map(
               (menuItemOrder) => menuItemOrder.menu_item_id
@@ -150,7 +189,7 @@ router.get("/:id/edit", function (req, res) {
   });
 });
 
-router.post("/:id/edit", function (req, res) {
+router.post("/:id/edit", function (req, res, next) {
   // TODO: Update units sold on menu items included in order
   const orderId = req.params.id;
   const totalPrice = req.body["input-order-price"];
@@ -178,8 +217,17 @@ router.post("/:id/edit", function (req, res) {
   const insertMenuItemsOrdersQuery = `INSERT INTO menu_items_orders (order_id, menu_item_id) VALUES ${menuItemIdOrderIdTuples}`;
 
   db.pool.query(deleteMenuItemsOrdersQuery, function (error, rows, fields) {
+    if (error) {
+      return next(error);
+    }
     db.pool.query(updateOrderQuery, function (error, rows, fields) {
+      if (error) {
+        return next(error);
+      }
       db.pool.query(insertMenuItemsOrdersQuery, function (error, rows, fields) {
+        if (error) {
+          return next(error);
+        }
         res.redirect("/orders");
       });
     });
@@ -187,16 +235,21 @@ router.post("/:id/edit", function (req, res) {
 });
 
 // receives the submission of the "delete order" button
-router.get("/:id/delete", function (req, res) {
+router.get("/:id/delete", function (req, res, next) {
   const orderId = req.params.id;
   const deleteMenuItemsOrdersQuery = `DELETE FROM menu_items_orders WHERE order_id = ${orderId}`;
   const deleteOrderQuery = `DELETE FROM orders WHERE order_id = ${orderId}`;
 
   // TODO: Update units sold on menu items included in order
   db.pool.query(deleteMenuItemsOrdersQuery, function (error, rows, fields) {
-    console.log(error);
+    if (error) {
+      return next(error);
+    }
+
     db.pool.query(deleteOrderQuery, function (error, rows, fields) {
-      console.log(error);
+      if (error) {
+        return next(error);
+      }
       res.redirect("/orders");
     });
   });
