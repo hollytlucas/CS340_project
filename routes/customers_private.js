@@ -16,7 +16,7 @@ router.get("", function (req, res, next) {
 });
 
 // renders the "add customer" form
-router.get("/new", function (req, res) {
+router.get("/new", function (req, res, next) {
   res.render("customers_private/new");
 });
 
@@ -66,7 +66,7 @@ router.post("/:id/edit", function (req, res, next) {
 });
 
 // receives the form submission of the "delete customer" form
-router.delete("/:id/delete", function (req, res) {
+router.delete("/:id/delete", function (req, res, next) {
   // make a sql query to UPDATE the customer
 });
 

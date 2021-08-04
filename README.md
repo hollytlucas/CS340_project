@@ -1,4 +1,5 @@
 # Node.js - Step 0 - Getting a Server Running
+
 This is the bare minimum you need to get running with Node.js. This will get you a server that can accept web requests and will return an output.
 
 ## Initialize your Project
@@ -29,10 +30,12 @@ npm i express --save
 
 ## Install `forever`
 
-We need to install the forever code, so the first command you have to run is going to be 
+We need to install the forever code, so the first command you have to run is going to be
+
 ```bash
 npm i forever --save
 ```
+
 In short, if you were to run the command `node app.js` right now from the root of your project, you would be able to access it, via your browser. It would continue to work... until you logged out of the SSH session. We want this project to run forever (pardon the pun), so that it stays up until we want it to come down.
 
 For reasons beyond your control, running `forever` is a bit more complex on the school's FLIP server. Here is how to make it easy, run the following command from the root of your project:
@@ -41,13 +44,13 @@ For reasons beyond your control, running `forever` is a bit more complex on the 
 alias forever='./node_modules/forever/bin/forever'
 ```
 
-Now, whenever you run `forever` from the *root* of any project that has the forever dependency installed, it will work, without fail. If you want to make this more permanent (not absolutely permanent), you can add this as a line towards the end of the `~/.bashrc` file in your home directory (notice the ~ squiggly) on the OSU FLIP server.
+Now, whenever you run `forever` from the _root_ of any project that has the forever dependency installed, it will work, without fail. If you want to make this more permanent (not absolutely permanent), you can add this as a line towards the end of the `~/.bashrc` file in your home directory (notice the ~ squiggly) on the OSU FLIP server.
 
 > You must run the forever command from the root of your project (where app.js is located). If you don't it will fail.
 
 ## App.js
 
-You will need to create an `app.js` in the root of your project folder. Create a new file, and save it as `app.js` 
+You will need to create an `app.js` in the root of your project folder. Create a new file, and save it as `app.js`
 
 Our `app.js` is broken into three pieces at the very start. We have our SETUP, ROUTES, and LISTENER sections.
 
@@ -58,7 +61,7 @@ The ROUTES section contains every single path the server will respond to. Imagin
 I could open my browser while connected to the OSU VPN, and navigate to `http://flip1.engr.oregonstate.edu:9123/` and get the desired output.
 The ROUTES section define the path after the host name such as `flip1.engr.oregonstate.edu:9123`. `'/'` is considered the **root** route.
 
-The LISTENER section is what actually makes the server *work*. Without this, the server won't, well, listen. We need to make sure it is given the PORT we want it to listen on. 
+The LISTENER section is what actually makes the server _work_. Without this, the server won't, well, listen. We need to make sure it is given the PORT we want it to listen on.
 
 ```javascript
 // App.js
@@ -66,23 +69,34 @@ The LISTENER section is what actually makes the server *work*. Without this, the
 /*
     SETUP
 */
-var express = require('express');   // We are using the express library for the web server
-var app     = express();            // We need to instantiate an express object to interact with the server in our code
-PORT        = 9124;                 // Set a port number at the top so it's easy to change in the future
+var express = require("express"); // We are using the express library for the web server
+var app = express(); // We need to instantiate an express object to interact with the server in our code
+PORT = 9124; // Set a port number at the top so it's easy to change in the future
 
 /*
     ROUTES
 */
-app.get('/', function(req, res)                 // This is the basic syntax for what is called a 'route'
-    {
-        res.send("The server is running!")      // This function literally sends the string "The server is running!" to the computer
-    });                                         // requesting the web site.
+app.get(
+  "/",
+  function (
+    req,
+    res,
+    next // This is the basic syntax for what is called a 'route'
+  ) {
+    res.send("The server is running!"); // This function literally sends the string "The server is running!" to the computer
+  }
+); // requesting the web site.
 
 /*
     LISTENER
 */
-app.listen(PORT, function(){            // This is the basic syntax for what is called the 'listener' which receives incoming requests on the specified PORT.
-    console.log('Express started on http://localhost:' + PORT + '; press Ctrl-C to terminate.')
+app.listen(PORT, function () {
+  // This is the basic syntax for what is called the 'listener' which receives incoming requests on the specified PORT.
+  console.log(
+    "Express started on http://localhost:" +
+      PORT +
+      "; press Ctrl-C to terminate."
+  );
 });
 ```
 

@@ -51,7 +51,7 @@ router.get("/new", function (req, res, next) {
 });
 
 // receives the form submission of the "add shift" form
-router.post("/new", function (req, res) {
+router.post("/new", function (req, res, next) {
   const shiftDay = req.body["input-shift-day"];
   const shiftType = req.body["input-shift-type"];
 

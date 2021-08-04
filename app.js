@@ -51,20 +51,20 @@ app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 // GET ROUTES
 //ROUTE FOR MAIN PAGE
-app.get("/", function (req, res) {
+app.get("/", function (req, res, next) {
   res.render("index");
 });
 
 // GET ROUTES
 //ROUTE FOR MAIN PAGE
-app.get("/index_private", function (req, res) {
+app.get("/index_private", function (req, res, next) {
   res.render("index_private");
 });
 
 // ROUTE FOR WAITERS
 
 // ROUTE FOR WAITERS
-app.get("/waiters", function (req, res) {
+app.get("/waiters", function (req, res, next) {
   let query1;
   let query2;
   let data = req.query;
@@ -81,6 +81,7 @@ app.get("/waiters", function (req, res) {
   // Run the second query
   db.pool.query(query2, (error, rows, fields) => {
     if (error) {
+      return next(error);
     } else {
       waiters = rows;
     }
@@ -90,6 +91,9 @@ app.get("/waiters", function (req, res) {
   query2 = `SELECT shift_id FROM shifts`;
   // Run query
   db.pool.query(query2, (error, rows, fields) => {
+    if (error) {
+      return next(error);
+    }
     //assign shift ID's list to shifts
     shifts = rows;
   });
@@ -101,6 +105,9 @@ app.get("/waiters", function (req, res) {
     INNER JOIN shifts_waiters sw ON w.waiter_id = sw.waiter_id
     INNER JOIN shifts s ON sw.shift_id = s.shift_id WHERE w.waiter_id = '${data["input-id"]}'`;
     db.pool.query(query2, (error, rows, fields) => {
+      if (error) {
+        return next(error);
+      }
       remove_shift = rows;
       //set remove to true
       remove = true;
@@ -128,8 +135,7 @@ app.get("/waiters", function (req, res) {
     db.pool.query(query2, (error, rows, fields) => {
       if (error) {
         // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-        console.log("here is the error", error);
-        res.sendStatus(400);
+        return next(error);
       } else {
         // assign all attributes of waiter to modify to mod_waiter
         mod_waiter = rows;
@@ -164,6 +170,9 @@ app.get("/waiters", function (req, res) {
     ORDER BY w.last_name ASC`;
     // run query to get all waiters and their assigned shifts to display
     db.pool.query(query1, function (error, rows, fields) {
+      if (error) {
+        return next(error);
+      }
       // Save the people
       let people = rows;
 
@@ -171,6 +180,9 @@ app.get("/waiters", function (req, res) {
       query2 = `SELECT shift_id FROM shifts`;
       // Run query
       db.pool.query(query2, (error, rows, fields) => {
+        if (error) {
+          return next(error);
+        }
         //assign shift ID's list to shifts
         shifts = rows;
 
@@ -178,6 +190,7 @@ app.get("/waiters", function (req, res) {
         // Run the second query
         db.pool.query(query2, (error, rows, fields) => {
           if (error) {
+            return next(error);
           } else {
             waiters = rows;
 
@@ -198,6 +211,9 @@ app.get("/waiters", function (req, res) {
     query1 = `SELECT * FROM waiters w INNER JOIN shifts_waiters sw ON w.waiter_id = sw.waiter_id 
     INNER JOIN shifts s ON sw.shift_id = s.shift_id WHERE s.shift_id = '${data["input-shift"]}' ORDER BY w.last_name ASC`;
     db.pool.query(query1, function (error, rows, fields) {
+      if (error) {
+        return next(error);
+      }
       // Save the waiters
       let people = rows;
       return res.render("waiters", {
@@ -212,10 +228,13 @@ app.get("/waiters", function (req, res) {
 
 // ROUTE FOR MENU ITEMS --------------------------------------------------------------------------------------------
 
-app.get("/menu_items", function (req, res) {
+app.get("/menu_items", function (req, res, next) {
   // Display all items on page load
   let query1 = `SELECT * FROM menu_items`;
   db.pool.query(query1, function (error, rows, fields) {
+    if (error) {
+      return next(error);
+    }
     // Save menu items
     let items = rows;
     return res.render("menu_items", { data: items });
@@ -223,7 +242,7 @@ app.get("/menu_items", function (req, res) {
 });
 
 //need to delete if Kelley is not using
-app.post("/add-person-form", function (req, res) {
+app.post("/add-person-form", function (req, res, next) {
   // Capture the incoming data and parse it back to a JS object
   let data = req.body;
 
@@ -268,7 +287,7 @@ app.use("/shifts", shiftsRouter);
 
 // ROUTE FOR CUSTOMERS PUBLIC-------------------------------------------------------------------------------------------------------
 
-app.get("/customers_search", function (req, res) {
+app.get("/customers_search", function (req, res, next) {
   // Declare Query 1
   let query1;
   let charges;
@@ -278,6 +297,9 @@ app.get("/customers_search", function (req, res) {
   // select all customer_ID's to display all customer ID's on dropdown as default with every page load
   query1 = `SELECT customer_id FROM customers`;
   db.pool.query(query1, function (error, rows, fields) {
+    if (error) {
+      return next(error);
+    }
     // Save the people
     customer_ids = rows;
     // Run the second query
@@ -288,6 +310,9 @@ app.get("/customers_search", function (req, res) {
     // run query to select all customers with last name like user input
     query1 = `SELECT * FROM customers WHERE last_name LIKE "${req.query.lname}%"`;
     db.pool.query(query1, function (error, rows, fields) {
+      if (error) {
+        return next(error);
+      }
       // save customers
       let customers = rows;
       return res.render("customers_search", {
@@ -339,7 +364,7 @@ app.use("/customers_private", customersPrivateRouter);
 
 // ROUTE FOR ADD PERSON (NEED TO DELETE)
 
-app.post("/add-person-form", function (req, res) {
+app.post("/add-person-form", function (req, res, next) {
   // Capture the incoming data and parse it back to a JS object
   let data = req.body;
 
@@ -374,7 +399,7 @@ app.post("/add-person-form", function (req, res) {
 });
 
 // ROUTE FOR ADD WAITER -----------------------------------------------------------------------------------------------------------------
-app.post("/add-waiter-form", function (req, res) {
+app.post("/add-waiter-form", function (req, res, next) {
   // Capture the incoming data and parse it back to a JS object
   let data = req.body; // holds body of request
   let no_assigned_shift = false; // no assigned shift needs to flag error (all waiters must have a shift)
@@ -418,7 +443,7 @@ app.post("/add-waiter-form", function (req, res) {
   }
 });
 //  ROUTE FOR MODIFY WAITER --------------------------------------------------------------------------------------------------------
-app.post("/modify-waiter-form", function (req, res) {
+app.post("/modify-waiter-form", function (req, res, next) {
   let shifts; // holds all shift ID's
   let waiters; // holds all waiter ID's
   let query2;
@@ -547,7 +572,7 @@ app.post("/modify-waiter-form", function (req, res) {
 });
 
 // ROUTE FOR ADD MENU ITEM
-app.post("/add-menu-item-form", function (req, res) {
+app.post("/add-menu-item-form", function (req, res, next) {
   let data = req.body; // holds body of request
   let items; // holds all menu items to be displayed
 

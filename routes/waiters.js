@@ -40,7 +40,7 @@ router.get("/new", function (req, res, next) {
 });
 
 // receives the form submission of the "add waiter" form
-router.post("/new", function (req, res) {
+router.post("/new", function (req, res, next) {
   const firstName = req.body["input-fname"];
   const lastName = req.body["input-lname"];
   const phone = req.body["input-phone"];
