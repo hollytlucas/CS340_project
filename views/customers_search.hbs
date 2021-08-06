@@ -1,16 +1,4 @@
-<div class="w3-bar w3-light-blue">
-  <a
-    href="index_private"
-    class="w3-bar-item w3-button w3-mobile"
-    style="width:33%"
-  >Employees Only</a>
-  <a href="/" class="w3-bar-item w3-button w3-mobile" style="width:33%">Home</a>
-  <a
-    href="customers_search"
-    class="w3-bar-item w3-button w3-mobile w3-grayscale-max"
-    style="width:33%"
-  >Customers</a>
-</div>
+{{> nav currentRoute="/customers_search" }}
 
 <div class="my-container">
   {{! Create a table to display customers based on last name search }}
