@@ -1,0 +1,59 @@
+{{> nav currentRoute="/customers_search_orders" }}
+
+
+{{! Table to display all waiters and their shifts, or all waiters by given shift }}
+<div class="my-container">
+  <table id="people-table" class="table table-striped">
+    {{!-- Header section --}}
+    <thead>
+      <tr>
+        <th scope="col">CUSTOMER ID</th>
+        <th scope="col">FIRST NAME</th>
+        <th scope="col">LAST NAME</th>
+        <th scope="col">EMAIL</th>
+        <th scope="col">ORDER ID</th>
+        <th scope="col">ORDER DATE AND TIME</th>
+        <th scope="col">TOTAL CHARGES</th>
+      </tr>
+    </thead>
+
+    {{!-- Display all attributes for waiters and shifts --}}
+    <tbody>
+      {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+      {{#each orders}}
+      <tr>
+        <td>{{this.customer_id}}</td>
+        <td>{{this.first_name}}</td>
+        <td>{{this.last_name}}</td>
+        <td>{{this.email}}</td>
+        <td>{{this.order_id}}</td>
+        <td>{{this.order_created_at}}</td>
+        <td>$ {{this.total_price}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <h5>Total:</h5> 
+
+  {{! Display total charges for all orders of given customer }}
+  {{#each charges}}
+  <h7>{{this.total_charges}}</h7>
+  {{/each}}
+</div>
+
+{{! Form to search for all orders given user input of customer ID }}
+<div class="my-container">
+  <h2>Orders Search</h2>
+  <p>Search for orders by customer ID (To test total charges, choose customer ID = 1</p>
+  <form id="search-custorder-html" method="GET" action="/customers_search_orders">
+    <label for="input-custorder">Customer ID</label>
+      <select name="customer" id="input-custorder-html">
+        <option value="">Select a Customer ID</option>
+        {{#each customer_ids}}
+        <option value="{{this.customer_id}}">{{this.customer_id}}</option>
+        {{/each}}
+      </select>
+      <br /><br />
+    <button type="submit" class="btn btn-success">Search</button>
+  </form>
+</div>
