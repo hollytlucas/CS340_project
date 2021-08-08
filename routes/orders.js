@@ -103,6 +103,12 @@ router.post("/new", function (req, res, next) {
 
   let menuItemIds = getMenuIds(req.body);
 
+  // if no menu items selected, alert the user this is mandatory and redirect
+  // if (menuItemIds.length == 0) {
+  //   window.alert("You must select at least one menu item");
+  //   res.redirect("/new");
+  // }
+
   const selectOrdersQuery = `SElECT * FROM orders`;
 
   const insertOrderQuery = `INSERT INTO orders (total_price, waiter_id, customer_id) VALUES (${totalPrice}, ${waiterId}, ${customerId})`;
@@ -115,16 +121,25 @@ router.post("/new", function (req, res, next) {
       if (error) {
         return next(error);
       }
+      const orders = rows;
       const orderId = rows[rows.length - 1].order_id;
       const menuItemIdOrderIdTuples = menuItemIds
         .map((menuItemId) => `(${orderId}, ${menuItemId})`)
         .join(",");
 
-      const menuItemsOrdersQuery = `INSERT INTO menu_items_orders (order_id, menu_item_id) VALUES ${menuItemIdOrderIdTuples}`;
+      const updateMenuItemsOrdersQuery = `INSERT INTO menu_items_orders (order_id, menu_item_id) VALUES ${menuItemIdOrderIdTuples}`;
       // TODO: Update units sold on menu items included in order
-      db.pool.query(menuItemsOrdersQuery, function (error, rows, fields) {
+      db.pool.query(updateMenuItemsOrdersQuery, function (error, rows, fields) {
         if (error) {
           return next(error);
+        }
+        for (let menuItemId of menuItemIds) {
+          const updateNumberSoldQuery = `UPDATE menu_items mi SET number_sold = number_sold + 1 WHERE mi.menu_item_id = ${menuItemId}`;
+          db.pool.query(updateNumberSoldQuery, function (error, rows, fields) {
+            if (error) {
+              return next(error);
+            }
+          });
         }
         res.redirect("/orders");
       });
@@ -189,46 +204,72 @@ router.get("/:id/edit", function (req, res, next) {
   });
 });
 
+// receives submission of edit form
 router.post("/:id/edit", function (req, res, next) {
-  // TODO: Update units sold on menu items included in order
   const orderId = req.params.id;
   const totalPrice = req.body["input-order-price"];
   const waiterId = req.body["input-waiter-name"].split(": waiter ")[1];
   const customerId = req.body["input-customer-name"].split(": customer ")[1];
+  const getCurrentMenuItemIdsQuery = `SELECT menu_item_id FROM menu_items_orders mio WHERE mio.order_id = ${req.params.id}`;
 
-  const updateOrderQuery = `
-    UPDATE orders SET total_price = '${totalPrice}', waiter_id = ${waiterId}, customer_id = ${customerId} 
-      WHERE order_id = ${orderId}`;
-
-  // handle assigning menu items
-
-  // first parse from the body and just extract the menu item Ids that are checked
-  const menuItemIds = Object.keys(req.body)
-    .filter((key) => key.includes("menuItem-"))
-    .map((menuItemKey) => parseInt(menuItemKey.replace("menuItem-", "")));
-
-  // first delete
-  const deleteMenuItemsOrdersQuery = `DELETE FROM menu_items_orders WHERE order_id = ${orderId}`;
-
-  // then insert
-  const menuItemIdOrderIdTuples = menuItemIds
-    .map((menuItemId) => `(${orderId}, ${menuItemId})`)
-    .join(",");
-  const insertMenuItemsOrdersQuery = `INSERT INTO menu_items_orders (order_id, menu_item_id) VALUES ${menuItemIdOrderIdTuples}`;
-
-  db.pool.query(deleteMenuItemsOrdersQuery, function (error, rows, fields) {
-    if (error) {
-      return next(error);
-    }
-    db.pool.query(updateOrderQuery, function (error, rows, fields) {
+  //decrease current selected menu items' number sold
+  db.pool.query(getCurrentMenuItemIdsQuery, function (error, rows, fields) {
+    const currentMenuItemIds = rows.map((row) => row.menu_item_id).join(",");
+    const decreaseNumberSoldQuery = `UPDATE menu_items mi SET number_sold = number_sold - 1 WHERE mi.menu_item_id IN (${currentMenuItemIds})`;
+    db.pool.query(decreaseNumberSoldQuery, function (error, rows, fields) {
       if (error) {
         return next(error);
       }
-      db.pool.query(insertMenuItemsOrdersQuery, function (error, rows, fields) {
+
+      const updateOrderQuery = `
+    UPDATE orders SET total_price = '${totalPrice}', waiter_id = ${waiterId}, customer_id = ${customerId} 
+      WHERE order_id = ${orderId}`;
+
+      // handle assigning menu items
+
+      // first parse from the body and just extract the menu item Ids that are checked
+      const menuItemIds = Object.keys(req.body)
+        .filter((key) => key.includes("menuItem-"))
+        .map((menuItemKey) => parseInt(menuItemKey.replace("menuItem-", "")));
+
+      // first delete
+      const deleteMenuItemsOrdersQuery = `DELETE FROM menu_items_orders WHERE order_id = ${orderId}`;
+
+      // then insert
+      const menuItemIdOrderIdTuples = menuItemIds
+        .map((menuItemId) => `(${orderId}, ${menuItemId})`)
+        .join(",");
+      const insertMenuItemsOrdersQuery = `INSERT INTO menu_items_orders (order_id, menu_item_id) VALUES ${menuItemIdOrderIdTuples}`;
+
+      db.pool.query(deleteMenuItemsOrdersQuery, function (error, rows, fields) {
         if (error) {
           return next(error);
         }
-        res.redirect("/orders");
+        db.pool.query(updateOrderQuery, function (error, rows, fields) {
+          if (error) {
+            return next(error);
+          }
+          db.pool.query(
+            insertMenuItemsOrdersQuery,
+            function (error, rows, fields) {
+              if (error) {
+                return next(error);
+              }
+              const updateNumberSoldQuery = `UPDATE menu_items mi SET number_sold = number_sold + 1 WHERE mi.menu_item_id IN (${menuItemIds.join(
+                ","
+              )})`;
+              db.pool.query(
+                updateNumberSoldQuery,
+                function (error, rows, fields) {
+                  if (error) {
+                    return next(error);
+                  }
+                  return res.redirect("/orders");
+                }
+              );
+            }
+          );
+        });
       });
     });
   });
@@ -239,18 +280,29 @@ router.get("/:id/delete", function (req, res, next) {
   const orderId = req.params.id;
   const deleteMenuItemsOrdersQuery = `DELETE FROM menu_items_orders WHERE order_id = ${orderId}`;
   const deleteOrderQuery = `DELETE FROM orders WHERE order_id = ${orderId}`;
+  const getCurrentMenuItemIdsQuery = `SELECT menu_item_id FROM menu_items_orders mio WHERE mio.order_id = ${req.params.id}`;
 
-  // TODO: Update units sold on menu items included in order
-  db.pool.query(deleteMenuItemsOrdersQuery, function (error, rows, fields) {
+  db.pool.query(getCurrentMenuItemIdsQuery, function (error, rows, fields) {
     if (error) {
       return next(error);
     }
-
-    db.pool.query(deleteOrderQuery, function (error, rows, fields) {
+    const currentMenuItemIds = rows.map((row) => row.menu_item_id).join(",");
+    const decreaseNumberSoldQuery = `UPDATE menu_items mi SET number_sold = number_sold - 1 WHERE mi.menu_item_id IN (${currentMenuItemIds})`;
+    db.pool.query(decreaseNumberSoldQuery, function (error, rows, fields) {
       if (error) {
         return next(error);
       }
-      res.redirect("/orders");
+      db.pool.query(deleteMenuItemsOrdersQuery, function (error, rows, fields) {
+        if (error) {
+          return next(error);
+        }
+        db.pool.query(deleteOrderQuery, function (error, rows, fields) {
+          if (error) {
+            return next(error);
+          }
+          res.redirect("/orders");
+        });
+      });
     });
   });
 });

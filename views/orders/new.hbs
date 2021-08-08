@@ -21,7 +21,8 @@
       <div class="form-group">
         <label for="input-waiter-name">Waiter: </label>
           <select id="input-waiter-name" name="input-waiter-name">
-            <option>Select one...</option>
+            <option value=""></option>
+            <option value="">No Waiter (Online Order)</option>
             {{#each waiters}}
             <option>{{concat this.first_name " " this.last_name ": waiter " this.waiter_id }}</option>
             {{/each}}
@@ -29,15 +30,15 @@
       </div>
       <div class="form-group">
         <label for="input-customer-id">Customer: </label>
-          <select id="input-customer-name" name="input-customer-name">
-            <option>Select one...</option>
+          <select id="input-customer-name" name="input-customer-name" required>
+            <option value=""></option>
             {{#each customers}}
             <option>{{concat this.first_name " " this.last_name ": customer " this.customer_id}}</option>
             {{/each}}
           </select>
       </div>
       <h2>Assign Menu Items to the Order:</h2>
-            <div class="form-group d-flex flex-column">
+        <div class="form-group d-flex flex-column">
         {{#each menuItems}}
           <div>
             <input
@@ -55,9 +56,9 @@
             </label>
           </div>
         {{/each}}
-      <div class="mt-2">
-        <button type="submit" class="btn btn-success">Submit</button>
-      </div>
+        <div class="mt-2">
+          <button type="submit" class="btn btn-success">Submit</button>
+        </div>
     </form>
   </div>
 
