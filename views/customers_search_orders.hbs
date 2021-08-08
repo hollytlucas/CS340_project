@@ -1,31 +1,45 @@
 {{> nav currentRoute="/customers_search_orders" }}
 
+{{! Form to search for all orders given user input of customer ID }}
+<div class="w-40 mt-3 d-flex justify-content-center flex-column">
+  <h2>Customer Orders Search</h2>
+  <p>Search for orders by customer (To test total charges, choose customer ID = 1)</p>
+  <form id="search-custorder-html" method="GET" class="w-100" action="/customers_search_orders">
+    <label for="input-custorder">Customer</label>
+      <div style="width: 400px;"class="d-flex justify-content-center align-items-center">
+        <select name="customer" id="input-custorder-html">
+          <option value="">Select a Customer</option>
+          {{#each customersInfo}}
+          <option value="{{this.customer_id}}">{{concat this.first_name this.last_name ": ID = " this.customer_id}}</option>
+          {{/each}}
+        </select>
+        <div>
+          <button style="margin-top: 6px; margin-bottom: 16px; margin-left: 8px; height:45px;" type="submit" class="btn btn-secondary">Search</button>
+        </div>
+      </div>
+  </form>
+</div>
 
-{{! Table to display all waiters and their shifts, or all waiters by given shift }}
+{{! Table to display all orders for selected customer}}
 <div class="my-container">
-  <table id="people-table" class="table table-striped">
+  <table id="customers-search-table" class="table table-striped">
     {{!-- Header section --}}
     <thead>
       <tr>
         <th scope="col">CUSTOMER ID</th>
         <th scope="col">FIRST NAME</th>
         <th scope="col">LAST NAME</th>
-        <th scope="col">EMAIL</th>
         <th scope="col">ORDER ID</th>
         <th scope="col">ORDER DATE AND TIME</th>
         <th scope="col">TOTAL CHARGES</th>
       </tr>
     </thead>
-
-    {{!-- Display all attributes for waiters and shifts --}}
     <tbody>
-      {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
       {{#each orders}}
       <tr>
         <td>{{this.customer_id}}</td>
         <td>{{this.first_name}}</td>
         <td>{{this.last_name}}</td>
-        <td>{{this.email}}</td>
         <td>{{this.order_id}}</td>
         <td>{{this.order_created_at}}</td>
         <td>$ {{this.total_price}}</td>
@@ -41,19 +55,3 @@
   {{/each}}
 </div>
 
-{{! Form to search for all orders given user input of customer ID }}
-<div class="my-container">
-  <h2>Orders Search</h2>
-  <p>Search for orders by customer ID (To test total charges, choose customer ID = 1</p>
-  <form id="search-custorder-html" method="GET" action="/customers_search_orders">
-    <label for="input-custorder">Customer ID</label>
-      <select name="customer" id="input-custorder-html">
-        <option value="">Select a Customer ID</option>
-        {{#each customer_ids}}
-        <option value="{{this.customer_id}}">{{this.customer_id}}</option>
-        {{/each}}
-      </select>
-      <br /><br />
-    <button type="submit" class="btn btn-success">Search</button>
-  </form>
-</div>

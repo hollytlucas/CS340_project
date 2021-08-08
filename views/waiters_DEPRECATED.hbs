@@ -1,0 +1,289 @@
+{{!-- {{> nav currentRoute="/waiters" }} --}}
+<br />
+<br />
+
+<div class="my-container">
+  {{! Create a table to hold waiters and their shifts }}
+  <table id="people-table" class="table table-striped">
+    {{! Header section }}
+    <thead>
+      {{! For just the first row, we print each key of the row object as a header cell so we
+  know what each column means when the page renders }}
+      <tr>
+        <th scope="col">WAITER ID</th>
+        <th scope="col">FIRST NAME</th>
+        <th scope="col">LAST NAME</th>
+        <th scope="col">PHONE NUMBER</th>
+        <th scope="col">SHIFT PREFERENCE</th>
+        <th scope="col">SHIFT ID</th>
+        <th scope="col">SHIFT DAY</th>
+        <th scope="col">SHIFT TYPE</th>
+      </tr>
+    </thead>
+    {{! for each row, print the id, fname, lname, phone number, shift preference, shift ID, shift day and shift type }}
+    <tbody>
+      {{#each data}}
+        <tr>
+          <td>{{this.waiter_id}}</td>
+          <td>{{this.first_name}}</td>
+          <td>{{this.last_name}}</td>
+          <td>{{this.phone_number}}</td>
+          <td>{{this.shift_type_preference}}</td>
+          <td>{{this.shift_id}}</td>
+          <td>{{this.shift_day}}</td>
+          <td>{{this.shift_type}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+{{! Form to search by last name}}
+<div class="my-container">
+  <h2>Search For Waiters by Shift</h2>
+  <p>Search for all waiters assigned to a specific shift to determine shift
+    coverage</p>
+  <form id="search-person-html" method="GET" action="/waiters">
+    <label for="input-shift-id">Assigned Shift: </label>
+    <select id="input-shift-html" name="input-shift">
+      <option value="">Select a Shift</option>
+      <option value="ALL">ALL</option>
+      {{#each shifts}}
+        <option value="{{this.shift_id}}">{{this.shift_id}}</option>
+      {{/each}}
+    </select>
+    <br /><br />
+    <button class="btn btn-info">
+      Search
+    </button>
+  </form>
+</div>
+<br />
+
+{{! Form to add a waiter to the waiters table }}
+<div class="my-container">
+  <h2>Add A Waiter</h2>
+  <p>To add a waiter, please enter their information below and click `Submit`.
+    Please assign a shift ID</p>
+  <form id="add-waiter-form" method="POST" action="/add-waiter-form">
+    <label for="input-fname">First Name: </label>
+    <input type="text" name="input-fname" id="input-fname-html" required />
+
+    <label for="input-lname">Last Name: </label>
+    <input type="text" name="input-lname" id="input-lname-html" required />
+
+    <label for="input-phone">Phone Number: </label>
+    <input type="text" name="input-phone" id="input-phone-html" required />
+
+    <label for="shift-preference">Preferred Shift:</label>
+    <select id="input-shift-html" name="input-shift">
+      <option value="none">No Preference</option>
+      <option value="day">Day Shift</option>
+      <option value="swing">Swing Shift</option>
+      <option value="night">Night Shift</option>
+    </select>
+    <br />
+    <br />
+    <label for="input-assigned-shift">Assign Shift ID: </label>
+    <select id="input-shift-html" name="input-assigned-shift" required>
+      <option value="">Select a Shift</option>
+      {{#each shifts}}
+        <option value="{{this.shift_id}}">{{this.shift_id}}</option>
+      {{/each}}
+    </select>
+    <br /><br />
+    <button class="btn btn-success">
+      Add Waiter
+    </button>
+  </form>
+  {{#if no_assigned_shift}}
+    <br />
+    <br />
+    <div style="color:red"><h3>Invalid addition! Please enter an assigned shift</h3></div>
+  {{/if}}
+</div>
+<br />
+
+{{! Form to choose waiter ID to modify and whether an add/remove or no change will be made to shifts }}
+<div class="my-container">
+  <h2>Modify A Waiter</h2>
+  <p>To modify a waiter, please select an existing waiter ID and choose whether
+    you would like to add/remove an assigned shift ID. Then hit "Get Waiter"</p>
+  <form id="modify-waiter-form" method="GET" action="/waiters">
+    <label for="input-id">Waiter ID: </label>
+    <select id="input-waiter-html" name="input-id" required>
+      {{#each waiters}}
+        <option value="{{this.waiter_id}}">{{this.waiter_id}}</option>
+      {{/each}}
+    </select>
+
+    <label for="radio-one">No shift change </label>
+    <input
+      type="radio"
+      id="no-shift"
+      name="switch-one"
+      value="none"
+      checked
+      style="width 100px; margin-right: 50px;"
+    />
+    <label for="radio-two">Remove A Shift </label>
+    <input
+      type="radio"
+      id="delete-shift"
+      name="switch-one"
+      value="remove"
+      style="width 100px; margin-right: 50px;"
+    />
+    <label for="radio-two">Add A Shift </label>
+    <input
+      type="radio"
+      id="add-shift"
+      name="switch-one"
+      value="add"
+      style="width 100px; margin-right: 50px;"
+    />
+    <br /><br />
+
+    <button class="btn btn-success">
+      Get Waiter
+    </button>
+  </form>
+  <br />
+
+  {{! Form that autopopulates with waiter information so that user can change field content as needed }}
+  <form id="modify-waiter-form" method="POST" action="/modify-waiter-form">
+
+    {{! If user wants to remove a shift display this}}
+    {{#if remove}}
+      <label for="input-shift-action">Assigned Shift </label>
+      <input
+        type="text"
+        name="input-shift-action"
+        id="input-shift-action-html"
+        value="Remove"
+        readonly
+      />
+    {{/if}}
+
+    {{! If user wants to add a shift display this}}
+    {{#if add}}
+      <label for="input-shift-action">Assigned Shift </label>
+      <input
+        type="text"
+        name="input-shift-action"
+        id="input-shift-action-html"
+        value="Add"
+        readonly
+      />
+    {{/if}}
+
+    {{! Display all waiter attributes}}
+    {{#each mod_waiter}}
+      <label for="input-waiter-id">Waiter ID: </label>
+      <input
+        type="text"
+        name="input-waiter-id"
+        id="input-waiter-id-html"
+        value="{{this.waiter_id}}"
+        readonly
+      />
+
+      <label for="input-fname">First Name: </label>
+      <input
+        type="text"
+        name="input-fname"
+        id="input-fname-html"
+        value="{{this.first_name}}"
+      />
+
+      <label for="input-lname">Last Name: </label>
+      <input
+        type="text"
+        name="input-lname"
+        id="input-lname-html"
+        value="{{this.last_name}}"
+      />
+
+      <label for="input-phone">Phone Number: </label>
+      <input
+        type="text"
+        name="input-phone"
+        id="input-phone-html"
+        value="{{this.phone_number}}"
+      />
+
+      <label for="shift-preference">Shift Preference:</label>
+      <select id="input-shift-html" name="input-shift">
+        {{! Select from dynamically populated list of shift ID's }}
+        <option
+          value="{{this.shift_type_preference}}"
+        >{{this.shift_type_preference}}</option>
+        <option value="unchanged">no change</option>
+        <option value="day">day</option>
+        <option value="swing">swing</option>
+        <option value="night">night</option>
+      </select>
+      <br />
+      <br />
+    {{/each}}
+
+    {{! If user chose to add a shift, display this }}
+    {{#if add}}
+      <label for="input-assigned-shift">Assigned Shift ID: </label>
+      <select name="input-assigned-shift" id="input-assigned-shift-html">
+        <option value="">Select a Shift</option>
+        {{#each shifts}}
+          <option value="{{this.shift_id}}">{{this.shift_id}}</option>
+        {{/each}}
+      </select>
+      <button class="btn btn-success">
+        Edit Waiter and Assign Shift
+      </button>
+      <br /><br />
+      Shift assignment warning: A waiter cannot be assigned to the same shift
+      twice.
+    {{/if}}
+
+    {{! If user chose to delete a shift, display this }}
+    {{#if remove}}
+      <label for="input-assigned-shift">Assigned Shift ID: </label>
+      <select name="input-assigned-shift" id="input-assigned-shift-html">
+        <option value="" required>Select a Shift</option>
+        {{#each remove_shift}}
+          <option value="{{this.shift_id}}">{{this.shift_id}}</option>
+        {{/each}}
+      </select>
+      <button class="btn btn-success">
+        Edit Waiter and Remove Shift
+      </button>
+      <br /><br />
+      Shift removal warning: A waiter must have at least one shift.
+    {{/if}}
+
+    {{! If user chose no change to shifts, display this }}
+    {{#if no_shift_change}}
+      <button class="btn btn-success">
+        Edit Waiter
+      </button>
+      <br /><br />
+      No change in shift assignment will be made.
+    {{/if}}
+    <br /><br />
+  </form>
+
+  {{! If user not allowed to delete shift, display this error message }}
+  {{#if cant_delete}}
+    <br />
+    <br />
+    <div style="color:red"><h3>Invalid removal --> The waiter must have at least
+        one assigned shift</h3></div>
+  {{/if}}
+
+  {{! If user not allowed to add shift, display this error message }}
+  {{#if add_error}}
+    <br />
+    <br />
+    <div style="color:red"><h3>Invalid addition --> The waiter is already
+        assigned to this shift</h3></div>
+  {{/if}}
+</div>

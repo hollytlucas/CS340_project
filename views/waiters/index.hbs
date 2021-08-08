@@ -1,0 +1,45 @@
+{{> nav currentRoute="/waiters" }}
+
+<div id="waiters-container" class="d-flex justify-content-between flex-column my-container">
+  {{! Create a table to hold waiters}}
+  <table class="table table-striped">
+    {{! Header section }}
+    <thead>
+      {{! For just the first row, we print each key of the row object as a header cell so we
+  know what each column means when the page renders }}
+      <tr>
+        <th scope="col">WAITER ID</th>
+        <th scope="col">FIRST NAME</th>
+        <th scope="col">LAST NAME</th>
+        <th scope="col">PHONE NUMBER</th>
+        <th scope="col">SHIFT PREFERENCE</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    {{! for each row, print the id, fname, lname, phone number, shift preference}}
+    <tbody>
+      {{#each waiters}}
+        <tr>
+          <th scope="row">{{this.waiter_id}}</th>
+          <td>{{this.first_name}}</td>
+          <td>{{this.last_name}}</td>
+          <td>{{this.phone_number}}</td>
+          <td>{{this.shift_type_preference}}</td>
+          <td>
+            <a
+              class="btn btn-sm btn-warning"
+              href="/waiters/{{this.waiter_id}}/edit"
+            >
+              Edit
+            </a>
+          </td>
+        </tr>
+      {{/each}}
+        <div>
+          <a class="btn btn-success mb-3" href="/waiters/new">
+      Add Waiter
+          </a>
+        </div>
+    </tbody>
+  </table>
+</div>

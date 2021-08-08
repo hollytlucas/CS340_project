@@ -1,0 +1,52 @@
+{{> nav currentRoute="/waiters" }}
+
+<div id="waiters-container" class="d-flex justify-content-between">
+
+  <div id="add-waiter-container" class="m-3 w-40">
+    <h2>Edit Waiter</h2>
+    <form id="add-waiter-form" method="POST" action="/waiters/{{waiter.waiter_id}}/edit">
+      <div class="form-group">
+        <label for="input-first-name">First Name: </label>
+        <input
+          class="form-control"
+          type="text"
+          name="input-first-name"
+          id="input-first-name-html"
+          value={{waiter.first_name}}
+        />
+      </div>
+      <div class="form-group">
+        <label for="input-last-name">Last Name: </label>
+        <input
+          class="form-control"
+          type="text"
+          name="input-last-name"
+          id="input-last-name-html"
+          value={{waiter.last_name}}
+        />
+      </div>
+      <div class="form-group">
+        <label for="input-phone-number">Phone Number: </label>
+        <input
+          class="form-control"
+          type="text"
+          name="input-phone-number"
+          id="input-phone-number-html"
+          value={{waiter.phone_number}}
+        />
+      </div>
+      <div class="form-group">
+        <label for="input-shift-type-preference">Shift Type Preference:
+        </label>
+            <select name="input-shift-type-preference">
+              <option>{{waiter.shift_type_preference}}</option>
+              <option>day</option>
+              <option>swing</option>
+              <option>night</option>
+            </select>
+      </div>
+      <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+  </div>
+
+</div>

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database/db-connector");
 
-// renders customers list (/customers_private):
+// renders customers list (/customers):
 router.get("", function (req, res, next) {
   const selectQuery = `SELECT * FROM customers`;
 
@@ -11,13 +11,13 @@ router.get("", function (req, res, next) {
       return next(error);
     }
     const customers = rows;
-    res.render("customers_private", { customers });
+    res.render("customers", { customers });
   });
 });
 
 // renders the "add customer" form
 router.get("/new", function (req, res, next) {
-  res.render("customers_private/new");
+  res.render("customers/new");
 });
 
 // receives the form submission of the "add customer" form
@@ -31,7 +31,7 @@ router.post("/new", function (req, res, next) {
     if (error) {
       return next(error);
     }
-    res.redirect("/customers_private");
+    res.redirect("/customers");
   });
 });
 
@@ -43,7 +43,7 @@ router.get("/:id/edit", function (req, res, next) {
       return next(error);
     }
     const customer = rows[0];
-    res.render("customers_private/edit", { customer });
+    res.render("customers/edit", { customer });
   });
 });
 
@@ -61,7 +61,7 @@ router.post("/:id/edit", function (req, res, next) {
     if (error) {
       return next(error);
     }
-    res.redirect("/customers_private");
+    res.redirect("/customers");
   });
 });
 

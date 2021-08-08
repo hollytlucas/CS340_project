@@ -8,7 +8,7 @@ router.get("", function (req, res, next) {
 
   // If there is a query string, we run the query
   if (req.query.id != undefined) {
-    selectQuery = `SELECT * FROM waiters WHERE employee_id LIKE "${req.query.id}%"`;
+    selectQuery = `SELECT * FROM waiters WHERE waiter_id LIKE "${req.query.id}%"`;
     // Run the 1st query
     db.pool.query(selectQuery, function (error, rows, fields) {
       if (error) {
@@ -16,11 +16,11 @@ router.get("", function (req, res, next) {
       }
       // Save the waiters
       let waiters = rows;
-      return res.render("waiters", { data: waiters });
+      return res.render("waiters", { waiters });
     });
   } else {
     // Query 1 is select all waiters if name search is blank
-    selectQuery = "SELECT * FROM waiters;";
+    selectQuery = `SELECT * FROM waiters`;
 
     // Run the 1st query
     db.pool.query(selectQuery, function (error, rows, fields) {
@@ -28,8 +28,8 @@ router.get("", function (req, res, next) {
         return next(error);
       }
       // Save the waiters
-      let people = rows;
-      return res.render("waiters/index", { data: people });
+      let waiters = rows;
+      return res.render("waiters/index", { waiters });
     });
   }
 });
@@ -47,7 +47,7 @@ router.post("/new", function (req, res, next) {
   const shiftTypePreference = req.body["input-shift"];
 
   const insertQuery = `
-    INSERT INTO waiters (first_name, last_name, employee_phone_number, shift_type_preference) 
+    INSERT INTO waiters (first_name, last_name, phone_number, shift_type_preference) 
                 VALUES ('${firstName}', '${lastName}', ${phone}, '${shiftTypePreference}')`;
 
   db.pool.query(insertQuery, function (error, rows, fields) {
@@ -66,7 +66,7 @@ router.post("/new", function (req, res, next) {
 
 // renders the "edit waiter" form
 router.get("/:id/edit", function (req, res, next) {
-  const waiterQuery = `SELECT * FROM waiters WHERE employee_id = ${req.params.id}`;
+  const waiterQuery = `SELECT * FROM waiters WHERE waiter_id = ${req.params.id}`;
 
   db.pool.query(waiterQuery, function (error, rows, fields) {
     if (error) {
@@ -81,58 +81,20 @@ router.get("/:id/edit", function (req, res, next) {
 
 // receives the form submission of the "edit waiter" form
 router.post("/:id/edit", function (req, res, next) {
-  // make a sql query to UPDATE the waiter
-  // Capture the incoming data and parse it back to a JS object
-  count = 0;
-  let updateQuery = `UPDATE waiters SET `;
+  const firstName = req.body["input-first-name"];
+  const lastName = req.body["input-last-name"];
+  const phone = req.body["input-phone-number"];
+  const shiftTypePreference = req.body["input-shift-type-preference"];
+  const waiterID = req.params.id;
 
-  let data = req.body;
+  const updateWaiterQuery = `UPDATE waiters SET first_name = '${firstName}', last_name = '${lastName}', phone_number = '${phone}',
+                                shift_type_preference = '${shiftTypePreference}' WHERE waiter_id = ${waiterID}`;
 
-  // Capture NULL values
-  let fname = data["input-fname"];
-  if (fname != "") {
-    updateQuery += `first_name = '${fname}' `;
-    count += 1;
-  }
-
-  let lname = data["input-lname"];
-  if (lname != "") {
-    if (count >= 1) {
-      updateQuery += `, `;
-    }
-    updateQuery += ` last_name = '${lname}'`;
-  }
-
-  let phone = data["input-phone"];
-  if (phone != "") {
-    if (count >= 1) {
-      updateQuery += `, `;
-    }
-    updateQuery += ` employee_phone_number = '${phone}' `;
-  }
-
-  let shift = data["input-shift"];
-  if (shift != "") {
-    if (count >= 1) {
-      updateQuery += `, `;
-    }
-    updateQuery += ` shift_type_preference = '${shift}' `;
-  }
-
-  updateQuery += `where employee_id = '${data["input-id"]}'`;
-
-  // Create the query and run it on the database
-  db.pool.query(updateQuery, function (error, rows, fields) {
-    // Check to see if there was an error
+  db.pool.query(updateWaiterQuery, function (error, rows, fields) {
     if (error) {
       return next(error);
     }
-
-    // If there was no error, we redirect back to our root route, which automatically runs the SELECT * FROM waiters and
-    // presents it on the screen
-    else {
-      res.redirect("/waiters");
-    }
+    res.redirect("/waiters");
   });
 });
 
