@@ -2,6 +2,16 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `menu_items_orders`;
+DROP TABLE IF EXISTS `customers_orders`;
+DROP TABLE IF EXISTS `shifts_waiters`;
+DROP TABLE IF EXISTS `customers`;
+DROP TABLE IF EXISTS `orders`;
+DROP TABLE IF EXISTS `shifts`;
+DROP TABLE IF EXISTS `menu_items`;
+DROP TABLE IF EXISTS `waiters`;
+SET FOREIGN_KEY_CHECKS = 1;
 --
 -- Database: `cs340_lucasho`
 --
@@ -176,7 +186,8 @@ INSERT INTO `shifts_waiters` (`shift_id`, `waiter_id`) VALUES
 (2, 2),
 (2, 3),
 (3, 1),
-(4, 2);
+(4, 2), 
+(5, 2);
 
 
 
