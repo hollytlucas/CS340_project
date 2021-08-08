@@ -618,6 +618,7 @@ app.post("/modify-waiter-form", function (req, res, next) {
 });
 
 // ROUTE FOR ADD MENU ITEM
+
 app.post("/add-menu-item-form", function (req, res, next) {
   let data = req.body; // holds body of request
   let items; // holds all menu items to be displayed
@@ -644,6 +645,14 @@ app.post("/add-menu-item-form", function (req, res, next) {
       items = rows;
       return res.render("menu_items", { data: items });
     }
+  });
+});
+
+// global error handler
+
+app.use((error, req, res, next) => {
+  res.status(500).json({
+    error: error.message,
   });
 });
 
