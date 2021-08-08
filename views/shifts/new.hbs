@@ -5,6 +5,8 @@
 
   <div id="add-shift-container" class="m-3">
     <h2>Add Shift</h2>
+    <p>To add a shift, please enter the information below and click `Submit`. You must assign at least one waiter.</p>
+
     <form
       id="add-shift-form"
       class="form-group"
@@ -13,8 +15,8 @@
     >
       <div class="form-group">
         <label for="input-shift-day">Shift Day: </label>
-        <select id="input-shift-day" name="input-shift-day">
-          <option>Select one...</option>
+        <select id="input-shift-day" name="input-shift-day" required="true">
+          <option></option>
           <option>Friday</option>
           <option>Sunday</option>
           <option>Monday</option>
@@ -24,8 +26,8 @@
         </select>
       <div class="form-group">
         <label for="input-shift-type">Shift Type: </label>
-        <select id="input-shift-type" name="input-shift-type">
-          <option>Select one...</option>
+        <select id="input-shift-type" name="input-shift-type" required="true">
+          <option></option>
           <option>day</option>
           <option>swing</option>
           <option>night</option>

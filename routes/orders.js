@@ -88,8 +88,14 @@ router.get("/new", function (req, res, next) {
 // receives the form submission of the "add order" form
 router.post("/new", function (req, res, next) {
   const totalPrice = req.body["input-total-price"];
-  const waiterId = req.body["input-waiter-name"].split(": waiter ")[1];
+  let waiterId;
   const customerId = req.body["input-customer-name"].split(": customer ")[1];
+
+  if (req.body["input-waiter-name"] == "No Waiter (Online Order)") {
+    waiterId = "NULL";
+  } else if (req.body["input-waiter-name"] !== "No Waiter (Online Order)") {
+    waiterId = req.body["input-waiter-name"].split(": waiter ")[1];
+  }
 
   function getMenuIds(data) {
     let menuItemsWithHyphens = Object.keys(data).filter((key) =>
@@ -128,7 +134,6 @@ router.post("/new", function (req, res, next) {
         .join(",");
 
       const updateMenuItemsOrdersQuery = `INSERT INTO menu_items_orders (order_id, menu_item_id) VALUES ${menuItemIdOrderIdTuples}`;
-      // TODO: Update units sold on menu items included in order
       db.pool.query(updateMenuItemsOrdersQuery, function (error, rows, fields) {
         if (error) {
           return next(error);

@@ -350,64 +350,41 @@ app.use("/waiters", waitersRouter);
 // ROUTE FOR CUSTOMERS SEARCH ORDERS
 
 app.get("/customers_search_orders", function (req, res) {
-  // Declare Query 1
-  let query1;
-  let charges;
-  let orders;
-  let customersInfo;
-
-  // select all customer_ID's to display all customer ID's on dropdown as default with every page load
-  query1 = `SELECT * FROM customers`;
-  db.pool.query(query1, function (error, rows, fields) {
-    // Save the people
-    customersInfo = rows;
-    // Run the second query
-  });
-
   // If there is a query string, we run the query for searching by last name
-  if (req.query.lname != undefined) {
-    // run query to select all customers with last name like user input
-    query1 = `SELECT * FROM customers WHERE last_name LIKE "${req.query.lname}%"`;
-    db.pool.query(query1, function (error, rows, fields) {
-      // save customers
-      let customers = rows;
+  if (req.query.customer == undefined) {
+    // select all customer_ID's to display all customer ID's on dropdown as default with every page load
+    const selectCustomersInfoQuery = `SELECT * FROM customers`;
+    db.pool.query(selectCustomersInfoQuery, function (error, rows, fields) {
+      // Save the people
+      const customersInfo = rows;
       return res.render("customers_search_orders", {
-        customers: customers,
-        customersInfo: customersInfo,
-      });
-    });
-  }
-
-  // else if user input a customer ID to search for all orders
-  else if (req.query.customer != undefined) {
-    // run query to get all attributes for customers and orders for all entries for specified customer ID
-    query1 = `SELECT * FROM customers c
-    INNER JOIN orders o ON c.customer_id = o.customer_id WHERE c.customer_id = "${req.query.customer}%"`;
-    db.pool.query(query1, function (error, rows, fields) {
-      // save the orders
-      orders = rows;
-      // run query to get total charges for all orders for specified customer ID
-      query1 = `SELECT SUM(o.total_price) as total_charges FROM customers c
-      INNER JOIN orders o ON c.customer_id = o.customer_id WHERE c.customer_id = "${req.query.customer}%"`;
-      db.pool.query(query1, function (error, rows, fields) {
-        // save the charges
-        charges = rows;
-        return res.render("customers_search_orders", {
-          orders: orders,
-          charges: charges,
-          customer_ids: customer_ids,
-        });
+        customersInfo,
       });
     });
   } else {
-    // otherwise populate customer ID's into dropdown
-    query1 = `SELECT customer_id FROM customers`;
-    db.pool.query(query1, function (error, rows, fields) {
-      // Save the people
-      customer_ids = rows;
-      // Run the second query
-      return res.render("customers_search_orders", {
-        customer_ids: customer_ids,
+    // else if user input a customer to search for all orders
+    // run query to get all attributes for customers and orders for all entries for specified customer
+    const getCustomerOrdersQuery = `SELECT * FROM customers c
+  INNER JOIN orders o ON c.customer_id = o.customer_id WHERE c.customer_id = "${req.query.customer}"`;
+    db.pool.query(getCustomerOrdersQuery, function (error, rows, fields) {
+      // save the orders
+      const orders = rows;
+      // run query to get total charges for all orders for specified customer ID
+      const getOrdersTotalQuery = `SELECT SUM(o.total_price) as total_charges FROM customers c
+    INNER JOIN orders o ON c.customer_id = o.customer_id WHERE c.customer_id = "${req.query.customer}"`;
+      db.pool.query(getOrdersTotalQuery, function (error, rows, fields) {
+        // save the charges
+        const charges = rows;
+        const selectCustomersInfoQuery = `SELECT * FROM customers`;
+        db.pool.query(selectCustomersInfoQuery, function (error, rows, fields) {
+          // Save the people
+          const customersInfo = rows;
+          return res.render("customers_search_orders", {
+            orders,
+            charges,
+            customersInfo,
+          });
+        });
       });
     });
   }

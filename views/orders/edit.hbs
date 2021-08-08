@@ -3,6 +3,7 @@
 <div id="orders-container" class="d-flex justify-content-between">
   <div id="edit-order-container" class="m-3 w-40">
     <h2>Edit Order</h2>
+    <p>To edit this order, please update the information below and click `Submit`. You must assign at least one Menu Item.</p>
     <form
       id="edit-order-form"
       class="form-group"
@@ -20,12 +21,13 @@
             name="input-order-price"
             class="form-control"
             value={{order.total_price}}
+            required="true"
           />
         </div>
       </div>
       <div class="m-3 form-group">
         <label for="input-waiter-name">Waiter:</label>
-        <select name="input-waiter-name">
+        <select name="input-waiter-name" required="true">
           <option>{{getWaiterNameOnOrder waiters order}}</option>
           {{#each waiters}}
             <option>{{concat
@@ -40,7 +42,7 @@
       </div>
       <div class="m-3 form-group">
         <label for="input-customer-name">Customer:</label>
-        <select name="input-customer-name">
+        <select name="input-customer-name" required="true">
           <option>{{getCustomerNameOnOrder customers order}}</option>
           {{#each customers}}
             <option>{{concat

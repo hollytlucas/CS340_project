@@ -4,6 +4,7 @@
 
   <div id="add-order-container" class="m-3">
     <h2>Add an Order</h2>
+    <p>To add an order, please update the information below and click `Submit`. You must assign at least one Menu Item.</p>
     <form id="add-order-form" method="POST" action="/orders/new">
       <div class="form-group">
         <label for="input-total-price">Total Price: </label>
@@ -15,12 +16,13 @@
             class="form-control"
             name="input-total-price"
             value=""
+            required="true"
           />
         </div>
       </div>
       <div class="form-group">
         <label for="input-waiter-name">Waiter: </label>
-          <select id="input-waiter-name" name="input-waiter-name">
+          <select id="input-waiter-name" name="input-waiter-name" required="true">
             <option value=""></option>
             <option value="">No Waiter (Online Order)</option>
             {{#each waiters}}

@@ -7,10 +7,10 @@
   <form id="search-custorder-html" method="GET" class="w-100" action="/customers_search_orders">
     <label for="input-custorder">Customer</label>
       <div style="width: 400px;"class="d-flex justify-content-center align-items-center">
-        <select name="customer" id="input-custorder-html">
-          <option value="">Select a Customer</option>
+        <select name="customer" id="input-custorder-html" required="true">
+          <option value=""></option>
           {{#each customersInfo}}
-          <option value="{{this.customer_id}}">{{concat this.first_name this.last_name ": ID = " this.customer_id}}</option>
+          <option value="{{this.customer_id}}">{{concat this.first_name " " this.last_name ": ID = " this.customer_id}}</option>
           {{/each}}
         </select>
         <div>
