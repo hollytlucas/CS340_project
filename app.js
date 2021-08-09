@@ -238,40 +238,6 @@ app.get("/menu_items", function (req, res, next) {
   });
 });
 
-//need to delete if Kelley is not using
-app.post("/add-person-form", function (req, res, next) {
-  // Capture the incoming data and parse it back to a JS object
-  let data = req.body;
-
-  // Capture NULL values
-  let homeworld = parseInt(data["input-homeworld"]);
-  if (isNaN(homeworld)) {
-    homeworld = "NULL";
-  }
-
-  let age = parseInt(data["input-age"]);
-  if (isNaN(age)) {
-    age = "NULL";
-  }
-
-  // Create the query and run it on the database
-  query1 = `INSERT INTO bsg_people (fname, lname, homeworld, age) VALUES ('${data["input-fname"]}', '${data["input-lname"]}', ${homeworld}, ${age})`;
-  db.pool.query(query1, function (error, rows, fields) {
-    // Check to see if there was an error
-    if (error) {
-      // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-      console.log(error);
-      res.sendStatus(400);
-    }
-
-    // If there was no error, we redirect back to our root route, which automatically runs the SELECT * FROM bsg_people and
-    // presents it on the screen
-    else {
-      res.redirect("/");
-      //res.redirect('/xxxx');
-    }
-  });
-});
 // ROUTE FOR ORDERS--------------------------------------------------------------------------------------------------------------------
 app.use("/orders", ordersRouter);
 
@@ -282,7 +248,6 @@ app.use("/shifts", shiftsRouter);
 app.use("/waiters", waitersRouter);
 
 // ROUTE FOR DEPRECATED PAGE "SEARCH CUSTOMER PROFILES"-------------------------------------------------------------------------------------------------------
-
 // app.get("/customers_search_profiles", function (req, res) {
 //   // Declare Query 1
 //   let query1;
@@ -393,42 +358,6 @@ app.get("/customers_search_orders", function (req, res) {
 // ROUTE FOR CUSTOMERS PAGE
 
 app.use("/customers", customersRouter);
-
-// ROUTE FOR ADD PERSON (NEED TO DELETE)
-
-app.post("/add-person-form", function (req, res, next) {
-  // Capture the incoming data and parse it back to a JS object
-  let data = req.body;
-
-  // Capture NULL values
-  let homeworld = parseInt(data["input-homeworld"]);
-  if (isNaN(homeworld)) {
-    homeworld = "NULL";
-  }
-
-  let age = parseInt(data["input-age"]);
-  if (isNaN(age)) {
-    age = "NULL";
-  }
-
-  // Create the query and run it on the database
-  query1 = `INSERT INTO bsg_people (fname, lname, homeworld, age) VALUES ('${data["input-fname"]}', '${data["input-lname"]}', ${homeworld}, ${age})`;
-  db.pool.query(query1, function (error, rows, fields) {
-    // Check to see if there was an error
-    if (error) {
-      // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-      console.log(error);
-      res.sendStatus(400);
-    }
-
-    // If there was no error, we redirect back to our root route, which automatically runs the SELECT * FROM bsg_people and
-    // presents it on the screen
-    else {
-      res.redirect("/");
-      //res.redirect('/xxxx');
-    }
-  });
-});
 
 // // ROUTE FOR ADD WAITER -----------------------------------------------------------------------------------------------------------------
 // app.post("/add-waiter-form", function (req, res, next) {
@@ -605,6 +534,12 @@ app.post("/add-person-form", function (req, res, next) {
 
 // ROUTE FOR ADD MENU ITEM
 
+//render the add menu item form
+app.get("/menu_items/new", function (req, res, next) {
+  res.render("menu_items/new");
+});
+
+// handle submission of add menu item form
 app.post("/add-menu-item-form", function (req, res, next) {
   let data = req.body; // holds body of request
   let items; // holds all menu items to be displayed

@@ -1,0 +1,35 @@
+{{> nav currentRoute="/menu_items" }}
+
+<div id="menu-item-container" class="d-flex w-40 my-container justify-content-between">
+{{! Form to add a menu items }}
+  <div>
+    <h2>Add a Menu Item</h2>
+    <p>To add a new menu item, please enter the information below and click
+      `Submit`!</p>
+    <form id="add-menu-item-form" method="POST" action="/add-menu-item-form">
+      <div class="form-group">
+        <label for="input-name">Item Name (descriptive): </label>
+        <input type="text" name="input-name" id="input-name-html" required="true"/>
+      </div>
+      <div class="form-group">
+        <label for="input-price">Unit Price: </label>
+        <input type="text" name="input-price" id="input-price-html" required="true" />
+      </div>
+      <div class="form-group">
+        <label for="radio-one">In Stock</label>
+        <input type="radio" id="radio-one" name="is-available" value="1" checked />
+      </div>
+      <div class="form-group">
+        <label for="radio-two">Not In Stock</label>
+        <input type="radio" id="radio-two" name="is-available" value="0" />
+      </div>
+      <div class="form-group">
+        <label for="input-number-sold">Number of Units Sold: </label>
+        <input value="0" type="number" name="input-number-sold" id="input-number-sold-html" required="true"/>
+      </div>
+      <div class="mt-3">
+        <button class="btn btn-success">Add Menu Item</button>
+      </div>
+    </form>
+  </div>
+</div>

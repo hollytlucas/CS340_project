@@ -19,15 +19,12 @@ router.get("", function (req, res, next) {
       return res.render("waiters", { waiters });
     });
   } else {
-    // Query 1 is select all waiters if name search is blank
     selectQuery = `SELECT * FROM waiters`;
 
-    // Run the 1st query
     db.pool.query(selectQuery, function (error, rows, fields) {
       if (error) {
         return next(error);
       }
-      // Save the waiters
       let waiters = rows;
       return res.render("waiters/index", { waiters });
     });
@@ -36,7 +33,14 @@ router.get("", function (req, res, next) {
 
 // renders the "add waiter" form
 router.get("/new", function (req, res, next) {
-  res.render("waiters/new");
+  const selectShiftsQuery = `SELECT * FROM shifts`;
+  db.pool.query(selectShiftsQuery, function (error, rows, fields) {
+    if (error) {
+      return next(error);
+    }
+    const shifts = rows;
+    res.render("waiters/new", { shifts });
+  });
 });
 
 // receives the form submission of the "add waiter" form

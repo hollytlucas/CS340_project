@@ -1,10 +1,12 @@
 {{> nav currentRoute="/customers" }}
 
 
-<div id="customers-container" class="d-flex justify-content-between">
+<div id="customers-container" class="d-flex justify-content-between my-container">
 
   <div id="add-customer-container" class="m-3">
     <h2>Add Customer</h2>
+    <p>To add a new customer, please enter the information below and click
+    `Submit`!</p>
     <form id="add-customer-form" method="POST" action="/customers/new">
       <div class="form-group">
         <label for="input-first-name">First Name: </label>

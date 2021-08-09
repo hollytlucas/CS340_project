@@ -1,0 +1,33 @@
+{{> nav currentRoute="/menu_items" }}
+
+<div class="my-container">
+  <div>
+    <a class="btn btn-success mb-3" href="/menu_items/new">Add Menu Item</a>
+  </div>
+  {{! Create a table to display all menu items }}
+  <table id="inventor" class="table table-striped paddingBetweenCols">
+    {{! Header section }}
+    <thead>
+      <tr>
+        <th scope="col">MENU ITEM ID</th>
+        <th scope="col">ITEM NAME</th>
+        <th scope="col">PRICE</th>
+        <th scope="col">IS AVAILABLE (1=YES, 0=NO)</th>
+        <th scope="col">UNITS SOLD</th>
+      </tr>
+    </thead>
+
+    {{! Display all attributes of menu items }}
+    <tbody>
+      {{#each data}}
+        <tr>
+          <td>{{this.menu_item_id}}</td>
+          <td>{{this.name}}</td>
+          <td>$ {{this.price}}</td>
+          <td>{{this.is_available}}</td>
+          <td>{{this.number_sold}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

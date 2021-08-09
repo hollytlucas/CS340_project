@@ -1,44 +1,48 @@
 {{> nav currentRoute="/waiters" }}
 
+<div class="d-flex justify-content-between my-container">
 {{! Form to add a waiter to the waiters table }}
-<div class="my-container">
-  <h2>Add A Waiter</h2>
-  <p>To add a waiter, please enter their information below and click `Submit`.
-    Please assign a shift ID</p>
-  <form id="add-waiter-form" method="POST" action="/add-waiter-form">
-    <label for="input-fname">First Name: </label>
-    <input type="text" name="input-fname" id="input-fname-html" required />
+  <div class="my-container">
+    <h2>Add A Waiter</h2>
+    <p>To add a waiter, please enter their information below and click `Submit`.
+      Please assign a shift</p>
+    <form id="add-waiter-form" method="POST" action="/waiters/new">
+    <div class="form-group">
+      <label for="input-fname">First Name: </label>
+      <input type="text" name="input-fname" id="input-fname-html" required />
+    </div>
+    <div class="form-group">
+      <label for="input-lname">Last Name: </label>
+      <input type="text" name="input-lname" id="input-lname-html" required />
+    </div>
+    <div class="form-group">
+      <label for="input-phone">Phone Number: </label>
+      <input type="text" name="input-phone" id="input-phone-html" required />
+    </div>
+    <div class="form-group">
+      <label for="shift-preference">Preferred Shift Type:</label>
+      <select id="input-shift-html" name="input-shift">
+        <option value="none">No Preference</option>
+        <option value="day">Day Shift</option>
+        <option value="swing">Swing Shift</option>
+        <option value="night">Night Shift</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="input-assigned-shift">Assign the Waiter's First Shift: </label>
+      <select id="input-shift-html" name="input-assigned-shift" required="true">
+        <option value=""></option>
+        {{#each shifts}}
+          <option id="{{this.shift_id}}">{{concat this.shift_day " " this.shift_type ": ID - " this.shift_id}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <div>
+      <button class="btn btn-success">
+        Add Waiter
+      </button>
+    </div>
+    </form>
+  </div>
 
-    <label for="input-lname">Last Name: </label>
-    <input type="text" name="input-lname" id="input-lname-html" required />
-
-    <label for="input-phone">Phone Number: </label>
-    <input type="text" name="input-phone" id="input-phone-html" required />
-
-    <label for="shift-preference">Preferred Shift:</label>
-    <select id="input-shift-html" name="input-shift">
-      <option value="none">No Preference</option>
-      <option value="day">Day Shift</option>
-      <option value="swing">Swing Shift</option>
-      <option value="night">Night Shift</option>
-    </select>
-    <br />
-    <br />
-    <label for="input-assigned-shift">Assign Shift ID: </label>
-    <select id="input-shift-html" name="input-assigned-shift" required>
-      <option value="">Select a Shift</option>
-      {{#each shifts}}
-        <option value="{{this.shift_id}}">{{concat this.shift_day this.shift_type " - shift " this.shift_id}}</option>
-      {{/each}}
-    </select>
-    <br /><br />
-    <button class="btn btn-success">
-      Add Waiter
-    </button>
-  </form>
-  {{#if no_assigned_shift}}
-    <br />
-    <br />
-    <div style="color:red"><h3>Invalid addition! Please enter an assigned shift</h3></div>
-  {{/if}}
 </div>

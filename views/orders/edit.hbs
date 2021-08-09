@@ -1,9 +1,13 @@
 {{> nav currentRoute="/orders" }}
 
-<div id="orders-container" class="d-flex justify-content-between">
+<div id="orders-container" class="d-flex justify-content-between my-container">
   <div id="edit-order-container" class="m-3 w-40">
     <h2>Edit Order</h2>
-    <p>To edit this order, please update the information below and click `Submit`. You must assign at least one Menu Item.</p>
+    <p>To edit this order, please update the information below and click
+      `Submit`. Note: you must assign at least one Menu Item.</p>
+    {{#if errorMessage}}
+      <h4 class="text-danger">{{errorMessage}}</h4>
+    {{/if}}
     <form
       id="edit-order-form"
       class="form-group"

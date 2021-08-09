@@ -160,6 +160,11 @@ router.get("/:id/edit", function (req, res, next) {
   const menuItemsQuery = `SELECT * FROM menu_items`;
   const menuItemsOrdersQuery = `SELECT menu_item_id FROM menu_items_orders WHERE order_id = ${req.params.id}`;
 
+  let errorMessage;
+  if (req.query.error === "select_menu_items") {
+    errorMessage = "You must select at least 1 menu item";
+  }
+
   db.pool.query(selectQuery, function (error, rows, fields) {
     if (error) {
       return next(error);
@@ -201,6 +206,7 @@ router.get("/:id/edit", function (req, res, next) {
               waiters,
               customers,
               menuItems,
+              errorMessage,
             });
           });
         });
@@ -215,14 +221,25 @@ router.post("/:id/edit", function (req, res, next) {
   const totalPrice = req.body["input-order-price"];
   const waiterId = req.body["input-waiter-name"].split(": waiter ")[1];
   const customerId = req.body["input-customer-name"].split(": customer ")[1];
+  // first parse from the body and just extract the menu item Ids that are checked
+  const menuItemIds = Object.keys(req.body)
+    .filter((key) => key.includes("menuItem-"))
+    .map((menuItemKey) => parseInt(menuItemKey.replace("menuItem-", "")));
+
+  if (menuItemIds.length === 0) {
+    return res.redirect(`/orders/${orderId}/edit?error=select_menu_items`);
+  }
+
   const getCurrentMenuItemIdsQuery = `SELECT menu_item_id FROM menu_items_orders mio WHERE mio.order_id = ${req.params.id}`;
 
   //decrease current selected menu items' number sold
   db.pool.query(getCurrentMenuItemIdsQuery, function (error, rows, fields) {
     const currentMenuItemIds = rows.map((row) => row.menu_item_id).join(",");
-    const decreaseNumberSoldQuery = `UPDATE menu_items mi SET number_sold = number_sold - 1 WHERE mi.menu_item_id IN (${currentMenuItemIds})`;
+    const decreaseNumberSoldQuery = `UPDATE menu_items mi SET mi.number_sold = mi.number_sold - 1 WHERE mi.menu_item_id IN (${currentMenuItemIds})`;
+    console.log({ decreaseNumberSoldQuery });
     db.pool.query(decreaseNumberSoldQuery, function (error, rows, fields) {
       if (error) {
+        console.log("first");
         return next(error);
       }
 
@@ -231,11 +248,6 @@ router.post("/:id/edit", function (req, res, next) {
       WHERE order_id = ${orderId}`;
 
       // handle assigning menu items
-
-      // first parse from the body and just extract the menu item Ids that are checked
-      const menuItemIds = Object.keys(req.body)
-        .filter((key) => key.includes("menuItem-"))
-        .map((menuItemKey) => parseInt(menuItemKey.replace("menuItem-", "")));
 
       // first delete
       const deleteMenuItemsOrdersQuery = `DELETE FROM menu_items_orders WHERE order_id = ${orderId}`;
@@ -248,21 +260,26 @@ router.post("/:id/edit", function (req, res, next) {
 
       db.pool.query(deleteMenuItemsOrdersQuery, function (error, rows, fields) {
         if (error) {
+          console.log("2");
+
           return next(error);
         }
         db.pool.query(updateOrderQuery, function (error, rows, fields) {
           if (error) {
+            console.log("3");
+
             return next(error);
           }
           db.pool.query(
             insertMenuItemsOrdersQuery,
             function (error, rows, fields) {
               if (error) {
+                console.log("4");
+
                 return next(error);
               }
-              const updateNumberSoldQuery = `UPDATE menu_items mi SET number_sold = number_sold + 1 WHERE mi.menu_item_id IN (${menuItemIds.join(
-                ","
-              )})`;
+              const soldMenuItemIds = menuItemIds.join(",");
+              const updateNumberSoldQuery = `UPDATE menu_items mi SET number_sold = number_sold + 1 WHERE mi.menu_item_id IN (${soldMenuItemIds})`;
               db.pool.query(
                 updateNumberSoldQuery,
                 function (error, rows, fields) {
