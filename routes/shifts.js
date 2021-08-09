@@ -44,9 +44,15 @@ router.get("", function (req, res, next) {
 // renders the "add shift" form
 router.get("/new", function (req, res, next) {
   const waitersQuery = `SELECT * FROM waiters`;
+
+  let errorMessage;
+  if (req.query.error === "select_waiters") {
+    errorMessage = "You must select at least 1 waiter";
+  }
+
   db.pool.query(waitersQuery, function (error, rows, fields) {
     let waiters = rows;
-    res.render("shifts/new", { waiters });
+    res.render("shifts/new", { waiters, errorMessage });
   });
 });
 
@@ -66,6 +72,10 @@ router.post("/new", function (req, res, next) {
   }
 
   let waiterIds = getWaiterIds(req.body);
+
+  if (waiterIds.length === 0) {
+    return res.redirect(`/shifts/new?error=select_waiters`);
+  }
 
   const selectShiftsQuery = `SElECT * FROM shifts`;
 
@@ -98,6 +108,11 @@ router.get("/:id/edit", function (req, res, next) {
   const waitersQuery = `SELECT * FROM waiters`;
   const shiftsWaitersQuery = `SELECT waiter_id FROM shifts_waiters WHERE shift_id = ${req.params.id}`;
 
+  let errorMessage;
+  if (req.query.error === "select_waiters") {
+    errorMessage = "You must select at least 1 waiter";
+  }
+
   db.pool.query(shiftQuery, function (error, rows, fields) {
     if (error) {
       return next(error);
@@ -120,7 +135,7 @@ router.get("/:id/edit", function (req, res, next) {
           return waiter;
         });
 
-        res.render("shifts/edit", { shift, waiters });
+        res.render("shifts/edit", { shift, waiters, errorMessage });
       });
     });
   });
@@ -143,6 +158,10 @@ router.post("/:id/edit", function (req, res, next) {
   const waiterIds = Object.keys(req.body)
     .filter((key) => key.includes("waiter-"))
     .map((waiterKey) => waiterKey.replace("waiter-", ""));
+
+  if (waiterIds.length === 0) {
+    return res.redirect(`/shifts/${shiftId}/edit?error=select_waiters`);
+  }
 
   // first delete
   const deleteShiftsWaitersQuery = `DELETE FROM shifts_waiters WHERE shift_id = ${shiftId}`;

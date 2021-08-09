@@ -6,7 +6,9 @@
   <div id="add-shift-container" class="m-3">
     <h2>Add Shift</h2>
     <p>To add a shift, please enter the information below and click `Submit`. You must assign at least one waiter.</p>
-
+    {{#if errorMessage}}
+      <h4 class="text-danger">{{errorMessage}}</h4>
+    {{/if}}
     <form
       id="add-shift-form"
       class="form-group"
@@ -54,7 +56,9 @@
         </div>
       {{/each}}
       </div>
-      <button type="submit" class="btn btn-success">Submit</button>
+      <div>
+        <button type="submit" class="btn btn-success mt-3">Submit</button>
+      </div>
     </form>
   </div>
 </div>

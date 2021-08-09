@@ -4,6 +4,9 @@
   <div id="edit-shift-container" class="m-3 w-40">
     <h2>Edit Shift</h2>
     <p>To edit this shift, please update the information below and click `Submit`. You must assign at least one waiter.</p>
+    {{#if errorMessage}}
+      <h4 class="text-danger">{{errorMessage}}</h4>
+    {{/if}}
     <form
       id="edit-shift-form"
       class="form-group"
