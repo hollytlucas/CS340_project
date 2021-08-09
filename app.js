@@ -49,20 +49,17 @@ app.use("/assets", express.static(path.join(__dirname, "assets")));
     ROUTES
 */
 
-// GET ROUTES
 //ROUTE FOR MAIN PAGE
 app.get("/", function (req, res, next) {
   res.render("index");
 });
 
-// GET ROUTES
 //ROUTE FOR MAIN PAGE
 app.get("/index_private", function (req, res, next) {
   res.render("index_private");
 });
 
 // ROUTE FOR MENU ITEMS --------------------------------------------------------------------------------------------
-
 app.use("/menu_items", menuItemsRouter);
 
 // ROUTE FOR ORDERS--------------------------------------------------------------------------------------------------------------------
@@ -71,11 +68,13 @@ app.use("/orders", ordersRouter);
 // ROUTE FOR SHIFTS--------------------------------------------------------------------------------------------------------------------
 app.use("/shifts", shiftsRouter);
 
-// ROUTE FOR WAITERS--------------------------------------------------------------------------------------------------------------------
+// ROUTE FOR WAITERS-------------------------------------------------------------------------------------------------------------------
 app.use("/waiters", waitersRouter);
 
-// ROUTE FOR CUSTOMERS SEARCH ORDERS
+// ROUTE FOR CUSTOMERS-----------------------------------------------------------------------------------------------------------------
+app.use("/customers", customersRouter);
 
+// ROUTE FOR CUSTOMERS SEARCH ORDERS
 app.get("/customers_search_orders", function (req, res) {
   // If there is a query string, we run the query for searching by last name
   if (req.query.customer == undefined) {
@@ -116,10 +115,6 @@ app.get("/customers_search_orders", function (req, res) {
     });
   }
 });
-
-// ROUTE FOR CUSTOMERS PAGE
-
-app.use("/customers", customersRouter);
 
 // global error handler
 

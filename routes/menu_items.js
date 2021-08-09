@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database/db-connector");
 
-//render /menu_items
-app.get("/menu_items", function (req, res, next) {
+//render /menu_items, display menu_items table
+router.get("", function (req, res, next) {
   // Display all items on page load
   let query1 = `SELECT * FROM menu_items`;
   db.pool.query(query1, function (error, rows, fields) {
@@ -17,12 +17,12 @@ app.get("/menu_items", function (req, res, next) {
 });
 
 //render the add menu item form
-app.get("/menu_items/new", function (req, res, next) {
+router.get("/new", function (req, res, next) {
   res.render("menu_items/new");
 });
 
 // handle submission of add menu item form
-app.post("/add-menu-item-form", function (req, res, next) {
+router.post("/new", function (req, res, next) {
   let data = req.body; // holds body of request
   let items; // holds all menu items to be displayed
 
@@ -32,8 +32,9 @@ app.post("/add-menu-item-form", function (req, res, next) {
     if (error) {
       return next(error);
     }
-    res.redirect("/menu_items")
+    res.redirect("/menu_items");
   });
+});
 
 module.exports = {
   router,
