@@ -10,11 +10,9 @@
     <h4>Page Links and Descriptions</h4>
     <li><strong>Waiters page</strong>: Holly </li>
     <ol>
-      <li>Add a waiter (no fields can be blank)
-        <a href="waiters">"/waiters"</a></li>
-      <li>Search for a waiter based on shift ID
-        <a href="waiters">"/waiters"</a></li>
-      <li>Modify a waiter <a href="waiters">"/waiters"</a></li>
+      <li>Add a waiter
+        <a href="waiters/new">"/waiters/new"</a></li>
+      <li>Modify a waiter <a href="waiters/1/edit">"/waiters/:id/edit"</a></li>
     </ol>
     <li><strong>Shifts page</strong>: Kelley </li>
     <ol>
@@ -29,7 +27,7 @@
       <li>Display orders table (with menu item names via menu_items_orders
         table)
         <a href="orders/index">"/orders/index"</a></li>
-      <li>Add an order and assign menu items
+      <li>Add an order and assign menu items (FK waiter_id can be NULL for online orders)
         <a href="orders/new">"orders/new"</a></li>
       <li>Modify an order. Update menu_items_orders table
         <a href="orders/1/edit">"/orders/:id/edit"</a></li>
@@ -38,13 +36,17 @@
     </ol>
     <li><strong>Customers page </strong>: Kelley</li>
     <ol>
-      <li>Add customers
+      <li>Add a customer
         <a href="customers/new">"/customers/new"</a></li>
+      <li>Modify a customer
+        <a href="customers/1/edit">"/customers/:id/edit"</a></li>
     </ol>
     <li><Strong>Menu Items page</Strong>: Holly</li>
     <ol>
-      <li>Add menu items (no fields can be blank)
+      <li>Add a menu item
         <a href="menu_items">"/menu_items"</a></li>
+      <li>Modify a menu item
+        <a href="menu_items/1/edit">"/menu_items/:id/edit"</a></li>
     </ol>
     <li><strong>Search Customer Orders Page</strong>: Holly</li>
     <ol>
