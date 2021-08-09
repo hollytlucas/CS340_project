@@ -12,7 +12,7 @@ router.get("", function (req, res, next) {
 	  LEFT JOIN menu_items_orders mio ON o.order_id = mio.order_id
     LEFT JOIN menu_items mi ON mio.menu_item_id = mi.menu_item_id
     JOIN customers c ON o.customer_id = c.customer_id
-    JOIN waiters w ON o.waiter_id = w.waiter_id
+    LEFT JOIN waiters w ON o.waiter_id = w.waiter_id
     ORDER BY o.order_id
     `;
   const waitersQuery = `SELECT * FROM waiters`;
@@ -64,6 +64,11 @@ router.get("/new", function (req, res, next) {
   const customersQuery = `SELECT * FROM customers`;
   const menuItemsQuery = `SELECT * FROM menu_items`;
 
+  let errorMessage;
+  if (req.query.error === "select_menu_items") {
+    errorMessage = "You must select at least 1 menu item";
+  }
+
   db.pool.query(waitersQuery, function (error, rows, fields) {
     let waiters = rows;
     if (error) {
@@ -79,7 +84,12 @@ router.get("/new", function (req, res, next) {
         if (error) {
           return next(error);
         }
-        res.render("orders/new", { waiters, customers, menuItems });
+        res.render("orders/new", {
+          waiters,
+          customers,
+          menuItems,
+          errorMessage,
+        });
       });
     });
   });
@@ -91,10 +101,13 @@ router.post("/new", function (req, res, next) {
   let waiterId;
   const customerId = req.body["input-customer-name"].split(": customer ")[1];
 
-  if (req.body["input-waiter-name"] == "No Waiter (Online Order)") {
-    waiterId = "NULL";
-  } else if (req.body["input-waiter-name"] !== "No Waiter (Online Order)") {
+  if (
+    req.body["input-waiter-name"] !== "No Waiter (Online Order)" &&
+    req.body["input-waiter-name"]
+  ) {
     waiterId = req.body["input-waiter-name"].split(": waiter ")[1];
+  } else {
+    waiterId = null;
   }
 
   function getMenuIds(data) {
@@ -109,15 +122,29 @@ router.post("/new", function (req, res, next) {
 
   let menuItemIds = getMenuIds(req.body);
 
-  // if no menu items selected, alert the user this is mandatory and redirect
-  // if (menuItemIds.length == 0) {
-  //   window.alert("You must select at least one menu item");
-  //   res.redirect("/new");
-  // }
+  if (menuItemIds.length === 0) {
+    return res.redirect(`/orders/new?error=select_menu_items`);
+  }
 
   const selectOrdersQuery = `SElECT * FROM orders`;
 
-  const insertOrderQuery = `INSERT INTO orders (total_price, waiter_id, customer_id) VALUES (${totalPrice}, ${waiterId}, ${customerId})`;
+  const insertColumns = [
+    "total_price",
+    waiterId !== null ? "waiter_id" : null,
+    "customer_id",
+  ]
+    .filter((col) => col !== null)
+    .join(", ");
+
+  const insertValues = [
+    totalPrice,
+    waiterId !== null ? waiterId : null,
+    customerId,
+  ]
+    .filter((val) => val !== null)
+    .join(", ");
+
+  const insertOrderQuery = `INSERT INTO orders (${insertColumns}) VALUES (${insertValues})`;
 
   db.pool.query(insertOrderQuery, function (error, rows, fields) {
     if (error) {
@@ -138,15 +165,15 @@ router.post("/new", function (req, res, next) {
         if (error) {
           return next(error);
         }
-        for (let menuItemId of menuItemIds) {
-          const updateNumberSoldQuery = `UPDATE menu_items mi SET number_sold = number_sold + 1 WHERE mi.menu_item_id = ${menuItemId}`;
-          db.pool.query(updateNumberSoldQuery, function (error, rows, fields) {
-            if (error) {
-              return next(error);
-            }
-          });
-        }
-        res.redirect("/orders");
+        const updateNumberSoldQuery = `UPDATE menu_items mi SET number_sold = number_sold + 1 WHERE mi.menu_item_id IN (${menuItemIds.join(
+          ","
+        )})`;
+        db.pool.query(updateNumberSoldQuery, function (error, rows, fields) {
+          if (error) {
+            return next(error);
+          }
+          res.redirect("/orders");
+        });
       });
     });
   });
@@ -236,10 +263,8 @@ router.post("/:id/edit", function (req, res, next) {
   db.pool.query(getCurrentMenuItemIdsQuery, function (error, rows, fields) {
     const currentMenuItemIds = rows.map((row) => row.menu_item_id).join(",");
     const decreaseNumberSoldQuery = `UPDATE menu_items mi SET mi.number_sold = mi.number_sold - 1 WHERE mi.menu_item_id IN (${currentMenuItemIds})`;
-    console.log({ decreaseNumberSoldQuery });
     db.pool.query(decreaseNumberSoldQuery, function (error, rows, fields) {
       if (error) {
-        console.log("first");
         return next(error);
       }
 
@@ -260,22 +285,16 @@ router.post("/:id/edit", function (req, res, next) {
 
       db.pool.query(deleteMenuItemsOrdersQuery, function (error, rows, fields) {
         if (error) {
-          console.log("2");
-
           return next(error);
         }
         db.pool.query(updateOrderQuery, function (error, rows, fields) {
           if (error) {
-            console.log("3");
-
             return next(error);
           }
           db.pool.query(
             insertMenuItemsOrdersQuery,
             function (error, rows, fields) {
               if (error) {
-                console.log("4");
-
                 return next(error);
               }
               const soldMenuItemIds = menuItemIds.join(",");

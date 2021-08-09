@@ -24,6 +24,9 @@ const handleBarsHelpers = {
     let orderWaiter = waiters.filter(
       (waiter) => waiter.waiter_id == order.waiter_id
     )[0];
+    if (!orderWaiter) {
+      return "No Waiter (Online Order)";
+    }
     return `${orderWaiter.first_name} ${orderWaiter.last_name}: waiter ${orderWaiter.waiter_id}`;
   },
   getCustomerNameOnOrder: function (customers, order) {
