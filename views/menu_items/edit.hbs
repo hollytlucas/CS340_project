@@ -1,0 +1,58 @@
+{{> nav currentRoute="/menu_items" }}
+
+
+<div id="menu-items-container" class="d-flex justify-content-between">
+
+  <div id="add-menu-item-container" class="m-3">
+    <h2>Edit Menu Item</h2>
+    <form id="edit-menu-item-form" method="POST" action="/menu_items/{{item.menu_item_id}}/edit">
+      <div class="form-group">
+        <label for="input-item-name">Item Name (descriptive): </label>
+        <input
+          class="form-control"
+          type="text"
+          name="input-item-name"
+          id="input-item-name-html"
+          value={{item.name}}
+          required="true"
+        />
+      </div>
+      <div class="form-group">
+        <label for="input-unit-price">Unit Price: </label>
+        <input
+          class="form-control"
+          type="text"
+          name="input-unit-price"
+          id="input-unit-price-html"
+          value={{item.price}}
+          required="true"
+        />
+      </div>
+      {{#if item.is_available }}
+        <div class="form-group">
+          <label for="radio-one">In Stock</label>
+          <input type="radio" id="radio-one" name="is-available" value="1" checked />
+        </div>
+        <div class="form-group">
+          <label for="radio-two">Not In Stock</label>
+          <input type="radio" id="radio-two" name="is-available" value="0"/>
+        </div>
+        {{else}}
+        <div class="form-group">
+          <label for="radio-one">In Stock</label>
+          <input type="radio" id="radio-one" name="is-available" value="0"/>
+        </div>      
+        <div class="form-group">
+          <label for="radio-two">Not In Stock</label>
+          <input type="radio" id="radio-two" name="is-available" value="1" checked/>
+        </div>
+      {{/if}}
+      <div class="form-group">
+        <label for="input-number-sold">Number of Units Sold: </label>
+        <input value={{item.number_sold}} type="number" name="input-number-sold" id="input-number-sold-html" required="true"/>
+      </div>
+      <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+  </div>
+
+</div>

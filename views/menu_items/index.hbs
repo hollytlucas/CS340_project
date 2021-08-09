@@ -14,6 +14,7 @@
         <th scope="col">PRICE</th>
         <th scope="col">IS AVAILABLE (1=YES, 0=NO)</th>
         <th scope="col">UNITS SOLD</th>
+        <th scope="col"></th>
       </tr>
     </thead>
 
@@ -26,6 +27,14 @@
           <td>$ {{this.price}}</td>
           <td>{{this.is_available}}</td>
           <td>{{this.number_sold}}</td>
+          <td>
+            <a
+              class="btn btn-sm btn-warning"
+              href="/menu_items/{{this.menu_item_id}}/edit"
+            >
+              Edit
+            </a>
+          </td>
         </tr>
       {{/each}}
     </tbody>

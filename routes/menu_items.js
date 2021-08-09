@@ -36,6 +36,36 @@ router.post("/new", function (req, res, next) {
   });
 });
 
+//render the edit menu item form
+router.get("/:id/edit", function (req, res, next) {
+  const menuItemID = req.params.id;
+  const selectQuery = `SELECT * FROM menu_items WHERE menu_item_id = ${menuItemID}`;
+  db.pool.query(selectQuery, function (error, rows, fields) {
+    const item = rows[0];
+    console.log(item.name);
+    res.render("menu_items/edit", { item });
+  });
+});
+
+// receives the form submission of the "edit menu item" form
+router.post("/:id/edit", function (req, res, next) {
+  const name = req.body["input-item-name"];
+  const price = req.body["input-unit-price"];
+  const isAvailable = req.body["is-available"] === 1 ? true : false;
+  const numberSold = req.body["input-number-sold"];
+  const menuItemID = req.params.id;
+
+  const updateMenuItemQuery = `UPDATE menu_items SET name = '${name}', price = '${price}', is_available = '${isAvailable}', number_sold = '${numberSold}'
+                                  WHERE menu_item_id = ${menuItemID}`;
+
+  db.pool.query(updateMenuItemQuery, function (error, rows, fields) {
+    if (error) {
+      return next(error);
+    }
+    res.redirect("/menu_items");
+  });
+});
+
 module.exports = {
   router,
 };
