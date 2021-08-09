@@ -7,6 +7,7 @@ const { router: ordersRouter } = require("./routes/orders");
 const { router: shiftsRouter } = require("./routes/shifts");
 const { router: waitersRouter } = require("./routes/waiters");
 const { router: customersRouter } = require("./routes/customers");
+const { router: menuItemsRouter } = require("./routes/menu_items");
 
 // Express
 const express = require("express");
@@ -62,18 +63,7 @@ app.get("/index_private", function (req, res, next) {
 
 // ROUTE FOR MENU ITEMS --------------------------------------------------------------------------------------------
 
-app.get("/menu_items", function (req, res, next) {
-  // Display all items on page load
-  let query1 = `SELECT * FROM menu_items`;
-  db.pool.query(query1, function (error, rows, fields) {
-    if (error) {
-      return next(error);
-    }
-    // Save menu items
-    let items = rows;
-    return res.render("menu_items", { data: items });
-  });
-});
+app.use("/menu_items", menuItemsRouter);
 
 // ROUTE FOR ORDERS--------------------------------------------------------------------------------------------------------------------
 app.use("/orders", ordersRouter);
@@ -130,43 +120,6 @@ app.get("/customers_search_orders", function (req, res) {
 // ROUTE FOR CUSTOMERS PAGE
 
 app.use("/customers", customersRouter);
-
-// ROUTE FOR ADD MENU ITEM
-
-//render the add menu item form
-app.get("/menu_items/new", function (req, res, next) {
-  res.render("menu_items/new");
-});
-
-// handle submission of add menu item form
-app.post("/add-menu-item-form", function (req, res, next) {
-  let data = req.body; // holds body of request
-  let items; // holds all menu items to be displayed
-
-  // insert new menu item
-  query1 = `INSERT INTO menu_items (name, price, is_available, number_sold) VALUES ('${data["input-name"]}', '${data["input-price"]}', '${data["is-available"]}', '${data["input-number-sold"]}')`;
-  db.pool.query(query1, function (error, rows, fields) {
-    if (error) {
-      console.log(error);
-      res.sendStatus(400);
-    } else {
-    }
-  });
-
-  // get all menu items to display
-  query1 = `SELECT * FROM menu_items`;
-  db.pool.query(query1, function (error, rows, fields) {
-    // check to see if there was an error
-    if (error) {
-      console.log(error);
-      res.sendStatus(400);
-    } else {
-      // save all menu items
-      items = rows;
-      return res.render("menu_items", { data: items });
-    }
-  });
-});
 
 // global error handler
 
