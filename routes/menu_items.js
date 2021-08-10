@@ -51,7 +51,7 @@ router.get("/:id/edit", function (req, res, next) {
 router.post("/:id/edit", function (req, res, next) {
   const name = req.body["input-item-name"];
   const price = req.body["input-unit-price"];
-  const isAvailable = req.body["is-available"] === 1 ? true : false;
+  const isAvailable = req.body["is-available"] === "1" ? 1 : 0;
   const numberSold = req.body["input-number-sold"];
   const menuItemID = req.params.id;
 

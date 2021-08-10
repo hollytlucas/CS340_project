@@ -3,19 +3,19 @@
 
 <div id="menu-items-container" class="d-flex justify-content-between">
 
-  <div id="add-menu-item-container" class="m-3">
+  <div id="add-menu-item-container" class="m-3 w-50">
     <h2>Edit Menu Item</h2>
-    <form id="edit-menu-item-form" method="POST" action="/menu_items/{{item.menu_item_id}}/edit">
-      <div class="form-group">
+    <form id="edit-menu-item-form" class="w-100" method="POST" action="/menu_items/{{item.menu_item_id}}/edit">
+      <div class="form-group w-60">
         <label for="input-item-name">Item Name (descriptive): </label>
         <input
           class="form-control"
           type="text"
           name="input-item-name"
           id="input-item-name-html"
-          value={{item.name}}
+          value="{{item.name}}"
           required="true"
-        />
+        ></input>
       </div>
       <div class="form-group">
         <label for="input-unit-price">Unit Price: </label>
@@ -30,21 +30,21 @@
       </div>
       {{#if item.is_available }}
         <div class="form-group">
-          <label for="radio-one">In Stock</label>
+          <label for="is_available">In Stock</label>
           <input type="radio" id="radio-one" name="is-available" value="1" checked />
         </div>
         <div class="form-group">
-          <label for="radio-two">Not In Stock</label>
+          <label for="not-in-stock">Not In Stock</label>
           <input type="radio" id="radio-two" name="is-available" value="0"/>
         </div>
         {{else}}
         <div class="form-group">
-          <label for="radio-one">In Stock</label>
-          <input type="radio" id="radio-one" name="is-available" value="0"/>
+          <label for="is-available">In Stock</label>
+          <input type="radio" id="radio-one" name="is-available" value="1"/>
         </div>      
         <div class="form-group">
-          <label for="radio-two">Not In Stock</label>
-          <input type="radio" id="radio-two" name="is-available" value="1" checked/>
+          <label for="is-available">Not In Stock</label>
+          <input type="radio" id="radio-two" name="is-available" value="0" checked/>
         </div>
       {{/if}}
       <div class="form-group">
