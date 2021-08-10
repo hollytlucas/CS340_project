@@ -4,67 +4,42 @@ INSERT INTO waiters (first_name, last_name, employee_phone_number, shift_type_pr
 SELECT max(waiter_id) as last_id from waiters;
 INSERT INTO shifts_waiters (waiter_id, shift_id) VALUES (:waiter_id, :shift_id);
 
---  SELECT all waiters with certain shift ID
-SELECT * FROM waiters w
-INNER JOIN shift_waiters sw ON w.waiter_id = sw.waiter_id
-INNER JOIN shifts s ON sw.shift_id = s.shift_id
-ORDER BY w.last_name ASC;
-
--- SELECT all waiters and all shifts through innerjoin with the consolidated table
-SELECT * FROM waiters w
-INNER JOIN shifts_waiters sw ON w.waiter_id = sw.waiter_id
-INNER JOIN shifts s ON sw.shift_id = s.shift_id
-ORDER BY w.last_name ASC;
-
 -- SELECT all waiter ID’s from waiters
 SELECT waiter_id FROM waiters;
-
--- SELECT all shift ID’s from shifts
-SELECT shift_id FROM shifts;
-
--- SELECT all attributes for a waiter given waiter ID
-SELECT * FROM waiters WHERE waiter_id = :waiter_id;
 
 --  UPDATE a waiter
 UPDATE waiters SET first_name = :first_name, last_name = :last_name, phone_number = :phone_number, shift_preference = :shift_preference
 WHERE waiter_id = :waiter_id;
 
---    if user enters assigned shift ID and selects delete radio button
-SELECT * FROM shifts_waiters WHERE waiter_id = :waiter_id;
-DELETE FROM shifts_waiters WHERE :waiter_id = waiter_id AND :shift_id = shift_id;
-
---    if user enters assigned shift ID and selects add radio button
-INSERT INTO shifts_waiters (waiter_id, shift_id) VALUES (:waiter_id, :shift_id);
-
--- check to make sure there is more than one shift assigned to a waiter
-SELECT COUNT(*) AS count FROM shifts_waiters WHERE waiter_id = :waiter_id;     
-
--- DELETE relation from shifts_waiters table
-DELETE FROM shifts_waiters WHERE waiter_id = '${data["input-waiter-id"]}' AND shift_id = :shift_id;
   
 -- Menu Items --------------------------------------------------------------------------------------------------
 --  INSERT a menu item
 INSERT INTO menu_items (name, price, is_available, number_sold) VALUES (:name, :price, :is_available, :number_sold);
 
+-- UPDATE menu items
+UPDATE menu_items SET name = :name, price = :price, is_available = :is_available, number_sold = :number_sold
+WHERE menu_item_id = :menu_item_id;
+
 -- SELECT all menu items
 SELECT * FROM menu_items;
 
 -- Customers (Modify/Add/Delete Page (Private)) --------------------------------------------------------------------------------------------------
---  SELECT customer profile by name
-SELECT * FROM customers WHERE last_name LIKE .last_name;
+
+-- SELECT all customers
+SELECT * FROM customers;
 
 -- UPDATE customers
 UPDATE customers SET first_name = :first_name, last_name = :last_name, email = :email
-WHERE waiter_id = :waiter_id;
+WHERE customer_id = :customer_id;
 
--- Customers (Search Page (Public)) --------------------------------------------------------------------------------------------------
+-- Customers (Search Orders Page) --------------------------------------------------------------------------------------------------
 --  SELECT orders by customer id
 SELECT * FROM customers c
 INNER JOIN customers_orders co ON c.customer_id = co.customer_id
 INNER JOIN orders o ON co.order_id = o.order_id
 
--- SELECT all customer ID’s for dropdown list
-SELECT customer_id FROM customers;
+-- SELECT all customer info for dropdown list
+SELECT * FROM customers;
 
 -- SELECT sum of all prices of all orders related to given customer ID
 SELECT SUM(o.total_price) as total_charges FROM customers c

@@ -27,7 +27,7 @@ CREATE TABLE `waiters` (
   `first_name` varchar(50) NOT NULL,
   `last_name` varchar(50) NOT NULL,
   `phone_number` varchar(50) NOT NULL,
-  `shift_type_preference` varchar(50) NOT NULL,
+  `shift_type_preference` varchar(50),
   PRIMARY KEY (waiter_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -85,9 +85,9 @@ CREATE TABLE `menu_items` (
 --
 
 INSERT INTO `menu_items` (`name`, `price`, `is_available`, `number_sold`) VALUES
-('Sheet Pan Chicken with Mozzarella, Pesto, and Broccoli', '8.95', 1, 35),
-('Summer Special Shrimp and Fruit Fried Rice', '13.50', 1, 22),
-('Chipotle Peach Salsa with Cilantro', '9.75', 0, 12);
+('Sheet Pan Chicken with Mozzarella, Pesto, and Broccoli', '8.95', 1, 0),
+('Summer Special Shrimp and Fruit Fried Rice', '13.50', 1, 0),
+('Chipotle Peach Salsa with Cilantro', '9.75', 0, 0);
 
 -- --------------------------------------------------------
 
