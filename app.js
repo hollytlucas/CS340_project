@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-PORT = 8555;
+PORT = 6719;
 
 // Database
 const db = require("./database/db-connector");
