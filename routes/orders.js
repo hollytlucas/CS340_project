@@ -81,6 +81,7 @@ router.get("/new", function (req, res, next) {
       }
       db.pool.query(menuItemsQuery, function (error, rows, fields) {
         let menuItems = rows;
+
         if (error) {
           return next(error);
         }
