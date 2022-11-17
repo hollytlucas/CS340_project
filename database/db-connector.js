@@ -4,10 +4,10 @@ var mysql = require("mysql");
 // Create a 'connection pool' using the provided credentials
 var pool = mysql.createPool({
   connectionLimit: 10,
-  host: "database-1.clc3dlkbok9d.us-east-2.rds.amazonaws.com",
+  host: "database-2.clc3dlkbok9d.us-east-2.rds.amazonaws.com",
   user: "admin",
   password: "TonyJanSavannah49",
-  database: "database-1",
+  database: "database-2",
 });
 // var pool = mysql.createPool({
 //   connectionLimit: 10,
