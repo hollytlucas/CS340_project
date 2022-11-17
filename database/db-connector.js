@@ -7,7 +7,7 @@ var pool = mysql.createPool({
   host: "database-2.clc3dlkbok9d.us-east-2.rds.amazonaws.com",
   user: "admin",
   password: "TonyJanSavannah49",
-  database: "database-2",
+  database: "lucasho",
 });
 // var pool = mysql.createPool({
 //   connectionLimit: 10,
